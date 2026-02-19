@@ -1,0 +1,972 @@
+{
+  "roles": [
+    {
+      "id": "cmljobka30000b1l452rjbgse",
+      "name": "admin_prodi",
+      "permissions": []
+    },
+    {
+      "id": "cmljobka40001b1l4kkb9huwh",
+      "name": "kaprodi",
+      "permissions": []
+    },
+    {
+      "id": "cmljobka40002b1l4yl2jj9z2",
+      "name": "admin_surat",
+      "permissions": []
+    },
+    {
+      "id": "cmljobka50003b1l4b82le8yi",
+      "name": "supervisor",
+      "permissions": []
+    },
+    {
+      "id": "cmljobka50004b1l4t2x4j514",
+      "name": "upa",
+      "permissions": []
+    },
+    {
+      "id": "cmljobka60005b1l4yc38oaf3",
+      "name": "mahasiswa",
+      "permissions": []
+    },
+    {
+      "id": "cmljobka60006b1l4wa2pppxd",
+      "name": "super_admin",
+      "permissions": [
+        {
+          "id": "cmllzcn2s000xb180berz7o2c",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn1o0000b180svxtsgpt",
+          "permission": {
+            "id": "cmllzcn1o0000b180svxtsgpt",
+            "resource": "user",
+            "action": "read"
+          }
+        },
+        {
+          "id": "cmllzcn2w000zb180l0ysv6kj",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn1x0001b1808qehfxxg",
+          "permission": {
+            "id": "cmllzcn1x0001b1808qehfxxg",
+            "resource": "user",
+            "action": "create"
+          }
+        },
+        {
+          "id": "cmllzcn2x0011b1801ltzpwzu",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn1y0002b1806suojk5l",
+          "permission": {
+            "id": "cmllzcn1y0002b1806suojk5l",
+            "resource": "user",
+            "action": "write"
+          }
+        },
+        {
+          "id": "cmllzcn2y0013b180wl75tnkf",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn1z0003b180zye53aok",
+          "permission": {
+            "id": "cmllzcn1z0003b180zye53aok",
+            "resource": "user",
+            "action": "delete"
+          }
+        },
+        {
+          "id": "cmllzcn2z0015b180amzl8kpr",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn210004b180hi7rfn2c",
+          "permission": {
+            "id": "cmllzcn210004b180hi7rfn2c",
+            "resource": "mahasiswa",
+            "action": "read"
+          }
+        },
+        {
+          "id": "cmllzcn2z0017b180vo8g7jun",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn220005b1804cbdbflj",
+          "permission": {
+            "id": "cmllzcn220005b1804cbdbflj",
+            "resource": "mahasiswa",
+            "action": "create"
+          }
+        },
+        {
+          "id": "cmllzcn300019b1801rw1deyi",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn240006b180r67y1g4b",
+          "permission": {
+            "id": "cmllzcn240006b180r67y1g4b",
+            "resource": "mahasiswa",
+            "action": "write"
+          }
+        },
+        {
+          "id": "cmllzcn31001bb180kzkd2m9j",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn240007b180vrdfhhk5",
+          "permission": {
+            "id": "cmllzcn240007b180vrdfhhk5",
+            "resource": "mahasiswa",
+            "action": "delete"
+          }
+        },
+        {
+          "id": "cmllzcn31001db180erd78r67",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn250008b180u1smrl66",
+          "permission": {
+            "id": "cmllzcn250008b180u1smrl66",
+            "resource": "pegawai",
+            "action": "read"
+          }
+        },
+        {
+          "id": "cmllzcn32001fb180zylh7qxm",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn260009b180zs64ktws",
+          "permission": {
+            "id": "cmllzcn260009b180zs64ktws",
+            "resource": "pegawai",
+            "action": "create"
+          }
+        },
+        {
+          "id": "cmllzcn33001hb180mkycm00p",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn27000ab180gbayzds7",
+          "permission": {
+            "id": "cmllzcn27000ab180gbayzds7",
+            "resource": "pegawai",
+            "action": "write"
+          }
+        },
+        {
+          "id": "cmllzcn33001jb180qvge7rp6",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn28000bb180ucb2nrex",
+          "permission": {
+            "id": "cmllzcn28000bb180ucb2nrex",
+            "resource": "pegawai",
+            "action": "delete"
+          }
+        },
+        {
+          "id": "cmllzcn34001lb180bui98w22",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn29000cb180roneuhou",
+          "permission": {
+            "id": "cmllzcn29000cb180roneuhou",
+            "resource": "surat",
+            "action": "read"
+          }
+        },
+        {
+          "id": "cmllzcn34001nb180eil0yr7i",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn29000db180n9w6946g",
+          "permission": {
+            "id": "cmllzcn29000db180n9w6946g",
+            "resource": "surat",
+            "action": "create"
+          }
+        },
+        {
+          "id": "cmllzcn35001pb180txyaevlf",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2a000eb180d2rx0xmb",
+          "permission": {
+            "id": "cmllzcn2a000eb180d2rx0xmb",
+            "resource": "surat",
+            "action": "write"
+          }
+        },
+        {
+          "id": "cmllzcn36001rb180pq737hxb",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2b000fb1800sxwtj4k",
+          "permission": {
+            "id": "cmllzcn2b000fb1800sxwtj4k",
+            "resource": "surat",
+            "action": "delete"
+          }
+        },
+        {
+          "id": "cmllzcn36001tb180q32b4k1a",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2c000gb180cgqc7jz4",
+          "permission": {
+            "id": "cmllzcn2c000gb180cgqc7jz4",
+            "resource": "departemen",
+            "action": "read"
+          }
+        },
+        {
+          "id": "cmllzcn37001vb180oqcpngia",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2d000hb180m5ov163t",
+          "permission": {
+            "id": "cmllzcn2d000hb180m5ov163t",
+            "resource": "departemen",
+            "action": "create"
+          }
+        },
+        {
+          "id": "cmllzcn38001xb180ax8lcb15",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2e000ib180ovwm5a0r",
+          "permission": {
+            "id": "cmllzcn2e000ib180ovwm5a0r",
+            "resource": "departemen",
+            "action": "write"
+          }
+        },
+        {
+          "id": "cmllzcn38001zb180f2dx5h0k",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2f000jb180jvck7h8m",
+          "permission": {
+            "id": "cmllzcn2f000jb180jvck7h8m",
+            "resource": "departemen",
+            "action": "delete"
+          }
+        },
+        {
+          "id": "cmllzcn390021b18068drn520",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2g000kb180b34uj83l",
+          "permission": {
+            "id": "cmllzcn2g000kb180b34uj83l",
+            "resource": "prodi",
+            "action": "read"
+          }
+        },
+        {
+          "id": "cmllzcn3a0023b180ll2hgsf0",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2h000lb180psns5vj6",
+          "permission": {
+            "id": "cmllzcn2h000lb180psns5vj6",
+            "resource": "prodi",
+            "action": "create"
+          }
+        },
+        {
+          "id": "cmllzcn3b0025b180tycide18",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2h000mb1804rn77o5l",
+          "permission": {
+            "id": "cmllzcn2h000mb1804rn77o5l",
+            "resource": "prodi",
+            "action": "write"
+          }
+        },
+        {
+          "id": "cmllzcn3b0027b1806nbn3d5x",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2i000nb180tdufjmzg",
+          "permission": {
+            "id": "cmllzcn2i000nb180tdufjmzg",
+            "resource": "prodi",
+            "action": "delete"
+          }
+        },
+        {
+          "id": "cmllzcn3c0029b180a9645lda",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2j000ob180jcu3pdd8",
+          "permission": {
+            "id": "cmllzcn2j000ob180jcu3pdd8",
+            "resource": "role",
+            "action": "read"
+          }
+        },
+        {
+          "id": "cmllzcn3d002bb180efkjgqrr",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2k000pb180b8k2t2t2",
+          "permission": {
+            "id": "cmllzcn2k000pb180b8k2t2t2",
+            "resource": "role",
+            "action": "create"
+          }
+        },
+        {
+          "id": "cmllzcn3d002db180xg1guwyk",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2k000qb180h666o4d9",
+          "permission": {
+            "id": "cmllzcn2k000qb180h666o4d9",
+            "resource": "role",
+            "action": "write"
+          }
+        },
+        {
+          "id": "cmllzcn3e002fb180mpaoa11t",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2l000rb180vwkf2tf3",
+          "permission": {
+            "id": "cmllzcn2l000rb180vwkf2tf3",
+            "resource": "role",
+            "action": "delete"
+          }
+        },
+        {
+          "id": "cmllzcn3f002hb180lan5qbwk",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2m000sb1802xidg9bd",
+          "permission": {
+            "id": "cmllzcn2m000sb1802xidg9bd",
+            "resource": "permission",
+            "action": "read"
+          }
+        },
+        {
+          "id": "cmllzcn3g002jb180wj0e8ooo",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2m000tb180kg55e055",
+          "permission": {
+            "id": "cmllzcn2m000tb180kg55e055",
+            "resource": "permission",
+            "action": "create"
+          }
+        },
+        {
+          "id": "cmllzcn3h002lb180zw2c3fia",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2n000ub180iniye3on",
+          "permission": {
+            "id": "cmllzcn2n000ub180iniye3on",
+            "resource": "permission",
+            "action": "write"
+          }
+        },
+        {
+          "id": "cmllzcn3i002nb180hao9u0nb",
+          "roleId": "cmljobka60006b1l4wa2pppxd",
+          "permissionId": "cmllzcn2o000vb180knpvoc22",
+          "permission": {
+            "id": "cmllzcn2o000vb180knpvoc22",
+            "resource": "permission",
+            "action": "delete"
+          }
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    {
+      "id": "cmllzcn1o0000b180svxtsgpt",
+      "resource": "user",
+      "action": "read"
+    },
+    {
+      "id": "cmllzcn1x0001b1808qehfxxg",
+      "resource": "user",
+      "action": "create"
+    },
+    {
+      "id": "cmllzcn1y0002b1806suojk5l",
+      "resource": "user",
+      "action": "write"
+    },
+    {
+      "id": "cmllzcn1z0003b180zye53aok",
+      "resource": "user",
+      "action": "delete"
+    },
+    {
+      "id": "cmllzcn210004b180hi7rfn2c",
+      "resource": "mahasiswa",
+      "action": "read"
+    },
+    {
+      "id": "cmllzcn220005b1804cbdbflj",
+      "resource": "mahasiswa",
+      "action": "create"
+    },
+    {
+      "id": "cmllzcn240006b180r67y1g4b",
+      "resource": "mahasiswa",
+      "action": "write"
+    },
+    {
+      "id": "cmllzcn240007b180vrdfhhk5",
+      "resource": "mahasiswa",
+      "action": "delete"
+    },
+    {
+      "id": "cmllzcn250008b180u1smrl66",
+      "resource": "pegawai",
+      "action": "read"
+    },
+    {
+      "id": "cmllzcn260009b180zs64ktws",
+      "resource": "pegawai",
+      "action": "create"
+    },
+    {
+      "id": "cmllzcn27000ab180gbayzds7",
+      "resource": "pegawai",
+      "action": "write"
+    },
+    {
+      "id": "cmllzcn28000bb180ucb2nrex",
+      "resource": "pegawai",
+      "action": "delete"
+    },
+    {
+      "id": "cmllzcn29000cb180roneuhou",
+      "resource": "surat",
+      "action": "read"
+    },
+    {
+      "id": "cmllzcn29000db180n9w6946g",
+      "resource": "surat",
+      "action": "create"
+    },
+    {
+      "id": "cmllzcn2a000eb180d2rx0xmb",
+      "resource": "surat",
+      "action": "write"
+    },
+    {
+      "id": "cmllzcn2b000fb1800sxwtj4k",
+      "resource": "surat",
+      "action": "delete"
+    },
+    {
+      "id": "cmllzcn2c000gb180cgqc7jz4",
+      "resource": "departemen",
+      "action": "read"
+    },
+    {
+      "id": "cmllzcn2d000hb180m5ov163t",
+      "resource": "departemen",
+      "action": "create"
+    },
+    {
+      "id": "cmllzcn2e000ib180ovwm5a0r",
+      "resource": "departemen",
+      "action": "write"
+    },
+    {
+      "id": "cmllzcn2f000jb180jvck7h8m",
+      "resource": "departemen",
+      "action": "delete"
+    },
+    {
+      "id": "cmllzcn2g000kb180b34uj83l",
+      "resource": "prodi",
+      "action": "read"
+    },
+    {
+      "id": "cmllzcn2h000lb180psns5vj6",
+      "resource": "prodi",
+      "action": "create"
+    },
+    {
+      "id": "cmllzcn2h000mb1804rn77o5l",
+      "resource": "prodi",
+      "action": "write"
+    },
+    {
+      "id": "cmllzcn2i000nb180tdufjmzg",
+      "resource": "prodi",
+      "action": "delete"
+    },
+    {
+      "id": "cmllzcn2j000ob180jcu3pdd8",
+      "resource": "role",
+      "action": "read"
+    },
+    {
+      "id": "cmllzcn2k000pb180b8k2t2t2",
+      "resource": "role",
+      "action": "create"
+    },
+    {
+      "id": "cmllzcn2k000qb180h666o4d9",
+      "resource": "role",
+      "action": "write"
+    },
+    {
+      "id": "cmllzcn2l000rb180vwkf2tf3",
+      "resource": "role",
+      "action": "delete"
+    },
+    {
+      "id": "cmllzcn2m000sb1802xidg9bd",
+      "resource": "permission",
+      "action": "read"
+    },
+    {
+      "id": "cmllzcn2m000tb180kg55e055",
+      "resource": "permission",
+      "action": "create"
+    },
+    {
+      "id": "cmllzcn2n000ub180iniye3on",
+      "resource": "permission",
+      "action": "write"
+    },
+    {
+      "id": "cmllzcn2o000vb180knpvoc22",
+      "resource": "permission",
+      "action": "delete"
+    }
+  ],
+  "rolePermissions": [
+    {
+      "id": "cmllzcn2s000xb180berz7o2c",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn1o0000b180svxtsgpt",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn1o0000b180svxtsgpt",
+        "resource": "user",
+        "action": "read"
+      }
+    },
+    {
+      "id": "cmllzcn2w000zb180l0ysv6kj",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn1x0001b1808qehfxxg",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn1x0001b1808qehfxxg",
+        "resource": "user",
+        "action": "create"
+      }
+    },
+    {
+      "id": "cmllzcn2x0011b1801ltzpwzu",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn1y0002b1806suojk5l",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn1y0002b1806suojk5l",
+        "resource": "user",
+        "action": "write"
+      }
+    },
+    {
+      "id": "cmllzcn2y0013b180wl75tnkf",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn1z0003b180zye53aok",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn1z0003b180zye53aok",
+        "resource": "user",
+        "action": "delete"
+      }
+    },
+    {
+      "id": "cmllzcn2z0015b180amzl8kpr",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn210004b180hi7rfn2c",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn210004b180hi7rfn2c",
+        "resource": "mahasiswa",
+        "action": "read"
+      }
+    },
+    {
+      "id": "cmllzcn2z0017b180vo8g7jun",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn220005b1804cbdbflj",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn220005b1804cbdbflj",
+        "resource": "mahasiswa",
+        "action": "create"
+      }
+    },
+    {
+      "id": "cmllzcn300019b1801rw1deyi",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn240006b180r67y1g4b",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn240006b180r67y1g4b",
+        "resource": "mahasiswa",
+        "action": "write"
+      }
+    },
+    {
+      "id": "cmllzcn31001bb180kzkd2m9j",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn240007b180vrdfhhk5",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn240007b180vrdfhhk5",
+        "resource": "mahasiswa",
+        "action": "delete"
+      }
+    },
+    {
+      "id": "cmllzcn31001db180erd78r67",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn250008b180u1smrl66",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn250008b180u1smrl66",
+        "resource": "pegawai",
+        "action": "read"
+      }
+    },
+    {
+      "id": "cmllzcn32001fb180zylh7qxm",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn260009b180zs64ktws",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn260009b180zs64ktws",
+        "resource": "pegawai",
+        "action": "create"
+      }
+    },
+    {
+      "id": "cmllzcn33001hb180mkycm00p",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn27000ab180gbayzds7",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn27000ab180gbayzds7",
+        "resource": "pegawai",
+        "action": "write"
+      }
+    },
+    {
+      "id": "cmllzcn33001jb180qvge7rp6",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn28000bb180ucb2nrex",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn28000bb180ucb2nrex",
+        "resource": "pegawai",
+        "action": "delete"
+      }
+    },
+    {
+      "id": "cmllzcn34001lb180bui98w22",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn29000cb180roneuhou",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn29000cb180roneuhou",
+        "resource": "surat",
+        "action": "read"
+      }
+    },
+    {
+      "id": "cmllzcn34001nb180eil0yr7i",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn29000db180n9w6946g",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn29000db180n9w6946g",
+        "resource": "surat",
+        "action": "create"
+      }
+    },
+    {
+      "id": "cmllzcn35001pb180txyaevlf",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2a000eb180d2rx0xmb",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2a000eb180d2rx0xmb",
+        "resource": "surat",
+        "action": "write"
+      }
+    },
+    {
+      "id": "cmllzcn36001rb180pq737hxb",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2b000fb1800sxwtj4k",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2b000fb1800sxwtj4k",
+        "resource": "surat",
+        "action": "delete"
+      }
+    },
+    {
+      "id": "cmllzcn36001tb180q32b4k1a",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2c000gb180cgqc7jz4",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2c000gb180cgqc7jz4",
+        "resource": "departemen",
+        "action": "read"
+      }
+    },
+    {
+      "id": "cmllzcn37001vb180oqcpngia",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2d000hb180m5ov163t",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2d000hb180m5ov163t",
+        "resource": "departemen",
+        "action": "create"
+      }
+    },
+    {
+      "id": "cmllzcn38001xb180ax8lcb15",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2e000ib180ovwm5a0r",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2e000ib180ovwm5a0r",
+        "resource": "departemen",
+        "action": "write"
+      }
+    },
+    {
+      "id": "cmllzcn38001zb180f2dx5h0k",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2f000jb180jvck7h8m",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2f000jb180jvck7h8m",
+        "resource": "departemen",
+        "action": "delete"
+      }
+    },
+    {
+      "id": "cmllzcn390021b18068drn520",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2g000kb180b34uj83l",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2g000kb180b34uj83l",
+        "resource": "prodi",
+        "action": "read"
+      }
+    },
+    {
+      "id": "cmllzcn3a0023b180ll2hgsf0",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2h000lb180psns5vj6",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2h000lb180psns5vj6",
+        "resource": "prodi",
+        "action": "create"
+      }
+    },
+    {
+      "id": "cmllzcn3b0025b180tycide18",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2h000mb1804rn77o5l",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2h000mb1804rn77o5l",
+        "resource": "prodi",
+        "action": "write"
+      }
+    },
+    {
+      "id": "cmllzcn3b0027b1806nbn3d5x",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2i000nb180tdufjmzg",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2i000nb180tdufjmzg",
+        "resource": "prodi",
+        "action": "delete"
+      }
+    },
+    {
+      "id": "cmllzcn3c0029b180a9645lda",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2j000ob180jcu3pdd8",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2j000ob180jcu3pdd8",
+        "resource": "role",
+        "action": "read"
+      }
+    },
+    {
+      "id": "cmllzcn3d002bb180efkjgqrr",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2k000pb180b8k2t2t2",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2k000pb180b8k2t2t2",
+        "resource": "role",
+        "action": "create"
+      }
+    },
+    {
+      "id": "cmllzcn3d002db180xg1guwyk",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2k000qb180h666o4d9",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2k000qb180h666o4d9",
+        "resource": "role",
+        "action": "write"
+      }
+    },
+    {
+      "id": "cmllzcn3e002fb180mpaoa11t",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2l000rb180vwkf2tf3",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2l000rb180vwkf2tf3",
+        "resource": "role",
+        "action": "delete"
+      }
+    },
+    {
+      "id": "cmllzcn3f002hb180lan5qbwk",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2m000sb1802xidg9bd",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2m000sb1802xidg9bd",
+        "resource": "permission",
+        "action": "read"
+      }
+    },
+    {
+      "id": "cmllzcn3g002jb180wj0e8ooo",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2m000tb180kg55e055",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2m000tb180kg55e055",
+        "resource": "permission",
+        "action": "create"
+      }
+    },
+    {
+      "id": "cmllzcn3h002lb180zw2c3fia",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2n000ub180iniye3on",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2n000ub180iniye3on",
+        "resource": "permission",
+        "action": "write"
+      }
+    },
+    {
+      "id": "cmllzcn3i002nb180hao9u0nb",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "permissionId": "cmllzcn2o000vb180knpvoc22",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      },
+      "permission": {
+        "id": "cmllzcn2o000vb180knpvoc22",
+        "resource": "permission",
+        "action": "delete"
+      }
+    }
+  ]
+}

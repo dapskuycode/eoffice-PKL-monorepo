@@ -1,0 +1,37 @@
+[
+  {
+    "id": "cmljobka30000b1l452rjbgse",
+    "name": "admin_prodi",
+    "permissions": []
+  },
+  {
+    "id": "cmljobka40001b1l4kkb9huwh",
+    "name": "kaprodi",
+    "permissions": []
+  },
+  {
+    "id": "cmljobka40002b1l4yl2jj9z2",
+    "name": "admin_surat",
+    "permissions": []
+  },
+  {
+    "id": "cmljobka50003b1l4b82le8yi",
+    "name": "supervisor",
+    "permissions": []
+  },
+  {
+    "id": "cmljobka50004b1l4t2x4j514",
+    "name": "upa",
+    "permissions": []
+  },
+  {
+    "id": "cmljobka60005b1l4yc38oaf3",
+    "name": "mahasiswa",
+    "permissions": []
+  },
+  {
+    "id": "cmljobka60006b1l4wa2pppxd",
+    "name": "super_admin",
+    "permissions": []
+  }
+]

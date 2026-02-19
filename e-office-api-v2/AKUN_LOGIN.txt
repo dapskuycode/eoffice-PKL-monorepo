@@ -1,0 +1,185 @@
+=== DAFTAR AKUN LOGIN PER ROLE ===
+
+
+📌 SUPER ADMIN
+============================================================
+1. Email: email@testing2.com
+   Nama: testing 
+
+2. Email: superadmin@system.ac.id
+   Nama: Super Administrator
+   NIP: 199901010000000001
+
+
+📌 MAHASISWA
+============================================================
+1. Email: andi.pratama@students.ac.id
+   Nama: Andi Pratama
+   NIM: 24060123120039
+
+2. Email: budi.setiawan@students.ac.id
+   Nama: Budi Setiawan testing
+   NIM: H071201002
+
+3. Email: dwi@mat-s1.ac.id
+   Nama: Dwi Matematika
+   NIM: H011201001
+
+4. Email: eko@fis-s1.ac.id
+   Nama: Eko Fisika
+   NIM: H021201001
+
+5. Email: fajar@bio-s1.ac.id
+   Nama: Fajar Biologi
+   NIM: H031201001
+
+6. Email: gita@biotek-s1.ac.id
+   Nama: Gita Bioteknologi
+   NIM: H031201002
+
+7. Email: hana@kim-s1.ac.id
+   Nama: Hana Kimia
+   NIM: H041201001
+
+8. Email: ika@stat-s1.ac.id
+   Nama: Ika Statistika
+   NIM: H051201001
+
+9. Email: joni@mat-s2.ac.id
+   Nama: Joni Matematika S2
+   NIM: H012201001
+
+10. Email: kiki@fis-s2.ac.id
+   Nama: Kiki Fisika S2
+   NIM: H022201001
+
+11. Email: lulu@bio-s2.ac.id
+   Nama: Lulu Biologi S2
+   NIM: H032201001
+
+12. Email: maman@kim-s2.ac.id
+   Nama: Maman Kimia S2
+   NIM: H042201001
+
+13. Email: nina@dsm-s3.ac.id
+   Nama: Nina Doktor
+   NIM: H063201001
+
+
+📌 ADMIN PRODI
+============================================================
+1. Email: admin.prodi@bio-s1.ac.id
+   Nama: Admin Biologi S1
+   NIP: 198605052011012005
+
+2. Email: admin.prodi@bio-s2.ac.id
+   Nama: Admin Biologi S2
+   NIP: 198607072011012007
+
+3. Email: admin.prodi@biotek-s1.ac.id
+   Nama: Admin Bioteknologi
+   NIP: 198606062011012006
+
+4. Email: admin.prodi@dsm-s3.ac.id
+   Nama: Admin Doktor Sains
+   NIP: 198611112011012011
+
+5. Email: admin.prodi@fis-s1.ac.id
+   Nama: Admin Fisika S1
+   NIP: 198603032011012003
+
+6. Email: admin.prodi@fis-s2.ac.id
+   Nama: Admin Fisika S2
+   NIP: 198604042011012004
+
+7. Email: admin.prodi@informatika.ac.id
+   Nama: Siti Rahma
+   NIP: 198501012010012001
+
+8. Email: admin.prodi@kim-s1.ac.id
+   Nama: Admin Kimia S1
+   NIP: 198608082011012008
+
+9. Email: admin.prodi@kim-s2.ac.id
+   Nama: Admin Kimia S2
+   NIP: 198609092011012009
+
+10. Email: admin.prodi@mat-s1.ac.id
+   Nama: Admin Matematika S1
+   NIP: 198601012011012001
+
+11. Email: admin.prodi@mat-s2.ac.id
+   Nama: Admin Matematika S2
+   NIP: 198602022011012002
+
+12. Email: admin.prodi@stat-s1.ac.id
+   Nama: Admin Statistika
+   NIP: 198610102011012010
+
+
+📌 KAPRODI
+============================================================
+1. Email: kaprodi@bio-s1.ac.id
+   Nama: Dr. Dewi Biologi, M.Si
+   NIP: 197309092005011005
+
+2. Email: kaprodi@bio-s2.ac.id
+   Nama: Prof. Dr. Farah Biologi, M.Si
+   NIP: 197511112005011007
+
+3. Email: kaprodi@biotek-s1.ac.id
+   Nama: Dr. Eka Bioteknologi, M.Si
+   NIP: 197410102005011006
+
+4. Email: kaprodi@dsm-s3.ac.id
+   Nama: Prof. Dr. Kusuma Doktor, M.Si
+   NIP: 197903032005011011
+
+5. Email: kaprodi@fis-s1.ac.id
+   Nama: Dr. Budi Fisika, M.Sc
+   NIP: 197107072005011003
+
+6. Email: kaprodi@fis-s2.ac.id
+   Nama: Prof. Dr. Cahya Fisika, M.Sc
+   NIP: 197208082005011004
+
+7. Email: kaprodi@informatika.ac.id
+   Nama: Dr. Budi Santoso, M.Kom
+   NIP: 197505151998021002
+
+8. Email: kaprodi@kim-s1.ac.id
+   Nama: Dr. Hadi Kimia, M.Si
+   NIP: 197612122005011008
+
+9. Email: kaprodi@kim-s2.ac.id
+   Nama: Prof. Dr. Indah Kimia, M.Si
+   NIP: 197701012005011009
+
+10. Email: kaprodi@mat-s1.ac.id
+   Nama: Dr. Siti Nurhaliza, M.Si
+   NIP: 197505052005011001
+
+11. Email: kaprodi@mat-s2.ac.id
+   Nama: Prof. Dr. Ahmad Hidayat, M.Si
+   NIP: 197006062005011002
+
+12. Email: kaprodi@stat-s1.ac.id
+   Nama: Dr. Joko Statistika, M.Si
+   NIP: 197802022005011010
+
+
+📌 SUPERVISOR
+============================================================
+1. Email: supervisor@akademik.ac.id
+   Nama: Prof. Dr. Ahmad Hidayat
+   NIP: 197201051995121001
+
+
+📌 UPA
+============================================================
+1. Email: upa@akademik.ac.id
+   Nama: Rina Wijaya, S.S.
+   NIP: 198803202012032002
+
+
+💡 PASSWORD DEFAULT: "password123" (untuk semua akun development)

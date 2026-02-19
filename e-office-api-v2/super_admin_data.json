@@ -1,0 +1,22 @@
+{
+  "id": "cmljobkpp001rb1l4l4jaccnf",
+  "name": "Super Administrator",
+  "email": "superadmin@system.ac.id",
+  "emailVerified": true,
+  "image": null,
+  "isAnonymous": false,
+  "createdAt": "2026-02-12T16:29:07.358Z",
+  "updatedAt": "2026-02-12T16:29:07.358Z",
+  "deletedAt": null,
+  "userRole": [
+    {
+      "id": "cmljobkpq001tb1l4q1hy7qts",
+      "userId": "cmljobkpp001rb1l4l4jaccnf",
+      "roleId": "cmljobka60006b1l4wa2pppxd",
+      "role": {
+        "id": "cmljobka60006b1l4wa2pppxd",
+        "name": "super_admin"
+      }
+    }
+  ]
+}

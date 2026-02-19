@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # MinIO Service
+  minio:
+    image: minio/minio:latest
+    container_name: e-office-minio
+    ports:
+      - "9000:9000"      # MinIO API
+      - "9001:9001"      # MinIO Console
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - e-office-network
+    restart: unless-stopped
+
+  # Create Buckets automatically
+  createbuckets:
+    image: minio/mc:latest
+    container_name: e-office-minio-setup
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/e-office-storage --ignore-existing;
+      /usr/bin/mc anonymous set download myminio/e-office-storage;
+      echo 'Bucket e-office-storage created successfully';
+      exit 0;
+      "
+    networks:
+      - e-office-network
+
+volumes:
+  minio_data:
+    driver: local
+
+networks:
+  e-office-network:
+    driver: bridge

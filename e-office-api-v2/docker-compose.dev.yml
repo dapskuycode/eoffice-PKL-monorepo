@@ -1,0 +1,67 @@
+services:
+  # PostgreSQL Database Service
+  postgres:
+    image: postgres:15-alpine
+    container_name: e-office-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: senku
+      POSTGRES_DB: persuratanSKL
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d persuratanSKL"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO Service untuk file storage
+  minio:
+    image: minio/minio:latest
+    container_name: e-office-minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"      # MinIO API
+      - "9001:9001"      # MinIO Console (Web UI)
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Create Buckets automatically saat pertama kali
+  createbuckets:
+    image: minio/mc:latest
+    container_name: e-office-minio-setup
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/e-office-storage --ignore-existing;
+      /usr/bin/mc anonymous set download myminio/e-office-storage;
+      echo '✅ Bucket e-office-storage created successfully';
+      exit 0;
+      "
+
+volumes:
+  postgres_data:
+    driver: local
+  minio_data:
+    driver: local
+    
+networks:
+  default:
+    name: e-office-network
+    driver: bridge

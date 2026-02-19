@@ -1,0 +1,17 @@
+=== ADMIN FAKULTAS LOGIN CHECK ===
+
+✅ User: Drs. Bambang Suryanto, M.Si
+   ID: cmlm8jpe8001ub1oky7t9tsjb
+
+🔐 Accounts: 1
+   1. credential - Password: SET
+
+🎭 Roles: 1
+   1. admin_fakultas
+
+👤 Pegawai: YES
+   NIP: 196805151993031001
+   Jabatan: Admin Fakultas
+
+=== DIAGNOSIS ===
+✅ Account looks good!
