@@ -435,6 +435,7 @@ function ReviewSuratContent() {
         const updateData: any = {
           tglLulus: safeTglLulus,
           ipkTerakhir: parseFloat(detail.ipk) || 0,
+          jumlahSks: parseInt(detail.jumlahSks) || 0,
           namaSementara,
           nimSementara,
           emailSementara,
@@ -466,6 +467,7 @@ function ReviewSuratContent() {
           mahasiswaId: profile.id,
           tglLulus: safeTglLulus,
           ipkTerakhir: parseFloat(detail.ipk) || 0,
+          jumlahSks: parseInt(detail.jumlahSks) || 0,
           namaSementara,
           nimSementara,
           emailSementara,

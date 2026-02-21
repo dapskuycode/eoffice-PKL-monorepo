@@ -187,8 +187,9 @@ export default new Elysia()
 			const pengajuan = await Prisma.pengajuanSkl.create({
 				data: {
 					mahasiswaId: body.mahasiswaId,
-					tglLulus: body.tglLulus ? new Date(body.tglLulus) : new Date(), // Default to today if not provided
-					ipkTerakhir: body.ipkTerakhir || 0, // Default to 0 if not provided
+					tglLulus: body.tglLulus ? new Date(body.tglLulus) : new Date(),
+					ipkTerakhir: body.ipkTerakhir || 0,
+					jumlahSks: body.jumlahSks || 0,
 					status: "DRAFT",
 					// Data identitas sementara
 					namaSementara: body.namaSementara,
@@ -247,6 +248,7 @@ export default new Elysia()
 				tanggalLahirSementara: t.Optional(t.String()),
 				tglLulus: t.Optional(t.String()),
 				ipkTerakhir: t.Optional(t.Number()),
+				jumlahSks: t.Optional(t.Number()),
 				tandatangan: t.Optional(t.String()),
 				draftStep: t.Optional(t.Number()),
 				createLog: t.Optional(t.Boolean()),
@@ -262,6 +264,7 @@ export default new Elysia()
 					mahasiswaId: body.mahasiswaId,
 					tglLulus: new Date(body.tglLulus),
 					ipkTerakhir: body.ipkTerakhir,
+					jumlahSks: body.jumlahSks || 0,
 					status: "DRAFT",
 					// Data identitas sementara (optional)
 					namaSementara: body.namaSementara,
@@ -310,6 +313,7 @@ export default new Elysia()
 				mahasiswaId: t.String(),
 				tglLulus: t.String(),
 				ipkTerakhir: t.Number(),
+				jumlahSks: t.Optional(t.Number()),
 				// Optional temporary identity data
 				namaSementara: t.Optional(t.String()),
 				nimSementara: t.Optional(t.String()),
@@ -336,6 +340,7 @@ export default new Elysia()
 			// Update only provided fields
 			if (body.hasOwnProperty('tglLulus') && body.tglLulus) updateData.tglLulus = new Date(body.tglLulus);
 			if (body.hasOwnProperty('ipkTerakhir')) updateData.ipkTerakhir = body.ipkTerakhir;
+			if (body.hasOwnProperty('jumlahSks')) updateData.jumlahSks = body.jumlahSks;
 			if (body.hasOwnProperty('namaSementara')) updateData.namaSementara = body.namaSementara;
 			if (body.hasOwnProperty('nimSementara')) updateData.nimSementara = body.nimSementara;
 			if (body.hasOwnProperty('emailSementara')) updateData.emailSementara = body.emailSementara;
@@ -369,7 +374,7 @@ export default new Elysia()
 				},
 			});
 
-			
+
 			// Create history log if requested
 			if (body.createLog) {
 				await Prisma.riwayatPengajuanSkl.create({
@@ -397,6 +402,7 @@ export default new Elysia()
 				tanggalLahirSementara: t.Optional(t.String()),
 				tglLulus: t.Optional(t.String()),
 				ipkTerakhir: t.Optional(t.Number()),
+				jumlahSks: t.Optional(t.Number()),
 				tandatangan: t.Optional(t.String()),
 				draftStep: t.Optional(t.Number()),
 				createLog: t.Optional(t.Boolean()),

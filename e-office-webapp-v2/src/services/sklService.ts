@@ -4,7 +4,8 @@ export interface CreateSklPengajuanData {
   mahasiswaId: string;
   tglLulus: string;
   ipkTerakhir: number;
-  // Optional temporary identity data (tidak mengubah master mahasiswa)
+  jumlahSks?: number;
+  // Optional temporary identity data
   namaSementara?: string;
   nimSementara?: string;
   emailSementara?: string;
@@ -20,6 +21,7 @@ export interface CreateSklPengajuanData {
 export interface UpdateSklPengajuanData {
   tglLulus?: string;
   ipkTerakhir?: number;
+  jumlahSks?: number;
   namaSementara?: string;
   nimSementara?: string;
   emailSementara?: string;
@@ -49,6 +51,7 @@ export interface SaveDraftData {
   // Detail pengajuan (optional untuk draft)
   tglLulus?: string;
   ipkTerakhir?: number;
+  jumlahSks?: number;
   // Draft step indicator
   draftStep?: number; // 1=dataDiri, 2=detail, 3=lampiran, 4=review
   createLog?: boolean; // Flag to create history entry
@@ -59,6 +62,7 @@ export interface SklPengajuan {
   mahasiswaId: string;
   tglLulus: Date;
   ipkTerakhir: number;
+  jumlahSks?: number;
   status: string;
   nomorSkl?: string;
   nomorSuratPengantar?: string;

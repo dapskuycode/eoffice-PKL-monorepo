@@ -33,6 +33,7 @@ interface DetailData {
   jenisSurat: string;
   tanggalLulus: string;
   ipk: string;
+  jumlahSks: string;
 }
 
 // --- 2. KOMPONEN FORM ---
@@ -83,7 +84,7 @@ const FormDetailPengajuan: React.FC<{
             }}
           />
         </Col>
-        <Col span={24}>
+        <Col span={24} md={12}>
           <ProFormText
             name="ipk"
             label="IPK"
@@ -93,6 +94,21 @@ const FormDetailPengajuan: React.FC<{
               {
                 pattern: /^(?:[0-3](?:\.\d{1,2})?|4(?:\.0{1,2})?)$/,
                 message: "IPK harus dalam format desimal antara 0.00 sampai 4.00",
+              },
+            ]}
+            fieldProps={{ size: "large", style: { backgroundColor: "white", borderColor: "#d9d9d9" } }}
+          />
+        </Col>
+        <Col span={24} md={12}>
+          <ProFormText
+            name="jumlahSks"
+            label="Jumlah SKS"
+            placeholder="Masukkan jumlah SKS (contoh: 144)"
+            rules={[
+              { required: true, message: "Wajib diisi" },
+              {
+                pattern: /^\d{2,3}$/,
+                message: "SKS harus berupa angka (contoh: 144)",
               },
             ]}
             fieldProps={{ size: "large", style: { backgroundColor: "white", borderColor: "#d9d9d9" } }}
@@ -137,8 +153,9 @@ function DetailContent() {
         // 1. Ambil Mock Data (Simulasi API)
         const mockData: DetailData = {
           jenisSurat: "Surat Keterangan Lulus",
-          tanggalLulus: undefined as any, // undefined untuk DatePicker kosong
+          tanggalLulus: undefined as any,
           ipk: "",
+          jumlahSks: "",
         };
 
         // 2. Fetch draft info if URL has draftId
@@ -241,7 +258,28 @@ function DetailContent() {
         return;
       }
 
-      // 6. Jika validasi lolos, simpan dan lanjut
+      // 6. Validasi SKS minimum 144
+      const sksValue = parseInt(values.jumlahSks);
+      if (isNaN(sksValue) || sksValue < 144) {
+        modal.warning({
+          title: "Jumlah SKS Tidak Mencukupi",
+          icon: <ExclamationCircleOutlined style={{ color: '#faad14' }} />,
+          content: (
+            <>
+              <p>Jumlah SKS minimal untuk pengajuan SKL adalah <strong>144 SKS</strong>.</p>
+              <p>SKS yang Anda masukkan: <strong>{values.jumlahSks || 0} SKS</strong></p>
+              <p style={{ color: '#8c8c8c', fontSize: 13 }}>
+                Pastikan seluruh SKS yang telah ditempuh sudah tercatat sebelum mengajukan SKL.
+              </p>
+            </>
+          ),
+          okText: "Perbaiki Data",
+          centered: true,
+        });
+        return;
+      }
+
+      // 7. Jika validasi lolos, simpan dan lanjut
       const dataToSave = { ...detailData, ...values };
       localStorage.setItem("skl_detail_pengajuan", JSON.stringify(dataToSave));
 

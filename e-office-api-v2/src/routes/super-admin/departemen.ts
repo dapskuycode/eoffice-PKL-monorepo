@@ -8,11 +8,16 @@ export default new Elysia()
   .get('/', async ({ query }) => {
     const { limit = '100' } = query as any;
 
+    console.log('--- DEPARTEMEN GET DEBUG ---');
+    console.log('Query:', query);
+
     const departemen = await prisma.departemen.findMany({
       where: { deletedAt: null },
       take: parseInt(limit),
       orderBy: { name: 'asc' },
     });
+
+    console.log('Result total:', departemen.length);
 
     return { data: departemen };
   }, {

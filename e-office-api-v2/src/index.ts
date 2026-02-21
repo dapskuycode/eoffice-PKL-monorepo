@@ -23,6 +23,7 @@ process.on("unhandledRejection", (error) => {
 await Prisma.$connect();
 console.log("Database was connected!");
 
+
 app.listen(config.PORT, () =>
 	console.log(`Server started at ${app.server?.url.origin}`),
 );

@@ -1,0 +1,144 @@
+No	Kategori	Skenario Uji	Keluaran yang Diharapkan	Kriteria Evaluasi	Hasil Uji	Keterangan
+1	Login & Autentikasi	Login dengan email dan password valid	Sistem mengarahkan ke dashboard sesuai role pengguna	PASS: Redirect ke dashboard yang benar sesuai role | FAIL: Gagal login atau redirect salah		
+2	Login & Autentikasi	Login dengan kredensial tidak valid (salah password)	Sistem menampilkan pesan error "Email atau password salah"	PASS: Pesan error muncul, tidak ada redirect | FAIL: Berhasil login atau tidak ada pesan error		
+3	Login & Autentikasi	Login dengan email yang tidak terdaftar	Sistem menampilkan pesan error bahwa akun tidak ditemukan	PASS: Pesan error muncul | FAIL: Sistem crash atau tidak ada feedback		
+4	Login & Autentikasi	Login dengan field email kosong	Sistem menampilkan validasi field email wajib diisi	PASS: Validasi tampil sebelum request dikirim | FAIL: Request dikirim dengan email kosong		
+5	Login & Autentikasi	Login dengan field password kosong	Sistem menampilkan validasi field password wajib diisi	PASS: Validasi tampil sebelum request dikirim | FAIL: Request dikirim dengan password kosong		
+6	Login & Autentikasi	Logout dari sistem	Sesi pengguna dihapus, diarahkan ke halaman login	PASS: Session terhapus, tidak bisa akses halaman protected | FAIL: Masih bisa akses tanpa login setelah logout		
+7	Form Pengajuan SKL	Membuka form pengajuan SKL	Form pengajuan tampil dengan data biodata mahasiswa yang sudah terisi otomatis	PASS: Form tampil, biodata auto-fill dari database | FAIL: Form kosong atau error		
+8	Form Pengajuan SKL	Mengisi input manual (Tanggal Lulus, IPK) dan menyimpan	Data tersimpan dan status pengajuan berubah menjadi "Diajukan"	PASS: Data tersimpan di DB, status berubah | FAIL: Error saat simpan		
+9	Form Pengajuan SKL	Mengisi Tanggal Lulus dengan tanggal di masa depan	Sistem menampilkan pesan error validasi tanggal tidak valid	PASS: Error message muncul, tidak bisa submit | FAIL: Data tersimpan dengan tanggal masa depan		
+10	Form Pengajuan SKL	Mengisi IPK dengan nilai > 4.00	Sistem menampilkan pesan error bahwa IPK tidak valid (maks 4.00)	PASS: Validasi muncul, tidak bisa submit | FAIL: Data tersimpan dengan IPK > 4.00		
+11	Form Pengajuan SKL	Mengisi IPK dengan nilai < 2.00	Sistem menampilkan pesan error bahwa IPK terlalu rendah atau tidak valid	PASS: Validasi muncul | FAIL: Data tersimpan tanpa validasi		
+12	Form Pengajuan SKL	Mengisi IPK dengan format huruf (misal: "abc")	Sistem menampilkan pesan error format IPK harus berupa angka	PASS: Input ditolak / pesan error muncul | FAIL: Data huruf tersimpan sebagai IPK		
+13	Form Pengajuan SKL	Meninggalkan field wajib kosong dan submit	Sistem menampilkan daftar field yang belum diisi	PASS: Semua error field wajib ditampilkan | FAIL: Form tersubmit dengan field kosong		
+14	Form Pengajuan SKL	Override data biodata sementara (nama, email, alamat)	Data yang diubah tersimpan sebagai override sementara, tidak mengubah data profil asli	PASS: Data override tersimpan terpisah | FAIL: Profil asli ikut berubah atau tidak bisa dioverride		
+15	Upload Dokumen	Mengunggah semua dokumen dengan format valid (PDF/JPG/PNG) dan ukuran < 5MB	Semua dokumen berhasil terunggah dan dapat dipreview	PASS: File tersimpan di MinIO, URL dapat diakses | FAIL: Upload gagal		
+16	Upload Dokumen	Mengunggah dokumen dengan format tidak valid (.docx, .zip)	Sistem menolak file dan menampilkan pesan format tidak didukung	PASS: File ditolak sebelum/sesudah upload | FAIL: File .docx/.zip berhasil tersimpan		
+17	Upload Dokumen	Mengunggah dokumen dengan ukuran lebih dari 5MB	Sistem menolak file dan menampilkan pesan ukuran melebihi batas	PASS: File ditolak, pesan error size muncul | FAIL: File >5MB berhasil terupload		
+18	Upload Dokumen	Menghapus lampiran yang sudah diupload	File terhapus dari sistem dan list lampiran diperbarui	PASS: File tidak ada di storage dan list | FAIL: File masih tampil atau error saat hapus		
+19	Upload Dokumen	Preview dokumen yang sudah diupload	Dokumen dapat ditampilkan/dibuka di browser tanpa diunduh	PASS: Preview muncul via presigned URL | FAIL: Link error atau file tidak bisa dibuka		
+20	Fitur Draf	Mengisi sebagian form lalu klik "Simpan Draf"	Data tersimpan dengan status "Draf" dan bisa dibuka kembali	PASS: Status = Draf, data tidak hilang | FAIL: Data tidak tersimpan atau langsung diajukan		
+21	Fitur Draf	Simpan draf tanpa mengisi field apapun	Sistem menyimpan draf kosong atau menampilkan pesan minimal field harus diisi	PASS: Draf kosong tersimpan ATAU validasi minimal muncul | FAIL: Error sistem		
+22	Fitur Draf	Membuka kembali draf yang sudah disimpan	Form terbuka dengan data yang sebelumnya diisi pada draf	PASS: Semua data draf ter-load ke form | FAIL: Form kosong atau data tidak sesuai		
+23	Fitur Draf	Membuat multiple draf pengajuan	Pengguna dapat memiliki lebih dari satu draf pengajuan	PASS: Semua draf tersimpan dan bisa diakses | FAIL: Error duplikasi atau hanya 1 draf yang tersimpan		
+24	Edit Berdasarkan Status	Melakukan Edit/Revisi saat status surat "Draf"	Form dapat diedit dan perubahan tersimpan	PASS: Tombol edit aktif, data bisa diubah | FAIL: Form tidak bisa diedit		
+25	Edit Berdasarkan Status	Melakukan Edit saat status surat "Revisi"	Form dapat diedit sesuai catatan revisi	PASS: Form bisa diedit, bisa disubmit ulang | FAIL: Form terkunci		
+26	Edit Berdasarkan Status	Melakukan Edit saat status surat "Terverifikasi Admin"	Sistem menolak edit karena sudah melewati tahap verifikasi	PASS: Tombol edit nonaktif / error ditampilkan | FAIL: Data bisa diubah setelah terverifikasi		
+27	Edit Berdasarkan Status	Melakukan Edit saat status surat "APPROVED_KAPRODI"	Sistem menolak edit karena sudah disetujui Kaprodi	PASS: Tombol edit nonaktif / error ditampilkan | FAIL: Data bisa diubah		
+28	Edit Berdasarkan Status	Melakukan Edit saat status surat "Selesai"	Sistem menolak edit karena surat sudah selesai diproses	PASS: Tombol edit nonaktif / error ditampilkan | FAIL: Data bisa diubah setelah selesai		
+29	Catatan & Revisi	Membaca catatan revisi dari Admin Prodi	Catatan revisi ditampilkan pada pengajuan yang berstatus "Revisi"	PASS: Catatan muncul jelas beserta nama Admin Prodi | FAIL: Catatan tidak tampil		
+30	Catatan & Revisi	Membaca catatan revisi dari Supervisor	Catatan revisi dari Supervisor tampil di detail pengajuan	PASS: Catatan dari Supervisor tampil | FAIL: Catatan tidak ada		
+31	Catatan & Revisi	Edit dan submit ulang setelah revisi	Setelah submit ulang, status berubah dari "Revisi" ke "Diajukan" kembali	PASS: Status berubah, notif ke Admin Prodi | FAIL: Status tidak berubah		
+32	Pembatalan	Mencoba membatalkan saat pengajuan status "Terverifikasi Admin"	Sistem menampilkan pesan bahwa pembatalan tidak diizinkan pada status ini	PASS: Tombol batal nonaktif / pesan muncul | FAIL: Pembatalan berhasil di status ini		
+33	Pembatalan	Konfirmasi pembatalan pengajuan	Dialog konfirmasi muncul sebelum pembatalan diproses	PASS: Modal konfirmasi tampil | FAIL: Langsung dibatalkan tanpa konfirmasi		
+34	Pembatalan	Membatalkan pengajuan saat status "Diajukan"	Pengajuan berhasil dibatalkan dan status berubah menjadi "Batal"	PASS: Status = Batal, data tidak terhapus | FAIL: Error saat batal atau status tidak berubah		
+35	Tracking & Detail	Membuka halaman Detail Surat	Halaman detail menampilkan semua informasi pengajuan dan lampiran	PASS: Semua data tampil lengkap | FAIL: Halaman error atau data tidak lengkap		
+36	Tracking & Detail	Melihat detail setiap step workflow	Timeline/tracking menampilkan setiap tahap beserta actor dan waktu	PASS: Semua step tampil berurutan dengan info actor | FAIL: Step tidak lengkap		
+37	Tracking & Detail	Refresh halaman tracking	Data tracking tetap konsisten setelah refresh halaman	PASS: Tidak ada perubahan data setelah refresh | FAIL: Data berubah atau hilang		
+38	Tracking & Detail	Tracking menampilkan urutan workflow berurutan	Urutan step: Mahasiswa → Admin Prodi → Kaprodi → Supervisor → Staf → UPA	PASS: Urutan benar dan logis | FAIL: Urutan acak atau tidak sesuai workflow		
+39	Download Surat	Mengunduh surat saat status "Selesai"	File PDF surat SKL berhasil diunduh	PASS: File PDF ter-download, bisa dibuka | FAIL: Error atau file tidak ter-download		
+40	Download Surat	Mengunduh surat saat status belum selesai	Sistem menolak download dan menampilkan pesan surat belum selesai	PASS: Tombol download nonaktif / pesan muncul | FAIL: File bisa didownload sebelum selesai		
+41	Download Surat	Download surat berkali-kali	File dapat diunduh berulang kali tanpa error	PASS: Download ke-N tetap berhasil | FAIL: Error setelah download pertama		
+42	Download Surat	Verifikasi isi PDF yang didownload	Isi PDF sesuai dengan data pengajuan mahasiswa (nama, NIM, dll.)	PASS: Data di PDF cocok dengan data DB | FAIL: Data tidak sesuai / salah		
+43	Download Surat	File PDF tidak corrupt	File PDF dapat dibuka dan terbaca dengan sempurna	PASS: PDF terbuka normal di PDF reader | FAIL: File corrupt / tidak bisa dibuka		
+44	Detail Pengajuan Selesai	Melihat detail pengajuan saat status "Selesai"	Halaman detail menampilkan semua informasi termasuk nomor SKL	PASS: Semua info termasuk nomor SKL tampil | FAIL: Detail tidak lengkap		
+45	Detail Pengajuan Selesai	Melihat nomor SKL final pada detail pengajuan	Nomor SKL yang diinput UPA tampil di halaman detail mahasiswa	PASS: Nomor SKL tampil di detail | FAIL: Nomor SKL tidak ditampilkan		
+46	Detail Pengajuan Selesai	Melihat lokasi pengambilan dokumen	Informasi lokasi/instruksi pengambilan fisik dokumen tampil jelas	PASS: Lokasi pengambilan tampil | FAIL: Tidak ada info lokasi		
+47	Dashboard Mahasiswa	Membuka Dashboard setelah login	Dashboard menampilkan ringkasan status pengajuan dan notifikasi	PASS: Dashboard load tanpa error | FAIL: Dashboard error atau blank		
+48	Dashboard Mahasiswa	Melihat notifikasi surat disetujui	Notifikasi "Surat Anda disetujui" muncul di dashboard/notification bell	PASS: Notifikasi muncul | FAIL: Tidak ada notifikasi		
+49	Dashboard Mahasiswa	Melihat notifikasi surat perlu revisi	Notifikasi "Surat Anda perlu revisi" beserta catatan muncul	PASS: Notifikasi dengan catatan muncul | FAIL: Tidak ada notifikasi atau tanpa catatan		
+50	Dashboard Mahasiswa	Melihat notifikasi surat ditolak	Notifikasi penolakan beserta alasan tampil di dashboard	PASS: Notifikasi ditolak + alasan tampil | FAIL: Tidak ada notifikasi		
+51	Dashboard Mahasiswa	Klik notifikasi	Pengguna diarahkan ke detail pengajuan yang bersangkutan	PASS: Redirect ke halaman detail yang tepat | FAIL: Notifikasi tidak bisa diklik / redirect salah		
+52	Dashboard Mahasiswa	Dashboard menampilkan statistik per status akurat	Jumlah pengajuan per status sesuai dengan data aktual di database	PASS: Angka statistik akurat | FAIL: Angka tidak sesuai DB		
+53	Dashboard Mahasiswa	Melihat pengajuan terbaru terurut tanggal	Daftar pengajuan terurut dari yang terbaru ke terlama	PASS: Urutan descending berdasarkan tanggal | FAIL: Urutan acak		
+54	Admin Prodi - Antrean	Admin Prodi login dan membuka Dashboard	Dashboard Admin Prodi menampilkan antrean pengajuan dari prodinya	PASS: Hanya pengajuan dari prodi sendiri yang tampil | FAIL: Semua prodi tampil atau dashboard error		
+55	Admin Prodi - Antrean	Filter antrean berdasarkan status	Daftar antrean terfilter sesuai status yang dipilih	PASS: Filter bekerja, hanya status yang dipilih tampil | FAIL: Filter tidak berfungsi		
+56	Admin Prodi - Antrean	Search pengajuan berdasarkan NIM	Pengajuan dengan NIM yang dicari muncul dalam hasil	PASS: Hasil pencarian akurat | FAIL: Search tidak berfungsi atau hasil tidak akurat		
+57	Admin Prodi - Antrean	Search pengajuan berdasarkan nama mahasiswa	Pengajuan dengan nama yang dicari muncul dalam hasil	PASS: Hasil pencarian case-insensitive dan akurat | FAIL: Search tidak berfungsi		
+58	Admin Prodi - Antrean	Sort antrean berdasarkan tanggal submit	Daftar terurut berdasarkan tanggal pengajuan	PASS: Sorting bekerja ascending dan descending | FAIL: Sorting tidak berfungsi		
+59	Admin Prodi - Antrean	Pagination daftar antrean	Navigasi halaman bekerja dan data per halaman konsisten	PASS: Pagination berfungsi, data tidak dobel/hilang | FAIL: Pagination error		
+60	Admin Prodi - Antrean	Melihat statistik dashboard	Statistik jumlah surat per status tampil di dashboard Admin	PASS: Angka statistik akurat | FAIL: Statistik tidak tampil atau tidak akurat		
+61	Admin Prodi - Antrean	Filter berdasarkan rentang tanggal	Antrean terfilter sesuai rentang tanggal yang dipilih	PASS: Hanya pengajuan dalam rentang tanggal yang tampil | FAIL: Filter tanggal tidak berfungsi		
+62	Admin Prodi - Antrean	Export list ke Excel/CSV	File Excel/CSV berhasil diunduh berisi daftar pengajuan	PASS: File ter-download dengan data yang benar | FAIL: Tombol tidak ada / error saat export		
+63	Admin Prodi - Antrean	Hanya melihat surat dari prodi sendiri	Admin Prodi S1 Informatika tidak melihat surat dari S1 Matematika	PASS: Data terisolasi per prodi | FAIL: Admin bisa melihat prodi lain		
+64	Admin Prodi - Verifikasi	Admin Prodi klik aksi "Setujui"	Status pengajuan berubah dan diteruskan ke Kaprodi	PASS: Status = Diverifikasi Admin, notif ke Kaprodi | FAIL: Status tidak berubah		
+65	Admin Prodi - Verifikasi	Admin Prodi klik aksi "Revisi" dan mengisi catatan	Status berubah ke "Revisi", catatan tersimpan, notif ke Mahasiswa	PASS: Status = Revisi, catatan tersimpan | FAIL: Catatan tidak tersimpan atau status tidak berubah		
+66	Admin Prodi - Verifikasi	Admin Prodi klik aksi "Tolak" dan mengisi catatan	Status berubah ke "Ditolak", catatan tersimpan, notif ke Mahasiswa	PASS: Status = Ditolak, catatan tersimpan | FAIL: Status tidak berubah		
+67	Admin Prodi - Verifikasi	Mencoba Setujui tanpa memeriksa lampiran	Sistem mengizinkan atau memberi peringatan jika lampiran belum diperiksa	PASS: Peringatan muncul ATAU approval diizinkan dengan warning | FAIL: Crash sistem		
+68	Admin Prodi - Verifikasi	Mencoba Revisi tanpa mengisi catatan	Sistem menolak aksi revisi jika catatan tidak diisi	PASS: Validasi muncul, revisi tidak terproses | FAIL: Revisi berhasil tanpa catatan		
+69	Admin Prodi - Verifikasi	Mencoba Tolak tanpa mengisi catatan	Sistem menolak aksi tolak jika alasan tidak diisi	PASS: Validasi muncul, tolak tidak terproses | FAIL: Surat ditolak tanpa alasan		
+70	Admin Prodi - Verifikasi	Preview semua lampiran sebelum approve	Admin dapat membuka/preview setiap lampiran yang diupload mahasiswa	PASS: Semua lampiran dapat dibuka | FAIL: Preview error atau link tidak berfungsi		
+71	Admin Prodi - Verifikasi	Melihat history pengajuan mahasiswa sebelumnya	Riwayat pengajuan sebelumnya oleh mahasiswa yang sama tampil	PASS: Riwayat tampil | FAIL: Tidak ada riwayat atau error		
+72	Admin Prodi - Verifikasi	Konfirmasi sebelum approve/reject	Dialog konfirmasi muncul sebelum aksi diproses	PASS: Modal konfirmasi tampil sebelum aksi | FAIL: Aksi langsung terproses tanpa konfirmasi		
+73	Admin Prodi - Nomor Surat	Admin Prodi menginput Nomor Surat untuk pengajuan	Nomor surat tersimpan dan tampil pada detail pengajuan	PASS: Nomor surat tersimpan di DB | FAIL: Error saat simpan		
+74	Admin Prodi - Nomor Surat	Menginput nomor surat dengan format yang salah	Sistem menampilkan validasi format nomor surat yang benar	PASS: Validasi muncul | FAIL: Format salah tersimpan		
+75	Admin Prodi - Nomor Surat	Meninggalkan field nomor surat kosong	Sistem menampilkan pesan field nomor surat wajib diisi	PASS: Validasi muncul | FAIL: Tersimpan dengan nomor surat kosong		
+76	Kaprodi	Preview surat dengan nomor yang baru diinput	Surat dapat diprevew dengan nomor surat yang sudah diinput Admin	PASS: Preview surat menampilkan nomor surat | FAIL: Nomor surat tidak muncul di preview		
+77	Kaprodi	Kaprodi login dan melihat antrean	Antrean surat yang menunggu persetujuan Kaprodi tampil	PASS: Daftar surat tampil | FAIL: Antrean kosong atau error		
+78	Kaprodi	Filter berdasarkan periode tanggal	Antrean terfilter sesuai periode yang dipilih	PASS: Filter bekerja | FAIL: Filter tidak berfungsi		
+79	Kaprodi	Melihat jumlah surat menunggu TTD	Badge/counter menunjukkan jumlah surat yang belum di-TTD	PASS: Counter akurat | FAIL: Counter tidak ada atau tidak akurat		
+80	Kaprodi	Search berdasarkan nama mahasiswa	Surat dari mahasiswa yang dicari muncul dalam hasil	PASS: Pencarian akurat | FAIL: Search tidak berfungsi		
+81	Kaprodi	Hanya melihat surat dari prodi sendiri	Kaprodi tidak dapat melihat surat dari prodi lain	PASS: Data terisolasi per prodi | FAIL: Kaprodi bisa lihat prodi lain		
+82	Kaprodi	Kaprodi membubuhkan TTD dan klik setuju	TTD tersimpan, status berubah, diteruskan ke Supervisor	PASS: TTD tersimpan di PDF/DB, status berubah | FAIL: Proses gagal		
+83	Kaprodi	Mencoba submit tanpa membubuhkan TTD	Sistem menolak aksi jika TTD belum diberikan	PASS: Validasi muncul | FAIL: Bisa approve tanpa TTD		
+84	Kaprodi	Upload TTD dalam format gambar (PNG/JPG)	File gambar TTD berhasil diunggah dan tersimpan	PASS: File ter-upload | FAIL: Error upload		
+85	Kaprodi	Menggambar TTD menggunakan canvas/drawing pad	Canvas dapat digunakan untuk menggambar TTD digital	PASS: TTD bisa digambar dan disimpan | FAIL: Fitur canvas tidak ada atau error		
+86	Kaprodi	Preview surat sebelum TTD	Surat dapat dipreviewed sebelum TTD dibubuhkan	PASS: Preview muncul tanpa TTD | FAIL: Preview tidak bisa dibuka		
+87	Kaprodi	Preview surat setelah TTD	Surat dapat dipreviewed dengan TTD yang sudah dibubuhkan	PASS: Preview muncul dengan TTD | FAIL: TTD tidak muncul di preview		
+88	Kaprodi	Melihat riwayat verifikasi yang sudah dilakukan	Riwayat TTD dan verifikasi Kaprodi tampil	PASS: Riwayat lengkap | FAIL: Riwayat tidak ada		
+89	Admin Fakultas	Filter laporan berdasarkan status	Laporan terfilter sesuai status yang dipilih	PASS: Filter bekerja | FAIL: Filter tidak berfungsi		
+90	Admin Fakultas	Admin Fakultas login	Dashboard Admin Fakultas tampil dengan semua surat dari semua prodi	PASS: Dashboard load, data semua prodi tampil | FAIL: Error atau data terbatas		
+91	Admin Fakultas	Filter surat berdasarkan program studi	Surat terfilter berdasarkan prodi yang dipilih	PASS: Filter bekerja | FAIL: Filter tidak berfungsi		
+92	Admin Fakultas	Filter surat berdasarkan status	Surat terfilter berdasarkan status yang dipilih	PASS: Filter bekerja | FAIL: Filter tidak berfungsi		
+93	Admin Fakultas	Search berdasarkan nomor surat pengantar	Surat dengan nomor tersebut muncul dalam hasil	PASS: Pencarian akurat | FAIL: Search tidak berfungsi		
+94	Admin Fakultas	Search berdasarkan nama mahasiswa	Surat dari mahasiswa yang dicari muncul	PASS: Pencarian akurat | FAIL: Search tidak berfungsi		
+95	Admin Fakultas	Admin Fakultas melakukan "Registrasi Surat"	Surat berhasil diregistrasi dan mendapat nomor registrasi fakultas	PASS: Nomor registrasi tersimpan | FAIL: Error registrasi		
+96	Admin Fakultas	Melihat detail surat sebelum registrasi	Detail surat lengkap tampil sebelum proses registrasi	PASS: Detail tampil lengkap | FAIL: Detail tidak lengkap		
+97	Admin Fakultas	Melihat nomor surat pengantar dari prodi	Nomor surat pengantar yang diinput Admin Prodi tampil di detail	PASS: Nomor tampil | FAIL: Nomor tidak tampil		
+98	Supervisor	Supervisor klik "Setujui & Kirim ke Staf Fakultas"	Status berubah dan surat diteruskan ke Staf Fakultas	PASS: Status berubah, notif ke Staf Fakultas | FAIL: Proses gagal		
+99	Supervisor	Supervisor klik "Revisi" atau "Tolak" beserta catatan	Status berubah ke Revisi/Ditolak, catatan tersimpan, notif ke Mahasiswa	PASS: Catatan tersimpan, status berubah | FAIL: Catatan tidak tersimpan		
+100	Supervisor	Mencoba verifikasi tanpa melihat dokumen	Sistem mengizinkan atau memberi peringatan jika dokumen belum dibuka	PASS: Peringatan muncul ATAU aksi diizinkan dengan warning | FAIL: Crash	 	
+101	Supervisor	Revisi tanpa catatan	Sistem menolak aksi revisi tanpa catatan	PASS: Validasi muncul | FAIL: Revisi berhasil tanpa catatan		
+102	Supervisor	Download semua lampiran untuk review offline	Semua lampiran dapat diunduh dalam satu kali klik atau satu per satu	PASS: Semua file ter-download | FAIL: Error download		
+103	Supervisor	Melihat track record mahasiswa	Riwayat semua pengajuan mahasiswa tersebut tampil	PASS: Riwayat lengkap tampil | FAIL: Riwayat tidak ada		
+104	Supervisor	Preview surat sebelum approval	Surat dapat dipreviewed sebelum disetujui	PASS: Preview muncul | FAIL: Preview error		
+105	Supervisor	Konfirmasi sebelum approve/reject	Modal konfirmasi muncul sebelum aksi diproses	PASS: Modal konfirmasi tampil | FAIL: Langsung terproses tanpa konfirmasi		
+106	Manajer TU	Manajer TU login dan melihat dashboard	Dashboard Manajer TU menampilkan statistik dan grafik pengajuan	PASS: Dashboard load dengan data | FAIL: Error atau kosong		
+107	Manajer TU	Melihat grafik trend pengajuan per bulan	Grafik menampilkan tren jumlah pengajuan per bulan	PASS: Grafik tampil dengan data akurat | FAIL: Grafik tidak ada atau kosong		
+108	Manajer TU	Filter statistik berdasarkan periode	Statistik berubah sesuai periode yang dipilih	PASS: Filter bekerja, data berubah | FAIL: Filter tidak berfungsi		
+109	Manajer TU	Melihat detail breakdown per prodi	Statistik menampilkan rincian jumlah surat per program studi	PASS: Breakdown per prodi tampil | FAIL: Data hanya total, tidak per prodi		
+110	Manajer TU	Real-time update dashboard	Dashboard memperbarui data secara otomatis tanpa refresh manual	PASS: Data update otomatis dalam interval tertentu | FAIL: Harus refresh manual (catatan: fitur ini belum diimplementasi)		
+111	Staf Fakultas	Staf Fakultas login dan membuka daftar antrean	Daftar surat yang siap dicetak dan dikirim ke UPA tampil	PASS: Daftar tampil | FAIL: Daftar kosong atau error		
+112	Staf Fakultas	Filter berdasarkan prodi	Antrean terfilter berdasarkan prodi yang dipilih	PASS: Filter bekerja | FAIL: Filter tidak berfungsi		
+113	Staf Fakultas	Sort berdasarkan tanggal	Antrean terurut berdasarkan tanggal pengajuan	PASS: Sorting bekerja | FAIL: Sorting tidak berfungsi		
+114	Staf Fakultas	Search berdasarkan nama mahasiswa	Surat dari mahasiswa yang dicari muncul	PASS: Pencarian akurat | FAIL: Search tidak berfungsi		
+115	Staf Fakultas	Melihat instruksi dari Manajer TU	Instruksi atau catatan dari Manajer TU tampil di interface Staf	PASS: Instruksi tampil | FAIL: Tidak ada instruksi		
+116	Staf Fakultas	Staf Fakultas klik tombol "Cetak & Kirim ke UPA"	Surat dicetak dan status berubah ke tahap UPA	PASS: Status berubah, notif ke UPA | FAIL: Error atau status tidak berubah		
+117	UPA	UPA login ke dalam sistem	Dashboard UPA menampilkan daftar surat yang masuk dari Staf Fakultas	PASS: Dashboard load | FAIL: Error atau kosong		
+118	UPA	Filter berdasarkan fakultas/prodi	Daftar terfilter sesuai fakultas/prodi yang dipilih	PASS: Filter bekerja | FAIL: Filter tidak berfungsi		
+119	UPA	Search berdasarkan NIM/Nama	Surat dari mahasiswa yang dicari muncul	PASS: Pencarian akurat | FAIL: Search tidak berfungsi		
+120	UPA	Melihat statistik surat yang sudah difinalisasi	Statistik jumlah surat yang sudah mendapat nomor SKL tampil	PASS: Statistik akurat | FAIL: Tidak ada statistik		
+121	UPA	Melihat antrean berdasarkan tanggal masuk	Antrean terurut berdasarkan tanggal surat masuk ke UPA	PASS: Urutan benar | FAIL: Urutan acak		
+122	UPA	UPA menginput Nomor SKL (Nomor Kelulusan) lalu simpan	Nomor SKL tersimpan dan PDF final digenerate otomatis	PASS: Nomor SKL tersimpan, PDF ter-generate | FAIL: Error simpan atau PDF tidak ter-generate		
+123	UPA	Field nomor SKL kosong saat submit	Sistem menampilkan validasi field nomor SKL wajib diisi	PASS: Validasi muncul | FAIL: Tersimpan tanpa nomor SKL		
+124	UPA	Generate nomor SKL otomatis	Sistem dapat meng-generate nomor SKL secara otomatis	PASS: Nomor ter-generate dengan format yang benar | FAIL: Fitur tidak ada (catatan: belum tentu diimplementasi)		
+125	UPA	Mengamati sistem setelah UPA menyimpan Nomor SKL	Mahasiswa mendapat notifikasi bahwa surat selesai dan bisa diunduh	PASS: Notif ke mahasiswa, status = Selesai | FAIL: Tidak ada notif atau status tidak berubah		
+126	UPA	Download PDF final yang sudah digenerate	File PDF final berhasil diunduh dengan nomor SKL yang benar	PASS: PDF ter-download, nomor SKL benar | FAIL: Error download atau nomor salah		
+127	UPA	Verifikasi isi PDF final	Isi PDF mencakup semua data: nama, NIM, nomor SKL, TTD, dll.	PASS: Semua elemen ada di PDF | FAIL: Ada data yang hilang		
+128	UPA	Melihat riwayat surat yang sudah difinalisasi	Daftar semua surat yang sudah mendapat nomor SKL tampil	PASS: Riwayat tampil lengkap | FAIL: Riwayat tidak ada		
+129	UPA	Export laporan finalisasi bulanan	File laporan bulanan berhasil diunduh dalam format Excel/PDF	PASS: File ter-download | FAIL: Fitur tidak ada atau error		
+130	UPA	Filter laporan berdasarkan periode	Laporan terfilter sesuai bulan/tahun yang dipilih	PASS: Filter bekerja | FAIL: Filter tidak berfungsi		
+131	UPA	Cetak rekapitulasi nomor SKL	Rekapitulasi dapat dicetak langsung dari browser	PASS: Print dialog muncul dengan data yang benar | FAIL: Fitur cetak tidak ada		
+132	UPA	Melihat statistik per prodi	Statistik jumlah SKL per prodi tampil	PASS: Breakdown per prodi akurat | FAIL: Hanya total, tidak per prodi		
+133	Full Workflow	Full workflow: Mahasiswa submit → hingga UPA finalisasi	Seluruh alur proses berjalan tanpa error dari awal sampai akhir	PASS: Semua tahap berhasil, status akhir = Selesai | FAIL: Ada tahap yang gagal		
+134	Full Workflow	Workflow dengan revisi dan Submit ulang	Alur revisi berjalan: Ditolak Admin → Mahasiswa edit → Submit ulang → Diproses lagi	PASS: Alur revisi berjalan normal | FAIL: Stuck di salah satu tahap		
+135	Full Workflow	Workflow ditolak Admin Prodi	Status berubah ke Ditolak, mahasiswa mendapat notifikasi, alur berhenti	PASS: Status = Ditolak, notif ke mahasiswa | FAIL: Status tidak berubah		
+136	Full Workflow	Workflow ditolak Supervisor	Status berubah ke Ditolak oleh Supervisor, notif ke mahasiswa	PASS: Status = Ditolak, notif ke mahasiswa | FAIL: Status tidak berubah		
+137	Full Workflow	Tracking status update real-time	Status tracking di halaman mahasiswa berubah segera setelah ada aksi dari admin	PASS: Status berubah dalam <60 detik | FAIL: Status tidak update tanpa refresh manual (catatan: perlu polling)		
+138	Full Workflow	Riwayat mencatat semua actor	Setiap tahap workflow tercatat beserta nama dan role pelakunya	PASS: Semua actor tercatat di riwayat | FAIL: Ada tahap tanpa actor tercatat		
+139	Notifikasi	Mahasiswa submit pengajuan → Admin dapat notif	Setelah mahasiswa submit, Admin Prodi mendapat notifikasi	PASS: Notif muncul di dashboard Admin | FAIL: Tidak ada notif		
+140	Notifikasi	Admin Prodi approve → Kaprodi dapat notif	Setelah Admin approve, Kaprodi mendapat notifikasi	PASS: Notif muncul di dashboard Kaprodi | FAIL: Tidak ada notif		
+141	Notifikasi	Kaprodi TTD → Admin Prodi dapat notif	Setelah Kaprodi TTD, Admin Prodi mendapat notifikasi	PASS: Notif muncul di dashboard Admin | FAIL: Tidak ada notif		
+142	Notifikasi	Setiap perubahan status → Mahasiswa mendapat notif	Mahasiswa mendapat notifikasi setiap kali status pengajuannya berubah	PASS: Notif muncul sesuai perubahan status | FAIL: Notif tidak muncul		
+143	Notifikasi	Surat ditolak atau perlu revisi → Mhs dapat notif	Notifikasi penolakan/revisi beserta catatan sampai ke mahasiswa	PASS: Notif + catatan tampil di dashboard mahasiswa | FAIL: Tidak ada notif atau tanpa catatan		

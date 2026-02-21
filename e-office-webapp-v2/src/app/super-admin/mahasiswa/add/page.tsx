@@ -72,10 +72,11 @@ export default function AddMahasiswaPage() {
 
     try {
       // 1. Create user account
+      // NOTE: Do NOT use credentials:'include' here — it would override the super_admin's session cookie
+      // with the new student's session, causing the next request to fail with 403.
       const userResponse = await fetch('http://localhost:3001/api/auth/sign-up/email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -127,6 +128,7 @@ export default function AddMahasiswaPage() {
       if (!mahasiswaResponse.ok) {
         const errorData = await mahasiswaResponse.json();
         alert(`Gagal membuat data mahasiswa: ${errorData.message || 'Unknown error'}`);
+        setLoading(false);
         return;
       }
 

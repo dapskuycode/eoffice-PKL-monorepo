@@ -1,112 +1,134 @@
-import { newEnforcer, type Enforcer } from "casbin";
 import { Prisma } from "@backend/db/index.ts";
-import path from "node:path";
 
-let enforcer: Enforcer | null = null;
-
-export async function getEnforcer(): Promise<Enforcer> {
-	if (!enforcer) {
-		const modelPath = path.join(process.cwd(), "casbin", "model.conf");
-
-		enforcer = await newEnforcer(modelPath);
-
-		await syncPoliciesFromDatabase(enforcer);
-	}
-
-	return enforcer;
-}
-
-// Sync policies from Prisma database to Casbin
-async function syncPoliciesFromDatabase(enforcer: Enforcer) {
-	// Get all role permissions from database
-	const rolePermissions = await Prisma.rolePermission.findMany({
-		include: {
-			role: true,
-			permission: true,
-		},
-	});
-
-	// Add policies from database
-	for (const rp of rolePermissions) {
-		const roleName = rp.role.name;
-		const resource = rp.permission.resource;
-		const action = rp.permission.action;
-
-		await enforcer.addPolicy(roleName, resource, action);
-	}
-
-	// Get all user roles from database
-	const userRoles = await Prisma.userRole.findMany({
-		include: {
-			user: true,
-			role: true,
-		},
-	});
-
-	// Add role assignments from database
-	for (const ur of userRoles) {
-		await enforcer.addGroupingPolicy(ur.userId, ur.role.name);
-	}
-
-	console.log("Policies synced from database to Casbin");
-}
-
-// Check if user has permission
+// Check if user has permission by querying the database directly
+// This is more reliable than relying on in-memory Casbin state
 export async function checkPermission(
 	userId: string,
 	resource: string,
 	action: string,
 ): Promise<boolean> {
-	const enforcer = await getEnforcer();
-	return await enforcer.enforce(userId, resource, action);
+	// Get all roles for the user
+	const userRoles = await Prisma.userRole.findMany({
+		where: { userId },
+		include: { role: true },
+	});
+
+	if (userRoles.length === 0) {
+		return false;
+	}
+
+	const roleIds = userRoles.map((ur) => ur.roleId);
+
+	// Check if any of the user's roles has the required permission
+	const permission = await Prisma.rolePermission.findFirst({
+		where: {
+			roleId: { in: roleIds },
+			permission: {
+				resource,
+				action,
+			},
+		},
+	});
+
+	return permission !== null;
 }
 
-// Add permission to role
+// Get all roles for user from database
+export async function getUserRoles(userId: string): Promise<string[]> {
+	const userRoles = await Prisma.userRole.findMany({
+		where: { userId },
+		include: { role: true },
+	});
+
+	return userRoles.map((ur) => ur.role.name);
+}
+
+// Add permission to role (update DB)
 export async function addPermissionToRole(
-	role: string,
+	roleName: string,
 	resource: string,
 	action: string,
 ): Promise<boolean> {
-	const enforcer = await getEnforcer();
-	return await enforcer.addPolicy(role, resource, action);
+	const role = await Prisma.role.findUnique({ where: { name: roleName } });
+	const permission = await Prisma.permission.findUnique({
+		where: { resource_action: { resource, action } },
+	});
+
+	if (!role || !permission) return false;
+
+	await Prisma.rolePermission.upsert({
+		where: { roleId_permissionId: { roleId: role.id, permissionId: permission.id } },
+		update: {},
+		create: { roleId: role.id, permissionId: permission.id },
+	});
+
+	return true;
 }
 
-// Remove permission from role
+// Remove permission from role (update DB)
 export async function removePermissionFromRole(
-	role: string,
+	roleName: string,
 	resource: string,
 	action: string,
 ): Promise<boolean> {
-	const enforcer = await getEnforcer();
-	return await enforcer.removePolicy(role, resource, action);
+	const role = await Prisma.role.findUnique({ where: { name: roleName } });
+	const permission = await Prisma.permission.findUnique({
+		where: { resource_action: { resource, action } },
+	});
+
+	if (!role || !permission) return false;
+
+	await Prisma.rolePermission.deleteMany({
+		where: { roleId: role.id, permissionId: permission.id },
+	});
+
+	return true;
 }
 
-// Assign role to user
+// Assign role to user (update DB)
 export async function assignRoleToUser(
 	userId: string,
-	role: string,
+	roleName: string,
 ): Promise<boolean> {
-	const enforcer = await getEnforcer();
-	return await enforcer.addGroupingPolicy(userId, role);
+	const role = await Prisma.role.findUnique({ where: { name: roleName } });
+	if (!role) return false;
+
+	await Prisma.userRole.upsert({
+		where: { userId_roleId: { userId, roleId: role.id } },
+		update: {},
+		create: { userId, roleId: role.id },
+	});
+
+	return true;
 }
 
-// Remove role from user
+// Remove role from user (update DB)
 export async function removeRoleFromUser(
 	userId: string,
-	role: string,
+	roleName: string,
 ): Promise<boolean> {
-	const enforcer = await getEnforcer();
-	return await enforcer.removeGroupingPolicy(userId, role);
-}
+	const role = await Prisma.role.findUnique({ where: { name: roleName } });
+	if (!role) return false;
 
-// Get all roles for user
-export async function getUserRoles(userId: string): Promise<string[]> {
-	const enforcer = await getEnforcer();
-	return await enforcer.getRolesForUser(userId);
+	await Prisma.userRole.deleteMany({
+		where: { userId, roleId: role.id },
+	});
+
+	return true;
 }
 
 // Get all permissions for role
-export async function getRolePermissions(role: string): Promise<string[][]> {
-	const enforcer = await getEnforcer();
-	return await enforcer.getPermissionsForUser(role);
+export async function getRolePermissions(roleName: string): Promise<string[][]> {
+	const role = await Prisma.role.findUnique({
+		where: { name: roleName },
+		include: {
+			rolePermission: {
+				include: { permission: true },
+			},
+		},
+	});
+
+	if (!role) return [];
+
+	return role.rolePermission.map((rp) => [rp.permission.resource, rp.permission.action]);
 }

@@ -89,7 +89,7 @@ export default new Elysia()
   })
 
   // Create mahasiswa (Atomic)
-  .post('/', async ({ body }) => {
+  .post('/', async ({ body, set }) => {
     const {
       nim,
       tahunMasuk,
@@ -106,6 +106,7 @@ export default new Elysia()
     } = body as any;
 
     if (!departemenId || !programStudiId) {
+      set.status = 400;
       return { error: 'Bad Request', message: 'Departemen and Program Studi are required' };
     }
 
@@ -118,11 +119,7 @@ export default new Elysia()
         let user = await tx.user.findUnique({ where: { email } });
 
         if (!user) {
-          // If we want to create a user safely with better-auth, we'd ideally use its API.
-          // For now, if user doesn't exist, we might still need to use the signUp API from frontend
-          // OR we can create a placeholder and the user will have to use "Forgot Password".
-          // BUT the user needs to log in.
-          // To keep it simple, we'll try to reuse the user if they were partially created.
+          set.status = 400; // Or 404/409 depending on policy
           return { error: 'Conflict', message: 'User must be created via sign-up API first or provide existing userId' };
         }
         finalUserId = user.id;
@@ -131,6 +128,7 @@ export default new Elysia()
       // Check if student profile already exists
       const existingMhs = await tx.mahasiswa.findUnique({ where: { userId: finalUserId } });
       if (existingMhs) {
+        set.status = 409;
         return { error: 'Conflict', message: 'Mahasiswa profile already exists for this user' };
       }
 

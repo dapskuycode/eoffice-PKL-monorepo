@@ -8,6 +8,9 @@ export default new Elysia()
     const { page = '1', limit = '100' } = query as any;
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
+    console.log('--- PRODI GET DEBUG ---');
+    console.log('Query:', query);
+
     const [prodi, total] = await Promise.all([
       prisma.programStudi.findMany({
         include: {
@@ -19,6 +22,9 @@ export default new Elysia()
       }),
       prisma.programStudi.count(),
     ]);
+
+    console.log('Result total:', total);
+    console.log('Result length:', prodi.length);
 
     return {
       data: prodi,

@@ -90,10 +90,10 @@ export default function AddPegawaiPage() {
 
     try {
       // 1. Create user account
+      // NOTE: Do NOT use credentials:'include' here — it would override the super_admin's session cookie
       const userResponse = await fetch('http://localhost:3001/api/auth/sign-up/email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -140,6 +140,7 @@ export default function AddPegawaiPage() {
       if (!pegawaiResponse.ok) {
         const errorData = await pegawaiResponse.json();
         alert(`Gagal membuat data pegawai: ${errorData.message || 'Unknown error'}`);
+        setLoading(false);
         return;
       }
 

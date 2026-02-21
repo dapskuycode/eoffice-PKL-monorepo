@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, Users, Briefcase, GraduationCap, FileText, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function SuperAdminLayout({
   children,
@@ -11,6 +12,7 @@ export default function SuperAdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { logout } = useAuth();
 
   const menuItems = [
     {
@@ -41,27 +43,30 @@ export default function SuperAdminLayout({
   ];
 
   const handleLogout = () => {
-    router.push('/');
+    if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
+      logout();
+    }
   };
+
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full top-16 z-10">
+      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-[calc(100vh-4rem)] top-16 z-10">
         {/* Menu Items */}
         <nav className="flex-1 p-4 space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.path;
-            
+
             return (
               <button
                 key={item.path}
                 onClick={() => router.push(item.path)}
                 className={`
                   w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors
-                  ${isActive 
-                    ? 'bg-blue-50 text-blue-700 font-medium' 
+                  ${isActive
+                    ? 'bg-blue-50 text-blue-700 font-medium'
                     : 'text-gray-700 hover:bg-gray-100'
                   }
                 `}
@@ -81,7 +86,7 @@ export default function SuperAdminLayout({
             onClick={handleLogout}
           >
             <LogOut className="h-5 w-5 mr-3" />
-            Kembali ke Home
+            Logout
           </Button>
         </div>
       </aside>

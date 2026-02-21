@@ -7,6 +7,8 @@ import { autoload } from "elysia-autoload";
 import env from "env-var";
 
 
+console.log("--- SERVER INITIALIZED ---");
+
 export const app = new Elysia()
 	.use(swagger())
 	.use(

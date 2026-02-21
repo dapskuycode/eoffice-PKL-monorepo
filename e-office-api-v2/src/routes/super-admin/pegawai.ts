@@ -100,7 +100,7 @@ export default new Elysia()
     ...requirePermission('pegawai', 'read')
   })
 
-  .post('/', async ({ body }) => {
+  .post('/', async ({ body, set }) => {
     const {
       nip,
       jabatan,
@@ -118,7 +118,8 @@ export default new Elysia()
       if (!finalUserId) {
         const user = await tx.user.findUnique({ where: { email } });
         if (!user) {
-          return { error: 'Conflict', message: 'User must be created via sign-up API first' };
+          set.status = 400;
+          return { error: 'Conflict', message: 'User must be created via sign-up API first or provide existing userId' };
         }
         finalUserId = user.id;
       }
@@ -126,6 +127,7 @@ export default new Elysia()
       // Check if profile exists
       const existingPeg = await tx.pegawai.findUnique({ where: { userId: finalUserId } });
       if (existingPeg) {
+        set.status = 409;
         return { error: 'Conflict', message: 'Pegawai profile already exists for this user' };
       }
 
