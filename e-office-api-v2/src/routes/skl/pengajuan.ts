@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 import { Prisma } from "@backend/db/index.ts";
 import { authGuardPlugin } from "@backend/middlewares/auth.ts";
+import { MinioService } from "@backend/services/minio.service.ts";
 
 export default new Elysia()
 	.use(authGuardPlugin)
@@ -23,6 +24,23 @@ export default new Elysia()
 			where.mahasiswaId = query.mahasiswaId;
 		}
 
+		// Check user role - Admin Fakultas can see ALL prodi
+		const userRoles = await Prisma.userRole.findMany({
+			where: { userId: user.id },
+			include: {
+				role: true
+			}
+		});
+
+		const isAdminFakultas = userRoles.some(ur => ur.role.name === 'admin_fakultas');
+		const isStafFakultas = userRoles.some(ur => ur.role.name === 'staf_fakultas');
+		const isSupervisor = userRoles.some(ur => ur.role.name === 'supervisor');
+		const isUpa = userRoles.some(ur => ur.role.name === 'upa');
+		const isManajerTu = userRoles.some(ur => ur.role.name === 'manajer_tu');
+
+		// Skip prodi filtering for faculty-level roles
+		const isFacultyLevelRole = isAdminFakultas || isStafFakultas || isSupervisor || isUpa || isManajerTu;
+
 		// Check if user is Ketua Prodi or Admin Prodi - filter by their program studi
 		// Get pegawai data to check if user is ketua prodi or admin prodi
 		const pegawai = await Prisma.pegawai.findUnique({
@@ -33,20 +51,25 @@ export default new Elysia()
 			},
 		});
 
-		// If user is ketua prodi, filter pengajuan by their program studi
-		if (pegawai?.ketuaDiProgramStudi && pegawai.ketuaDiProgramStudi.length > 0) {
-			const prodiIds = pegawai.ketuaDiProgramStudi.map(p => p.id);
-			where.mahasiswa = {
-				programStudiId: { in: prodiIds }
-			};
-			console.log('[GET /skl/pengajuan] Ketua Prodi detected, filtering by prodi:', prodiIds);
-		}
-		// If user is admin prodi (has programStudiId but not ketua), filter by their prodi
-		else if (pegawai?.programStudiId) {
-			where.mahasiswa = {
-				programStudiId: pegawai.programStudiId
-			};
-			console.log('[GET /skl/pengajuan] Admin Prodi detected, filtering by prodi:', pegawai.programStudiId);
+		// Only apply prodi filtering if NOT a faculty-level role
+		if (!isFacultyLevelRole) {
+			// If user is ketua prodi, filter pengajuan by their program studi
+			if (pegawai?.ketuaDiProgramStudi && pegawai.ketuaDiProgramStudi.length > 0) {
+				const prodiIds = pegawai.ketuaDiProgramStudi.map(p => p.id);
+				where.mahasiswa = {
+					programStudiId: { in: prodiIds }
+				};
+				console.log('[GET /skl/pengajuan] Ketua Prodi detected, filtering by prodi:', prodiIds);
+			}
+			// If user is admin prodi (has programStudiId but not ketua), filter by their prodi
+			else if (pegawai?.programStudiId) {
+				where.mahasiswa = {
+					programStudiId: pegawai.programStudiId
+				};
+				console.log('[GET /skl/pengajuan] Admin Prodi detected, filtering by prodi:', pegawai.programStudiId);
+			}
+		} else {
+			console.log('[GET /skl/pengajuan] Faculty-level role detected, showing ALL prodi');
 		}
 
 		console.log('[GET /skl/pengajuan] Query params:', query);
@@ -145,6 +168,54 @@ export default new Elysia()
 			throw new Error("Pengajuan tidak ditemukan");
 		}
 
+		// Regenerate fresh presigned URLs for lampiran to prevent expiry issues
+		if (pengajuan.lampiran && pengajuan.lampiran.length > 0) {
+			pengajuan.lampiran = await Promise.all(
+				pengajuan.lampiran.map(async (lamp) => {
+					try {
+						// Extract object name from the stored path
+						// pathFile bisa berupa:
+						// 1. Full presigned URL (legacy): http://localhost:9000/...
+						// 2. Object path: lampiran/filename.jpg
+						let objectName = lamp.pathFile;
+						
+						// If it's a full URL, extract the object path
+						if (lamp.pathFile.includes('://')) {
+							const url = new URL(lamp.pathFile);
+							const pathname = decodeURIComponent(url.pathname);
+							// Format: /bucket-name/lampiran/filename.jpg
+							const parts = pathname.split('/').filter(Boolean);
+							if (parts.length >= 2) {
+								// Skip bucket name, join the rest
+								objectName = parts.slice(1).join('/');
+							}
+						}
+						
+						// Remove category prefix if already present
+						const cleanObjectName = objectName
+							.replace(/^lampiran\//, '')
+							.replace(/^signature\//, '');
+						
+						// Generate fresh presigned URL (7 days expiry)
+						const freshUrl = await MinioService.getPresignedUrl(
+							'lampiran',
+							cleanObjectName,
+							7 * 24 * 60 * 60
+						);
+						
+						return {
+							...lamp,
+							pathFile: freshUrl,
+						};
+					} catch (error) {
+						console.error(`Failed to generate presigned URL for ${lamp.id}:`, error);
+						// Return original if regeneration fails
+						return lamp;
+					}
+				})
+			);
+		}
+
 		return pengajuan;
 	})
 
@@ -187,9 +258,9 @@ export default new Elysia()
 			const pengajuan = await Prisma.pengajuanSkl.create({
 				data: {
 					mahasiswaId: body.mahasiswaId,
-					tglLulus: body.tglLulus ? new Date(body.tglLulus) : new Date(),
-					ipkTerakhir: body.ipkTerakhir || 0,
-					jumlahSks: body.jumlahSks || 0,
+					tglLulus: body.tglLulus ? new Date(body.tglLulus) : undefined,
+					ipkTerakhir: body.ipkTerakhir,
+					jumlahSks: body.jumlahSks,
 					status: "DRAFT",
 					// Data identitas sementara
 					namaSementara: body.namaSementara,
@@ -263,9 +334,7 @@ export default new Elysia()
 				data: {
 					mahasiswaId: body.mahasiswaId,
 					tglLulus: new Date(body.tglLulus),
-					ipkTerakhir: body.ipkTerakhir,
-					jumlahSks: body.jumlahSks || 0,
-					status: "DRAFT",
+					ipkTerakhir: body.ipkTerakhir,				jumlahSks: body.jumlahSks,					status: "DRAFT",
 					// Data identitas sementara (optional)
 					namaSementara: body.namaSementara,
 					nimSementara: body.nimSementara,
@@ -408,7 +477,7 @@ export default new Elysia()
 				createLog: t.Optional(t.Boolean()),
 			}),
 		},
-	)
+	)  
 
 	.patch(
 		"/:id/status",

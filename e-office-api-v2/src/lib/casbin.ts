@@ -17,6 +17,12 @@ export async function checkPermission(
 		return false;
 	}
 
+	// Super admin has access to everything
+	const isSuperAdmin = userRoles.some((ur) => ur.role.name === "super_admin");
+	if (isSuperAdmin) {
+		return true;
+	}
+
 	const roleIds = userRoles.map((ur) => ur.roleId);
 
 	// Check if any of the user's roles has the required permission
