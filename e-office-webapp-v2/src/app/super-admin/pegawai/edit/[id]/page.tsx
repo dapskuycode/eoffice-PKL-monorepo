@@ -11,7 +11,7 @@ import { ArrowLeft, Save } from 'lucide-react';
 
 export default function EditPegawaiPage() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { id: string };
   const id = params?.id as string;
 
   const [loading, setLoading] = useState(false);

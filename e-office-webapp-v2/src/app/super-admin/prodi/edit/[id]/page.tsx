@@ -11,13 +11,13 @@ import { ArrowLeft, Save } from 'lucide-react';
 
 export default function EditProdiPage() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { id: string };
   const id = params?.id as string;
-  
+
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const [departemen, setDepartemen] = useState<any[]>([]);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     code: '',
@@ -49,7 +49,7 @@ export default function EditProdiPage() {
       const response = await fetch(`http://localhost:3001/super-admin/prodi/${id}`, {
         credentials: 'include',
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setFormData({

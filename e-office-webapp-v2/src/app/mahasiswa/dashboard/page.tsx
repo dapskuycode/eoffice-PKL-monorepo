@@ -1,4 +1,5 @@
 import React from 'react';
+export const dynamic = 'force-dynamic';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth-server';
 import DashboardContent from './DashboardContent';

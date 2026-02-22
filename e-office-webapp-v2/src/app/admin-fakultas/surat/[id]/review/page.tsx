@@ -34,7 +34,7 @@ const getCleanFileName = (url: string): string => {
 
 export default function AdminFakultasReviewSurat() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { id: string };
   const { user } = useAuth();
   const [zoom, setZoom] = useState(100);
   const [pengajuan, setPengajuan] = useState<any>(null);

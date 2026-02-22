@@ -94,17 +94,18 @@ export const useAuth = () => {
         message.success('Login berhasil');
 
         // Redirect based on role
-        const roles = result.user.roleNames || [result.user.role];
+        const roles = (result.user.roleNames || [result.user.role]).filter(Boolean) as string[];
+        const lowerRoles = roles.map(r => r.toLowerCase());
 
-        if (roles.map(r => r.toLowerCase()).includes('mahasiswa')) {
+        if (lowerRoles.includes('mahasiswa')) {
           router.push('/mahasiswa/portal');
-        } else if (roles.map(r => r.toLowerCase()).includes('admin_prodi')) {
+        } else if (lowerRoles.includes('admin_prodi')) {
           router.push('/admin-prodi/dashboard');
-        } else if (roles.map(r => r.toLowerCase()).includes('ketua_prodi') || roles.map(r => r.toLowerCase()).includes('kaprodi')) {
+        } else if (lowerRoles.includes('ketua_prodi') || lowerRoles.includes('kaprodi')) {
           router.push('/ketua-prodi/dashboard');
-        } else if (roles.map(r => r.toLowerCase()).includes('admin_fakultas')) {
+        } else if (lowerRoles.includes('admin_fakultas')) {
           router.push('/admin-fakultas/dashboard');
-        } else if (roles.map(r => r.toLowerCase()).includes('supervisor')) {
+        } else if (lowerRoles.includes('supervisor')) {
           router.push('/supervisor/dashboard');
         } else {
           router.push('/mahasiswa/portal');

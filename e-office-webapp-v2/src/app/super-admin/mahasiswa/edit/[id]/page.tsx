@@ -11,14 +11,14 @@ import { ArrowLeft, Save } from 'lucide-react';
 
 export default function EditMahasiswaPage() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { id: string };
   const id = params?.id as string;
-  
+
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const [prodi, setProdi] = useState<any[]>([]);
   const [departemen, setDepartemen] = useState<any[]>([]);
-  
+
   const [formData, setFormData] = useState({
     userId: '',
     name: '',
@@ -73,7 +73,7 @@ export default function EditMahasiswaPage() {
       const response = await fetch(`http://localhost:3001/super-admin/mahasiswa/${id}`, {
         credentials: 'include',
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setFormData({

@@ -13,14 +13,14 @@ import Image from 'next/image';
 // Utility function to extract clean filename from URL
 const getCleanFileName = (url: string): string => {
   if (!url) return 'Dokumen';
-  
+
   // Remove query parameters
   const urlWithoutQuery = url.split('?')[0];
-  
+
   // Get the filename from path
   const parts = urlWithoutQuery.split('/');
   const filename = parts[parts.length - 1];
-  
+
   // Decode URI component in case there are encoded characters
   try {
     return decodeURIComponent(filename);
@@ -31,7 +31,7 @@ const getCleanFileName = (url: string): string => {
 
 export default function AdminFakultasReviewSurat() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { id: string };
   const { user } = useAuth();
   const [zoom, setZoom] = useState(100);
   const [pengajuan, setPengajuan] = useState<any>(null);
@@ -49,16 +49,16 @@ export default function AdminFakultasReviewSurat() {
       setLoading(true);
       console.log('=== FETCHING PENGAJUAN DETAIL (Admin Fakultas) ===');
       console.log('Pengajuan ID:', params.id);
-      
+
       const pengajuanData = await sklService.getPengajuanDetail(params.id as string);
-      
+
       console.log('Pengajuan data received:', pengajuanData);
       console.log('Status:', pengajuanData?.status);
       console.log('Mahasiswa:', pengajuanData?.mahasiswa);
       console.log('Tanda tangan mahasiswa:', pengajuanData?.tandatangan);
       console.log('Tanda tangan kaprodi:', pengajuanData?.ttdKetuaProdi);
       console.log('Nomor SKL:', pengajuanData?.nomorSkl);
-      
+
       if (pengajuanData) {
         setPengajuan(pengajuanData);
       } else {
@@ -84,23 +84,23 @@ export default function AdminFakultasReviewSurat() {
         console.error('Error parsing stored user:', e);
       }
     }
-    
+
     if (!currentUser || !currentUser.id) {
       alert('Anda harus login terlebih dahulu untuk melakukan aksi ini.');
       router.push('/auth/login');
       return;
     }
-    
+
     console.log('=== DEBUG INFO ===');
     console.log('Current user:', currentUser);
     console.log('User ID:', currentUser.id);
     console.log('Pengajuan status:', pengajuan?.status);
-    
+
     if (pengajuan?.status !== 'REGISTERED') {
       alert(`Status surat tidak sesuai. Status saat ini: ${pengajuan?.status}. Harus REGISTERED untuk didaftarkan.`);
       return;
     }
-    
+
     try {
       const success = await adminFakultasService.registerPengajuan(
         params.id as string,
@@ -157,9 +157,9 @@ export default function AdminFakultasReviewSurat() {
   const namaLengkap = pengajuan.namaSementara || mahasiswa?.user?.name || 'Unknown';
   const nim = mahasiswa?.nim || '-';
   const tempatLahir = pengajuan.tempatLahirSementara || mahasiswa?.tempatLahir || '-';
-  const tanggalLahir = pengajuan.tanggalLahirSementara 
+  const tanggalLahir = pengajuan.tanggalLahirSementara
     ? new Date(pengajuan.tanggalLahirSementara).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
-    : (mahasiswa?.tanggalLahir 
+    : (mahasiswa?.tanggalLahir
       ? new Date(mahasiswa.tanggalLahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
       : '-');
   const alamat = pengajuan.alamatSementara || mahasiswa?.alamat || '-';
@@ -169,12 +169,12 @@ export default function AdminFakultasReviewSurat() {
   return (
     <div className="min-h-screen bg-gray-50">
       <AppHeader greetingOnly={true} />
-      
+
       <div className="flex" style={{ marginTop: '64px' }}>
         <aside className="w-64 bg-white shadow-md fixed left-0 h-[calc(100vh-64px)] overflow-y-auto" style={{ top: '64px' }}>
           <div className="p-4">
             <nav className="space-y-2">
-              <div 
+              <div
                 className="px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg font-medium cursor-pointer"
                 onClick={() => router.push('/admin-fakultas/dashboard')}
               >
@@ -262,7 +262,7 @@ export default function AdminFakultasReviewSurat() {
                             <p className="text-xs text-gray-500 truncate">{getCleanFileName(lamp.pathFile)}</p>
                           </div>
                         </div>
-                        <button 
+                        <button
                           className="p-1 hover:bg-gray-200 rounded flex-shrink-0"
                           onClick={() => lamp.pathFile && setPreviewModal({ visible: true, url: lamp.pathFile, title: lamp.jenisDokumen || 'Lampiran' })}
                           title="Buka file"
@@ -280,7 +280,7 @@ export default function AdminFakultasReviewSurat() {
                 </CardContent>
               </Card>
 
-              <Button 
+              <Button
                 variant="outline"
                 className="w-full"
                 onClick={() => router.back()}
@@ -323,7 +323,7 @@ export default function AdminFakultasReviewSurat() {
                           <span className="font-bold">No : {pengajuan.nomorSuratPengantar}</span>
                         </div>
                       )}
-                      
+
                       {/* Nomor SKL (dari Admin Fakultas) */}
                       {pengajuan.nomorSkl && (
                         <div className="mb-4">
@@ -340,7 +340,7 @@ export default function AdminFakultasReviewSurat() {
                       <div className="space-y-4 text-sm leading-relaxed" style={{ textAlign: 'justify' }}>
                         <div className="flex gap-8">
                           <span className="w-20 flex-shrink-0">Yth.</span>
-                          <span>Dekan<br/>Fakultas Sains dan Matematika Universitas Diponegoro<br/>Semarang.</span>
+                          <span>Dekan<br />Fakultas Sains dan Matematika Universitas Diponegoro<br />Semarang.</span>
                         </div>
 
                         <p>Dengan ini kami mengajukan permohonan pembuatan Surat Keterangan Lulus atas nama :</p>
@@ -388,7 +388,7 @@ export default function AdminFakultasReviewSurat() {
                             <p className="mb-4">Ketua Program Studi</p>
                             {pengajuan.ttdKetuaProdi && (
                               <div className="inline-block mb-2">
-                                <Image 
+                                <Image
                                   src={pengajuan.ttdKetuaProdi}
                                   alt="Tanda Tangan Kaprodi"
                                   width={100}
@@ -407,7 +407,7 @@ export default function AdminFakultasReviewSurat() {
                             <p className="mb-4">Pemohon,</p>
                             {pengajuan.tandatangan ? (
                               <div className="inline-block mb-2">
-                                <Image 
+                                <Image
                                   src={pengajuan.tandatangan}
                                   alt="Tanda Tangan Mahasiswa"
                                   width={100}
@@ -431,14 +431,14 @@ export default function AdminFakultasReviewSurat() {
                   </div>
 
                   <div className="flex gap-3 mt-6 justify-end">
-                    <Button 
+                    <Button
                       variant="outline"
                       onClick={() => router.back()}
                     >
                       Tutup
                     </Button>
                     {pengajuan.status === 'REGISTERED' && (
-                      <Button 
+                      <Button
                         className="bg-green-600 hover:bg-green-700 text-white"
                         onClick={handleDaftarkan}
                       >
@@ -459,7 +459,7 @@ export default function AdminFakultasReviewSurat() {
           <div className="bg-white rounded-lg p-6 max-w-5xl w-full mx-4 max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold">{previewModal.title}</h3>
-              <button 
+              <button
                 className="p-2 hover:bg-gray-100 rounded"
                 onClick={() => setPreviewModal({ visible: false, url: '', title: '' })}
               >
@@ -469,8 +469,8 @@ export default function AdminFakultasReviewSurat() {
               </button>
             </div>
             <div className="overflow-auto" style={{ maxHeight: 'calc(90vh - 120px)' }}>
-              <iframe 
-                src={previewModal.url} 
+              <iframe
+                src={previewModal.url}
                 className="w-full border-0"
                 style={{ height: '70vh' }}
               />

@@ -12,7 +12,7 @@ import Image from 'next/image';
 
 export default function AdminFakultasDetailSurat() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { id: string };
   const { user } = useAuth();
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
@@ -31,7 +31,7 @@ export default function AdminFakultasDetailSurat() {
     try {
       setLoading(true);
       const pengajuanData = await adminFakultasService.getPengajuanDetail(params.id as string);
-      
+
       if (pengajuanData) {
         setPengajuan(pengajuanData);
       }
@@ -55,14 +55,14 @@ export default function AdminFakultasDetailSurat() {
         console.error('Error parsing stored user:', e);
       }
     }
-    
+
     const actorId = currentUser?.id || pengajuan?.mahasiswa?.userId;
-    
+
     if (!actorId) {
       alert('Error: Tidak dapat menemukan user ID yang valid');
       return;
     }
-    
+
     try {
       const success = await adminFakultasService.registerPengajuan(
         params.id as string,
@@ -141,9 +141,9 @@ export default function AdminFakultasDetailSurat() {
   const namaLengkap = pengajuan.namaSementara || mahasiswa?.user?.name || 'Unknown';
   const nim = mahasiswa?.nim || '-';
   const tempatLahir = pengajuan.tempatLahirSementara || mahasiswa?.tempatLahir || '-';
-  const tanggalLahir = pengajuan.tanggalLahirSementara 
+  const tanggalLahir = pengajuan.tanggalLahirSementara
     ? new Date(pengajuan.tanggalLahirSementara).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
-    : (mahasiswa?.tanggalLahir 
+    : (mahasiswa?.tanggalLahir
       ? new Date(mahasiswa.tanggalLahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
       : '-');
   const alamat = pengajuan.alamatSementara || mahasiswa?.alamat || '-';
@@ -153,13 +153,13 @@ export default function AdminFakultasDetailSurat() {
   return (
     <div className="min-h-screen bg-gray-50">
       <AppHeader greetingOnly={true} />
-      
+
       <div className="flex" style={{ marginTop: '64px' }}>
         {/* Sidebar */}
         <aside className="w-64 bg-white shadow-md fixed left-0 h-[calc(100vh-64px)] overflow-y-auto" style={{ top: '64px' }}>
           <div className="p-4">
             <nav className="space-y-2">
-              <div 
+              <div
                 className="px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg font-medium cursor-pointer"
                 onClick={() => router.push('/admin-fakultas/dashboard')}
               >
@@ -263,7 +263,7 @@ export default function AdminFakultasDetailSurat() {
                         <p className="text-xs text-gray-500">File KTM.pdf • 2.1 MB</p>
                       </div>
                     </div>
-                    <button 
+                    <button
                       className="p-2 hover:bg-gray-200 rounded"
                       onClick={() => setShowPreviewModal(true)}
                     >
@@ -285,7 +285,7 @@ export default function AdminFakultasDetailSurat() {
                   <CardTitle className="text-lg">Aksi</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button 
+                  <Button
                     className="w-full bg-green-500 hover:bg-green-600 text-white"
                     onClick={handleSetujui}
                   >
@@ -294,7 +294,7 @@ export default function AdminFakultasDetailSurat() {
                     </svg>
                     Setujui Surat
                   </Button>
-                  <Button 
+                  <Button
                     variant="outline"
                     className="w-full"
                     onClick={() => setShowPreviewModal(true)}
@@ -309,7 +309,7 @@ export default function AdminFakultasDetailSurat() {
               </Card>
 
               {/* Riwayat Surat */}
-              <RiwayatSurat 
+              <RiwayatSurat
                 pengajuanId={params.id as string}
                 title="Riwayat Surat"
               />
@@ -349,7 +349,7 @@ export default function AdminFakultasDetailSurat() {
                 </button>
               </div>
             </div>
-            
+
             <div className="p-8 overflow-auto" style={{ maxHeight: 'calc(90vh - 80px)' }}>
               <div className="bg-white border rounded-lg p-8 shadow-sm" style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'top left', width: `${10000 / zoom}%` }}>
                 <div className="max-w-3xl mx-auto">
@@ -378,7 +378,7 @@ export default function AdminFakultasDetailSurat() {
                   <div className="space-y-4 text-sm leading-relaxed" style={{ textAlign: 'justify' }}>
                     <div className="flex gap-8">
                       <span className="w-20 flex-shrink-0">Yth.</span>
-                      <span>Dekan<br/>Fakultas Sains dan Matematika Universitas Diponegoro<br/>Semarang.</span>
+                      <span>Dekan<br />Fakultas Sains dan Matematika Universitas Diponegoro<br />Semarang.</span>
                     </div>
 
                     <p>Dengan ini kami mengajukan permohonan pembuatan Surat Keterangan Lulus atas nama :</p>
@@ -434,7 +434,7 @@ export default function AdminFakultasDetailSurat() {
                         <p className="mb-4">Ketua Program Studi</p>
                         {pengajuan.ttdKetuaProdi && (
                           <div className="inline-block mb-2">
-                            <Image 
+                            <Image
                               src={pengajuan.ttdKetuaProdi}
                               alt="Tanda Tangan Kaprodi"
                               width={100}
@@ -455,7 +455,7 @@ export default function AdminFakultasDetailSurat() {
                         <p className="mb-4">Pemohon,</p>
                         {pengajuan.tandatangan && (
                           <div className="inline-block mb-2">
-                            <Image 
+                            <Image
                               src={pengajuan.tandatangan}
                               alt="Tanda Tangan Mahasiswa"
                               width={100}

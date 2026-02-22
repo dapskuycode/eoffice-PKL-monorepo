@@ -34,7 +34,7 @@ const getCleanFileName = (url: string): string => {
 
 export default function AdminProdiDetailSurat() {
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { id: string };
   const { user } = useAuth();
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showRevisiModal, setShowRevisiModal] = useState(false);

@@ -22,19 +22,13 @@ export const MahasiswaLayout: React.FC<MahasiswaLayoutProps> = ({
 }) => {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
-  
+
   // Hide sidebar on form pages
   const isFormPage = pathname?.includes('/form');
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <AppHeader
-        collapsed={collapsed}
-        onCollapse={setCollapsed}
-        userName={userName}
-        userRole="Mahasiswa"
-        onLogout={onLogout}
-      />
+      <AppHeader />
       <Layout>
         {!isFormPage && (
           <Sider

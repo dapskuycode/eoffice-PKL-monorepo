@@ -13,7 +13,7 @@ export default function GenerateSuratPage() {
 
   // Mock data
   const surat = {
-    id: params.id,
+    id: params?.id,
     pengaju: 'Ahmad Douglas',
     nim: '24060121130063',
     perihal: 'Surat Keterangan Lulus',
@@ -49,13 +49,13 @@ export default function GenerateSuratPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <AppHeader greetingOnly={true} />
-      
+
       <div className="flex" style={{ marginTop: '64px' }}>
         {/* Sidebar */}
         <aside className="w-64 bg-white shadow-md fixed left-0 h-[calc(100vh-64px)] overflow-y-auto" style={{ top: '64px' }}>
           <div className="p-4">
             <nav className="space-y-2">
-              <div 
+              <div
                 className="px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg font-medium cursor-pointer"
                 onClick={() => router.push('/admin-fakultas/dashboard')}
               >
@@ -132,19 +132,19 @@ export default function GenerateSuratPage() {
                   <div className="flex justify-center p-4 bg-gray-50 rounded-lg">
                     <div className="w-32 h-32 bg-white border-2 border-gray-300 flex items-center justify-center">
                       <svg className="w-24 h-24" viewBox="0 0 100 100">
-                        <rect width="100" height="100" fill="white"/>
-                        <rect x="10" y="10" width="10" height="10" fill="black"/>
-                        <rect x="30" y="10" width="10" height="10" fill="black"/>
-                        <rect x="50" y="10" width="10" height="10" fill="black"/>
-                        <rect x="70" y="10" width="10" height="10" fill="black"/>
-                        <rect x="10" y="30" width="10" height="10" fill="black"/>
-                        <rect x="70" y="30" width="10" height="10" fill="black"/>
-                        <rect x="10" y="50" width="10" height="10" fill="black"/>
-                        <rect x="30" y="50" width="10" height="10" fill="black"/>
-                        <rect x="50" y="50" width="10" height="10" fill="black"/>
-                        <rect x="70" y="50" width="10" height="10" fill="black"/>
-                        <rect x="10" y="70" width="10" height="10" fill="black"/>
-                        <rect x="70" y="70" width="10" height="10" fill="black"/>
+                        <rect width="100" height="100" fill="white" />
+                        <rect x="10" y="10" width="10" height="10" fill="black" />
+                        <rect x="30" y="10" width="10" height="10" fill="black" />
+                        <rect x="50" y="10" width="10" height="10" fill="black" />
+                        <rect x="70" y="10" width="10" height="10" fill="black" />
+                        <rect x="10" y="30" width="10" height="10" fill="black" />
+                        <rect x="70" y="30" width="10" height="10" fill="black" />
+                        <rect x="10" y="50" width="10" height="10" fill="black" />
+                        <rect x="30" y="50" width="10" height="10" fill="black" />
+                        <rect x="50" y="50" width="10" height="10" fill="black" />
+                        <rect x="70" y="50" width="10" height="10" fill="black" />
+                        <rect x="10" y="70" width="10" height="10" fill="black" />
+                        <rect x="70" y="70" width="10" height="10" fill="black" />
                       </svg>
                     </div>
                   </div>
@@ -181,7 +181,7 @@ export default function GenerateSuratPage() {
               </Card>
 
               {/* Kembali Button */}
-              <Button 
+              <Button
                 variant="outline"
                 className="w-full"
                 onClick={() => router.back()}
@@ -232,7 +232,7 @@ export default function GenerateSuratPage() {
                       <div className="space-y-4 text-sm leading-relaxed" style={{ textAlign: 'justify' }}>
                         <div className="flex gap-8">
                           <span className="w-20 flex-shrink-0">Yth.</span>
-                          <span>Dekan<br/>Fakultas Sains dan Matematika Universitas Diponegoro<br/>Semarang.</span>
+                          <span>Dekan<br />Fakultas Sains dan Matematika Universitas Diponegoro<br />Semarang.</span>
                         </div>
 
                         <p>Dengan ini kami mengajukan permohonan pembuatan Surat Keterangan Lulus atas nama :</p>
@@ -309,13 +309,13 @@ export default function GenerateSuratPage() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-3 mt-6 justify-end">
-                    <Button 
+                    <Button
                       variant="outline"
                       onClick={() => router.back()}
                     >
                       Tutup
                     </Button>
-                    <Button 
+                    <Button
                       className="bg-blue-600 hover:bg-blue-700 text-white"
                       onClick={handleGenerateDanSetujui}
                     >
