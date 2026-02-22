@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth-server';
 import DashboardContent from './DashboardContent';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3079';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 async function getDashboardData(cookies: string) {
   try {

@@ -6,6 +6,7 @@ import AppHeader from '@/components/AppHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Eye, Trash2 } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
   DRAFT: { label: 'Draft', color: 'bg-gray-100 text-gray-800' },
@@ -36,7 +37,7 @@ export default function SuratPage() {
   const loadSurat = async () => {
     try {
       setLoading(true);
-      let url = `http://localhost:3001/super-admin/surat?page=${currentPage}&limit=10`;
+      let url = `${API_URL}/super-admin/surat?page=${currentPage}&limit=10`;
       if (filterStatus) url += `&status=${filterStatus}`;
 
       const response = await fetch(url, { credentials: 'include' });
@@ -57,7 +58,7 @@ export default function SuratPage() {
     if (!confirm('Yakin ingin menghapus data surat ini?')) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/super-admin/surat/${id}`, {
+      const response = await fetch(`${API_URL}/super-admin/surat/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

@@ -6,6 +6,7 @@ import AppHeader from '@/components/AppHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, Briefcase, GraduationCap, FileText } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 export default function SuperAdminDashboard() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function SuperAdminDashboard() {
   const loadStats = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3001/super-admin/dashboard/stats', {
+      const response = await fetch(`${API_URL}/super-admin/dashboard/stats`, {
         credentials: 'include',
       });
       

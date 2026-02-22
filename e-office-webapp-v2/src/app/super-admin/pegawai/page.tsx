@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, Edit, Trash2 } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 export default function PegawaiPage() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function PegawaiPage() {
 
   const loadRoles = async () => {
     try {
-      const response = await fetch('http://localhost:3001/master/role', {
+      const response = await fetch(`${API_URL}/master/role`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -45,7 +46,7 @@ export default function PegawaiPage() {
   const loadPegawai = async () => {
     try {
       setLoading(true);
-      let url = `http://localhost:3001/super-admin/pegawai?page=${currentPage}&limit=10`;
+      let url = `${API_URL}/super-admin/pegawai?page=${currentPage}&limit=10`;
       if (searchTerm) url += `&search=${searchTerm}`;
       if (filterRole) url += `&roleId=${filterRole}`;
 
@@ -72,7 +73,7 @@ export default function PegawaiPage() {
     if (!selectedPegawai) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/super-admin/pegawai/${selectedPegawai.id}`, {
+      const response = await fetch(`${API_URL}/super-admin/pegawai/${selectedPegawai.id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

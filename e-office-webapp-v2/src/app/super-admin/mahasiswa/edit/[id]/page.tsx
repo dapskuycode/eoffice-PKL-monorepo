@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Save } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 export default function EditMahasiswaPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function EditMahasiswaPage() {
 
   const loadDepartemen = async () => {
     try {
-      const response = await fetch('http://localhost:3001/super-admin/departemen?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/departemen?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -55,7 +56,7 @@ export default function EditMahasiswaPage() {
 
   const loadProdi = async () => {
     try {
-      const response = await fetch('http://localhost:3001/super-admin/prodi?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/prodi?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -70,7 +71,7 @@ export default function EditMahasiswaPage() {
   const loadMahasiswa = async () => {
     try {
       setLoadingData(true);
-      const response = await fetch(`http://localhost:3001/super-admin/mahasiswa/${id}`, {
+      const response = await fetch(`${API_URL}/super-admin/mahasiswa/${id}`, {
         credentials: 'include',
       });
       
@@ -107,7 +108,7 @@ export default function EditMahasiswaPage() {
 
     try {
       // 1. Update user data
-      const userResponse = await fetch(`http://localhost:3001/master/user/${formData.userId}`, {
+      const userResponse = await fetch(`${API_URL}/master/user/${formData.userId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -123,7 +124,7 @@ export default function EditMahasiswaPage() {
       }
 
       // 2. Update mahasiswa data
-      const mahasiswaResponse = await fetch(`http://localhost:3001/super-admin/mahasiswa/${id}`, {
+      const mahasiswaResponse = await fetch(`${API_URL}/super-admin/mahasiswa/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

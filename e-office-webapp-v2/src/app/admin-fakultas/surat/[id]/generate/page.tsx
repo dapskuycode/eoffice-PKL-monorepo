@@ -270,7 +270,7 @@ export default function GenerateSuratPage() {
                           </div>
                         </div>
 
-                        <p>Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi ...................../S1 .................. Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal .............. dengan Indeks Prestasi Kumulatif (IPK) ..../4 dengan Jumlah Satuan Kredit Semester (SKS) 144</p>
+                        <p>Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi ...................../S1 .................. Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal .............. dengan Indeks Prestasi Kumulatif (IPK) ..../4 dengan Jumlah Satuan Kredit Semester (SKS) ............</p>
 
                         <div className="mt-6">
                           <p className="font-semibold mb-2">Berikut kami lampirkan :</p>

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, Edit, Trash2 } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 export default function ProdiPage() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function ProdiPage() {
   const loadProdi = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3001/super-admin/prodi?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/prodi?limit=100`, {
         credentials: 'include',
       });
       
@@ -57,7 +58,7 @@ export default function ProdiPage() {
     if (!selectedProdi) return;
     
     try {
-      const response = await fetch(`http://localhost:3001/super-admin/prodi/${selectedProdi.id}`, {
+      const response = await fetch(`${API_URL}/super-admin/prodi/${selectedProdi.id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

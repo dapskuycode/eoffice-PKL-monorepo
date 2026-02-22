@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Card, Descriptions, Button, Space, Typography,
-  Divider, Row, Col, Spin, App, Modal, Image,
-  Tag, Alert, List, Tooltip
+  Divider, Row, Col, Spin, App, Modal,
+  Tag, Alert, List, Tooltip, Image
 } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -99,15 +99,16 @@ function DetailPageContent() {
         detailSKL: {
           jenisSurat: 'Surat Keterangan Lulus',
           ipk: pengajuanData.ipkTerakhir,
-          tanggalLulus: pengajuanData.tglLulus
+          tanggalLulus: pengajuanData.tglLulus,
+          jumlahSks: pengajuanData.jumlahSks
         },
         lampiranList: pengajuanData.lampiran?.map((l: any) => ({
           id: l.id,
-          namaFile: l.pathFile?.split('/').pop() || 'Dokumen',
+          namaFile: l.pathFile?.split('/').pop()?.split('?')[0] || 'Dokumen',
           kategori: l.jenisDokumen,
           filePath: l.pathFile,
           dataUrl: l.pathFile,
-          tipeFile: l.pathFile?.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'image/jpeg',
+          tipeFile: l.pathFile?.includes('.pdf') ? 'application/pdf' : 'image/jpeg',
           ukuranFile: 0
         })) || [],
         signature: pengajuanData.tandatangan || null,
@@ -213,7 +214,8 @@ function DetailPageContent() {
     localStorage.setItem('skl_detail_pengajuan', JSON.stringify({
       jenisSurat: detailSKL?.jenisSurat || 'Surat Keterangan Lulus',
       tanggalLulus: formattedTanggalLulus,
-      ipk: detailSKL?.ipk || ''
+      ipk: detailSKL?.ipk || '',
+      jumlahSks: detailSKL?.jumlahSks || ''
     }));
 
     // Save lampiran logic 
@@ -285,6 +287,9 @@ function DetailPageContent() {
       message.warning('File tidak tersedia');
       return;
     }
+    
+    console.log('Opening preview:', { url, title, type });
+    
     // Clean up title - extract only filename without query params
     let cleanTitle = title;
     if (title.includes('?')) {
@@ -347,7 +352,7 @@ function DetailPageContent() {
     );
   };
 
-  if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}><Spin size="large" tip="Memuat detail..." /></div>;
+  if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}><Spin size="large" description="Memuat detail..." /></div>;
   if (!pengajuan) return <div style={{ padding: '24px' }}><Text>Data tidak ditemukan</Text></div>;
 
   const { mahasiswa, detailSKL, lampiranList, signature } = pengajuan;
@@ -375,7 +380,7 @@ function DetailPageContent() {
 
         {/* LEFT COLUMN: Main Information */}
         <Col xs={24} lg={16}>
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          <Space vertical size="large" style={{ width: '100%' }}>
 
             {/* 2. Status Alerts (Contextual) */}
             {(pengajuan.status === 'REVISION' || pengajuan.status === 'REVISI') && (
@@ -449,6 +454,9 @@ function DetailPageContent() {
                 <Descriptions.Item label="IPK Terakhir">
                   <Tag color="blue" style={{ fontSize: 14 }}>{detailSKL?.ipk || '-'}</Tag>
                 </Descriptions.Item>
+                <Descriptions.Item label="Jumlah SKS">
+                  <Tag color="green" style={{ fontSize: 14 }}>{detailSKL?.jumlahSks || '-'} SKS</Tag>
+                </Descriptions.Item>
               </Descriptions>
             </Card>
 
@@ -463,7 +471,7 @@ function DetailPageContent() {
                       <Card
                         hoverable
                         size="small"
-                        bodyStyle={{ padding: 12 }}
+                        styles={{ body: { padding: 12 } }}
                         onClick={() => handlePreview(item.dataUrl || item.filePath, getLampiranLabel(item.kategori), item.tipeFile?.includes('pdf') ? 'pdf' : 'image')}
                         style={{ borderColor: '#d9d9d9' }}
                       >
@@ -614,13 +622,19 @@ function DetailPageContent() {
             src={previewModal.url}
             style={{ width: '100%', height: '75vh', border: 'none', borderRadius: 4 }}
             title="PDF Preview"
+            onLoad={() => console.log('PDF loaded successfully:', previewModal.title, previewModal.url)}
           />
         ) : (
           <div style={{ display: 'flex', justifyContent: 'center', background: '#f5f5f5', padding: 20, borderRadius: 4 }}>
-            <Image
+            <img
               src={previewModal.url}
               alt={previewModal.title}
-              style={{ maxHeight: '75vh', objectFit: 'contain' }}
+              style={{ maxHeight: '75vh', objectFit: 'contain', maxWidth: '100%' }}
+              onError={(e) => {
+                console.error('Failed to load image:', previewModal.url);
+                message.error('Gagal memuat gambar. File mungkin sudah tidak ada atau URL expired.');
+              }}
+              onLoad={() => console.log('Image loaded successfully:', previewModal.title, previewModal.url)}
             />
           </div>
         )}

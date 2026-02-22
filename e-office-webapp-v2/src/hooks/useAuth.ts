@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { message } from 'antd';
 import { authService } from '@/services/authService';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3079';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 // Local User type that's more flexible than the one in types/index.ts
 interface AuthUser {

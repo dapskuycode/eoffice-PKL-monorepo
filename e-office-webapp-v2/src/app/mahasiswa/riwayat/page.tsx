@@ -17,7 +17,7 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { mahasiswaService } from '@/services/mahasiswaService';
 import { sklService } from '@/services/sklService';
-import Image from 'next/image';
+import NextImage from 'next/image';
 
 const { Title, Text } = Typography;
 
@@ -195,8 +195,8 @@ const StatCard = ({ title, value, icon, color, loading, onClick, isActive }: any
       }}
     >
       <Card
-        bordered={false}
-        bodyStyle={{ padding: 20 }}
+        variant="borderless"
+        styles={{ body: { padding: 20 } }}
         style={{
           borderRadius: 12,
           boxShadow: isHovered
@@ -348,6 +348,22 @@ function RiwayatPengajuanContent() {
 
   const handleZoomIn = () => setZoom(prev => Math.min(prev + 10, 150));
   const handleZoomOut = () => setZoom(prev => Math.max(prev - 10, 50));
+
+
+  const handleViewLampiran = async (record: any) => {
+    try {
+      const pengajuanData = await sklService.getPengajuanDetail(record.idSurat);
+      if (!pengajuanData) {
+        message.error('Data draft tidak ditemukan');
+        return;
+      }
+      setSelectedDraftLampiran(pengajuanData.lampiran || []);
+      setLampiranModalVisible(true);
+    } catch (error) {
+      console.error('Error fetching lampiran:', error);
+      message.error('Gagal memuat lampiran');
+    }
+  };
 
   const handleDeleteDraft = async (record: any) => {
     modal.confirm({
@@ -819,7 +835,7 @@ function RiwayatPengajuanContent() {
                             <p style={{ marginBottom: '4px' }}>Ketua Program Studi</p>
                             <div className="signature-wrapper" style={{ height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                               {selectedSurat.ttdKetuaProdi && (
-                                <Image src={selectedSurat.ttdKetuaProdi} alt="TTD Kaprodi" width={120} height={80} style={{ objectFit: 'contain' }} />
+                                <NextImage src={selectedSurat.ttdKetuaProdi} alt="TTD Kaprodi" width={120} height={80} style={{ objectFit: 'contain' }} />
                               )}
                             </div>
                             <div style={{ marginTop: '4px' }}>
@@ -837,7 +853,7 @@ function RiwayatPengajuanContent() {
                             <p style={{ marginBottom: '4px' }}>Pemohon,</p>
                             <div className="signature-wrapper" style={{ height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                               {selectedSurat.tandatangan && (
-                                <Image src={selectedSurat.tandatangan} alt="TTD Mahasiswa" width={120} height={80} style={{ objectFit: 'contain' }} />
+                                <NextImage src={selectedSurat.tandatangan} alt="TTD Mahasiswa" width={120} height={80} style={{ objectFit: 'contain' }} />
                               )}
                             </div>
                             <div style={{ marginTop: '4px' }}>

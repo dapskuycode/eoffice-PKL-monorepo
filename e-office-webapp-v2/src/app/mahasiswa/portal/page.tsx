@@ -82,7 +82,7 @@ export default function MahasiswaPortalPage() {
           boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
           marginBottom: 32
         }}
-        bodyStyle={{ padding: '24px' }}
+        styles={{ body: { padding: '24px' } }}
       >
         <Row gutter={[32, 24]} align="middle">
           {/* Bagian Kiri: Teks Bantuan */}
@@ -147,7 +147,7 @@ export default function MahasiswaPortalPage() {
               border: '1px solid #d9d9d9',
               display: 'flex', flexDirection: 'column'
             }}
-            bodyStyle={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+            styles={{ body: { flex: 1, display: 'flex', flexDirection: 'column' } }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
               <div style={{

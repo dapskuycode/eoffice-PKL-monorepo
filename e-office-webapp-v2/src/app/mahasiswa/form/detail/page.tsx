@@ -76,7 +76,6 @@ const FormDetailPengajuan: React.FC<{
             name="tanggalLulus"
             label="Tanggal Lulus"
             placeholder="Pilih tanggal lulus"
-            rules={[{ required: true, message: "Wajib diisi" }]}
             fieldProps={{
               format: "DD/MM/YYYY",
               className: "w-full",
@@ -90,7 +89,6 @@ const FormDetailPengajuan: React.FC<{
             label="IPK"
             placeholder="Masukkan IPK (Rentang: 2.00 - 4.00)"
             rules={[
-              { required: true, message: "Wajib diisi" },
               {
                 pattern: /^(?:[0-3](?:\.\d{1,2})?|4(?:\.0{1,2})?)$/,
                 message: "IPK harus dalam format desimal antara 0.00 sampai 4.00",
@@ -105,7 +103,6 @@ const FormDetailPengajuan: React.FC<{
             label="Jumlah SKS"
             placeholder="Masukkan jumlah SKS (contoh: 144)"
             rules={[
-              { required: true, message: "Wajib diisi" },
               {
                 pattern: /^\d{2,3}$/,
                 message: "SKS harus berupa angka (contoh: 144)",
@@ -348,18 +345,65 @@ function DetailContent() {
 
                     // Sync ke DB
                     const profile = await mahasiswaService.getProfile();
-                    const bid = localStorage.getItem('skl_draft_id');
-                    if (profile && bid) {
+                    
+                    if (!profile) {
+                      message.error("Data profil tidak ditemukan. Silakan login kembali.");
+                      return;
+                    }
+
+                    // Get or create draft ID
+                    let bid = localStorage.getItem('skl_draft_id');
+                    
+                    if (!bid) {
+                      // Create new draft with data from previous step
+                      const dataDiriStr = localStorage.getItem("skl_data_diri");
+                      const dataDiri = dataDiriStr ? JSON.parse(dataDiriStr) : {};
+
+                      const newDraft = await sklService.saveDraft({
+                        mahasiswaId: profile.id,
+                        namaSementara: dataDiri.nama,
+                        nimSementara: dataDiri.nim,
+                        emailSementara: dataDiri.email,
+                        prodiSementara: dataDiri.prodi,
+                        departemenSementara: dataDiri.departemen,
+                        noHpSementara: dataDiri.no_hp,
+                        alamatSementara: dataDiri.alamat,
+                        tempatLahirSementara: dataDiri.tempatLahir,
+                        tanggalLahirSementara: dataDiri.tanggalLahir,
+                        tglLulus: values.tanggalLulus || undefined,
+                        ipkTerakhir: values.ipk ? parseFloat(values.ipk) : undefined,
+                        jumlahSks: values.jumlahSks ? parseInt(values.jumlahSks) : undefined,
+                        draftStep: 2,
+                        createLog: true
+                      });
+
+                      if (!newDraft || !newDraft.id) {
+                        message.error("Gagal membuat draft baru.");
+                        return;
+                      }
+
+                      bid = newDraft.id;
+                      localStorage.setItem('skl_draft_id', bid);
+                      console.log('Created new draft ID:', bid);
+                    } else {
+                      // Update existing draft
                       await sklService.saveDraft({
                         id: bid,
                         mahasiswaId: profile.id,
-                        tglLulus: values.tanggalLulus,
-                        ipkTerakhir: parseFloat(values.ipk),
+                        tglLulus: values.tanggalLulus || undefined,
+                        ipkTerakhir: values.ipk ? parseFloat(values.ipk) : undefined,
+                        jumlahSks: values.jumlahSks ? parseInt(values.jumlahSks) : undefined,
                         draftStep: 2,
                         createLog: true
                       });
                     }
-                    message.success("Draft berhasil disimpan ke server!");
+
+                    message.success("Draft berhasil disimpan!");
+                    
+                    // Redirect to riwayat page
+                    setTimeout(() => {
+                      router.push('/mahasiswa/riwayat');
+                    }, 1000);
                   } catch (err) {
                     console.error('Save draft error:', err);
                     message.error("Gagal sinkronisasi draft ke server.");

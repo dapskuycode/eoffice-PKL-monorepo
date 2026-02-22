@@ -193,6 +193,11 @@ function DataDiriSKLContent() {
         localStorage.setItem("skl_draft_id", savedDraft.id);
         message.success("Draft berhasil disimpan!");
         console.log('Draft ID saved:', savedDraft.id);
+        
+        // Redirect to riwayat page to see the saved draft
+        setTimeout(() => {
+          router.push('/mahasiswa/riwayat');
+        }, 1000);
       }
 
       setDataMahasiswa(values);

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Save } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 export default function AddPegawaiPage() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function AddPegawaiPage() {
 
   const loadDepartemen = async () => {
     try {
-      const response = await fetch('http://localhost:3001/super-admin/departemen?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/departemen?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -50,7 +51,7 @@ export default function AddPegawaiPage() {
 
   const loadProdi = async () => {
     try {
-      const response = await fetch('http://localhost:3001/super-admin/prodi?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/prodi?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -64,7 +65,7 @@ export default function AddPegawaiPage() {
 
   const loadRoles = async () => {
     try {
-      const response = await fetch('http://localhost:3001/master/role?limit=100', {
+      const response = await fetch(`${API_URL}/master/role?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -91,7 +92,7 @@ export default function AddPegawaiPage() {
     try {
       // 1. Create user account
       // NOTE: Do NOT use credentials:'include' here — it would override the super_admin's session cookie
-      const userResponse = await fetch('http://localhost:3001/api/auth/sign-up/email', {
+      const userResponse = await fetch(`${API_URL}/api/auth/sign-up/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -121,7 +122,7 @@ export default function AddPegawaiPage() {
       }
 
       // 2. Create pegawai record (Backend now handles role assignment)
-      const pegawaiResponse = await fetch('http://localhost:3001/super-admin/pegawai', {
+      const pegawaiResponse = await fetch(`${API_URL}/super-admin/pegawai`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

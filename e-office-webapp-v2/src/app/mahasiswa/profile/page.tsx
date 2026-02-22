@@ -4,7 +4,7 @@ import { getSession } from '@/lib/auth-server';
 import ProfileContent from './ProfileContent';
 import { App } from 'antd';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3079';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 async function getMahasiswaProfile(cookies: string) {
   try {

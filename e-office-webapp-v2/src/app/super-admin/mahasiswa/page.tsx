@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, Edit, Trash2 } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 export default function MahasiswaPage() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function MahasiswaPage() {
 
   const loadProdi = async () => {
     try {
-      const response = await fetch('http://localhost:3001/super-admin/prodi?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/prodi?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -43,7 +44,7 @@ export default function MahasiswaPage() {
   const loadMahasiswa = async () => {
     try {
       setLoading(true);
-      let url = `http://localhost:3001/super-admin/mahasiswa?page=${currentPage}&limit=10`;
+      let url = `${API_URL}/super-admin/mahasiswa?page=${currentPage}&limit=10`;
       if (searchTerm) url += `&search=${searchTerm}`;
       if (filterProdi) url += `&prodiId=${filterProdi}`;
       if (filterTahun) url += `&tahun=${filterTahun}`;
@@ -71,7 +72,7 @@ export default function MahasiswaPage() {
     if (!selectedMahasiswa) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/super-admin/mahasiswa/${selectedMahasiswa.id}`, {
+      const response = await fetch(`${API_URL}/super-admin/mahasiswa/${selectedMahasiswa.id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

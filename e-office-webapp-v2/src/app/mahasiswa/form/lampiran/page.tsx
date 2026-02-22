@@ -20,6 +20,7 @@ import ProgressStepper from '@/components/ProgressStepper';
 import { UploadField, type FileUpload } from '@/components/forms/UploadField';
 import { mahasiswaService } from '@/services/mahasiswaService';
 import { sklService } from '@/services/sklService';
+import { uploadService } from '@/services/uploadService';
 
 const { Title, Text } = Typography;
 
@@ -76,6 +77,59 @@ function LampiranContent() {
           const detail = await sklService.getPengajuanDetail(currentDraftId);
           if (detail) {
             setDraftStatus(detail.status);
+            
+            // Load lampiran from database
+            if (detail.lampiran && detail.lampiran.length > 0) {
+              console.log('Loading lampiran from database:', detail.lampiran);
+              const lampiranFromDb: LampiranData = {};
+              
+              detail.lampiran.forEach((item: any) => {
+                const fileUpload: FileUpload = {
+                  uid: item.id,
+                  name: item.namaFile || item.jenisDokumen,
+                  size: 0,
+                  type: item.pathFile.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg',
+                  dataUrl: item.pathFile,
+                  filePath: item.pathFile,
+                  isExisting: true,
+                };
+                
+                // Map jenisDokumen to field name
+                switch (item.jenisDokumen) {
+                  case 'KTM':
+                    lampiranFromDb.ktm = fileUpload;
+                    break;
+                  case 'BERITA_ACARA_UJIAN':
+                    lampiranFromDb.beritaAcara = fileUpload;
+                    break;
+                  case 'BEBAS_PUSTAKA':
+                    lampiranFromDb.ujianSarjana = fileUpload;
+                    break;
+                  case 'PAS_FOTO':
+                    lampiranFromDb.pasFoto = fileUpload;
+                    break;
+                  case 'TRANSKRIP_NILAI':
+                    lampiranFromDb.transkrip = fileUpload;
+                    break;
+                  case 'BUKTI_SUBMIT':
+                    lampiranFromDb.buktiSubmit = fileUpload;
+                    break;
+                  case 'LAINNYA':
+                    lampiranFromDb.lainnya = fileUpload;
+                    break;
+                }
+              });
+              
+              setLampiran(lampiranFromDb);
+              // Save lampiran from database (contains MinIO URLs, not base64)
+              try {
+                localStorage.setItem('skl_lampiran', JSON.stringify(lampiranFromDb));
+              } catch (storageError) {
+                console.warn('Failed to save lampiran to localStorage:', storageError);
+                // Continue anyway, data is in state
+              }
+              console.log('Loaded lampiran:', lampiranFromDb);
+            }
           }
         } catch (err) {
           console.error('Failed to fetch status in lampiran:', err);
@@ -197,37 +251,189 @@ function LampiranContent() {
   };
 
   const handleSaveDraft = async () => {
-    // Save only metadata to localStorage
-    const lampiranMetadata: Record<string, any> = {};
-    Object.entries(lampiran).forEach(([key, file]) => {
-      if (file) {
-        lampiranMetadata[key] = {
-          uid: file.uid,
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          hasFile: true
-        };
-      }
-    });
-    localStorage.setItem("skl_lampiran", JSON.stringify(lampiranMetadata));
-
-    // Sync ke DB
+    setLoading(true);
+    
     try {
       const profile = await mahasiswaService.getProfile();
-      const draftId = localStorage.getItem('skl_draft_id');
-      if (profile && draftId) {
-        await sklService.saveDraft({
-          id: draftId,
+      
+      if (!profile) {
+        message.error("Data profil tidak ditemukan. Silakan login kembali.");
+        setLoading(false);
+        return;
+      }
+
+      // Get or create draft ID
+      let draftId = localStorage.getItem('skl_draft_id');
+      
+      if (!draftId) {
+        // Create new draft first with data from previous steps
+        const dataDiriStr = localStorage.getItem("skl_data_diri");
+        const detailStr = localStorage.getItem("skl_detail_pengajuan");
+        const dataDiri = dataDiriStr ? JSON.parse(dataDiriStr) : {};
+        const detail = detailStr ? JSON.parse(detailStr) : {};
+
+        const newDraft = await sklService.saveDraft({
           mahasiswaId: profile.id,
+          namaSementara: dataDiri.nama,
+          nimSementara: dataDiri.nim,
+          emailSementara: dataDiri.email,
+          prodiSementara: dataDiri.prodi,
+          departemenSementara: dataDiri.departemen,
+          noHpSementara: dataDiri.no_hp,
+          alamatSementara: dataDiri.alamat,
+          tempatLahirSementara: dataDiri.tempatLahir,
+          tanggalLahirSementara: dataDiri.tanggalLahir,
+          tglLulus: detail.tanggalLulus,
+          ipkTerakhir: detail.ipk ? parseFloat(detail.ipk) : undefined,
+          jumlahSks: detail.jumlahSks ? parseInt(detail.jumlahSks) : undefined,
           draftStep: 3,
           createLog: true
         });
+
+        if (!newDraft || !newDraft.id) {
+          message.error("Gagal membuat draft baru.");
+          setLoading(false);
+          return;
+        }
+
+        draftId = newDraft.id;
+        localStorage.setItem('skl_draft_id', draftId);
+        console.log('Created new draft ID:', draftId);
       }
-      message.success("Draft berhasil disimpan ke server!");
+
+      // Save only metadata to localStorage
+      const lampiranMetadata: Record<string, any> = {};
+      Object.entries(lampiran).forEach(([key, file]) => {
+        if (file) {
+          lampiranMetadata[key] = {
+            uid: file.uid,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            hasFile: true
+          };
+        }
+      });
+      localStorage.setItem("skl_lampiran", JSON.stringify(lampiranMetadata));
+
+      // Map lampiran to upload
+      const lampiranMap: { [key: string]: { file: FileUpload | undefined, jenis: string } } = {
+        ktm: { file: lampiran.ktm, jenis: 'KTM' },
+        transkrip: { file: lampiran.transkrip, jenis: 'TRANSKRIP_NILAI' },
+        beritaAcara: { file: lampiran.beritaAcara, jenis: 'BERITA_ACARA_UJIAN' },
+        ujianSarjana: { file: lampiran.ujianSarjana, jenis: 'BEBAS_PUSTAKA' },
+        pasFoto: { file: lampiran.pasFoto, jenis: 'PAS_FOTO' },
+        buktiSubmit: { file: lampiran.buktiSubmit, jenis: 'BUKTI_SUBMIT' },
+        lainnya: { file: lampiran.lainnya, jenis: 'LAINNYA' },
+      };
+
+      // Check existing lampiran in database to avoid duplicates
+      let existingLampiran: any[] = [];
+      try {
+        const currentDraft = await sklService.getPengajuanDetail(draftId);
+        if (currentDraft && currentDraft.lampiran) {
+          existingLampiran = currentDraft.lampiran;
+          console.log('Existing lampiran in database:', existingLampiran);
+        }
+      } catch (err) {
+        console.warn('Could not fetch existing lampiran:', err);
+      }
+
+      // Upload lampiran files to MinIO and save to database
+      let uploadedCount = 0;
+      let failedCount = 0;
+      let skippedCount = 0;
+
+      for (const [key, { file, jenis }] of Object.entries(lampiranMap)) {
+        // Skip if file is from existing pengajuan (already in database)
+        if (file && (file as any).isExisting) {
+          console.log(`Skipping ${key} - file already exists in database`);
+          skippedCount++;
+          continue;
+        }
+
+        // Check if this jenis already exists in database
+        const alreadyExists = existingLampiran.some(l => l.jenisDokumen === jenis);
+        if (alreadyExists && !file?.originFileObj) {
+          console.log(`Skipping ${key} - already in database and no new file`);
+          skippedCount++;
+          continue;
+        }
+
+        if (file && file.originFileObj) {
+          try {
+            console.log(`Uploading ${jenis} to MinIO for draft...`);
+            
+            // Delete existing lampiran of this type first to avoid duplicates
+            if (alreadyExists) {
+              console.log(`Deleting existing ${jenis} before uploading new one`);
+              await sklService.deleteLampiranByCategory(draftId, jenis);
+            }
+            
+            // Upload file to MinIO
+            const uploadResult = await uploadService.uploadFile(file.originFileObj, 'lampiran');
+
+            if (uploadResult) {
+              console.log(`Upload successful for ${jenis}:`, uploadResult);
+              
+              // Save lampiran reference to database
+              await sklService.addLampiran(draftId, {
+                jenisDokumen: jenis as any,
+                pathFile: uploadResult.url,
+              });
+              
+              console.log(`Saved ${jenis} to database:`, uploadResult.fileName);
+              uploadedCount++;
+            }
+          } catch (err) {
+            console.error(`Failed to upload ${jenis}:`, err);
+            failedCount++;
+            // Don't throw error, continue with other files
+          }
+        }
+      }
+
+      // Get detail data for updating
+      const detailStr = localStorage.getItem("skl_detail_pengajuan");
+      const detail = detailStr ? JSON.parse(detailStr) : {};
+
+      // Sync draft step to DB
+      await sklService.saveDraft({
+        id: draftId,
+        mahasiswaId: profile.id,
+        tglLulus: detail.tanggalLulus,
+        ipkTerakhir: detail.ipk ? parseFloat(detail.ipk) : undefined,
+        jumlahSks: detail.jumlahSks ? parseInt(detail.jumlahSks) : undefined,
+        draftStep: 3,
+        createLog: true
+      });
+
+      // Store full lampiran data in window object for use in review page
+      if (typeof window !== 'undefined') {
+        (window as any).__skl_lampiran_full__ = lampiran;
+      }
+
+      const totalFiles = Object.values(lampiran).filter(f => !!f).length;
+      
+      if (uploadedCount > 0) {
+        message.success(`Draft berhasil disimpan dengan ${uploadedCount} lampiran baru! (Total: ${totalFiles} lampiran)`);
+      } else if (skippedCount > 0 && uploadedCount === 0) {
+        message.success(`Draft berhasil disimpan! Semua lampiran sudah tersimpan (${skippedCount} file).`);
+      } else if (failedCount > 0) {
+        message.warning("Draft disimpan tapi ada lampiran yang gagal diupload.");
+      } else {
+        message.success("Draft berhasil disimpan!");
+      }
+      
+      // Redirect to riwayat page
+      setTimeout(() => {
+        router.push('/mahasiswa/riwayat');
+      }, 1000);
     } catch (err) {
       console.error('Save draft error:', err);
-      message.error("Gagal sinkronisasi draft ke server.");
+      message.error("Gagal menyimpan draft.");
+    } finally {
+      setLoading(false);
     }
   };
 
