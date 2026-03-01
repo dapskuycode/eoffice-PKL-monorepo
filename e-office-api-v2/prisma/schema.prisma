@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
 
@@ -370,7 +370,6 @@ enum StatusPengajuan {
   SIAP_CETAK // Manajer TU sudah forward, menunggu cetak dari Staff Fakultas
   STEP_KONVENSIONAL // Staff Fakultas sudah cetak, menunggu penomoran final dari UPA
   COMPLETED // UPA sudah kasih nomor final, proses selesai
-  BATAL // Dibatalkan oleh mahasiswa
 
   @@map("status_pengajuan")
 }
@@ -381,7 +380,6 @@ enum JenisLampiranSkl {
   BERITA_ACARA_UJIAN
   BEBAS_PUSTAKA
   PAS_FOTO
-  BUKTI_SUBMIT
   LAINNYA
 
   @@map("jenis_lampiran_skl")
@@ -397,14 +395,10 @@ model PengajuanSkl {
   // Data Input Mahasiswa
   tglLulus    DateTime
   ipkTerakhir Float
-  jumlahSks   Int      @default(0)
 
   // Data Identitas Sementara (untuk di surat saja, tidak mengubah master mahasiswa)
   namaSementara         String?
-  nimSementara          String?
   emailSementara        String?
-  prodiSementara        String?
-  departemenSementara   String?
   noHpSementara         String?
   alamatSementara       String?
   tempatLahirSementara  String?

@@ -86,7 +86,7 @@ export interface PenomoranSurat {
 // ==================== MOCK DATA ====================
 export class MockDatabase {
   private static instance: MockDatabase;
-
+  
   // Auto-increment counters
   private nextMahasiswaId = 16;
   private nextPegawaiId = 8;
@@ -304,62 +304,62 @@ export class MockDatabase {
       nip: '198801152010121002',
       nama: 'Fajar Nugroho, S.Sos',
       role: 'staff_fakultas',
-      unit: 'Staf Administrasi Fakultas'
+      unit: 'Staff Administrasi Fakultas'
     }
   ];
 
   public surat: Surat[] = [
     // Admin Prodi: 5 surat dengan status "diajukan"
-    { id_surat: 1, id_mahasiswa: 1, jenis_surat: 'Surat Keterangan Lulus', nomor_surat: null, status: 'diajukan', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T08:00:00'), updated_at: new Date('2026-01-25T08:00:00') },
-    { id_surat: 2, id_mahasiswa: 3, jenis_surat: 'Surat Keterangan Aktif Kuliah', nomor_surat: null, status: 'diajukan', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T09:00:00'), updated_at: new Date('2026-01-25T09:00:00') },
-    { id_surat: 3, id_mahasiswa: 5, jenis_surat: 'Surat Pengantar PKL', nomor_surat: null, status: 'diajukan', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T10:00:00'), updated_at: new Date('2026-01-25T10:00:00') },
-    { id_surat: 4, id_mahasiswa: 7, jenis_surat: 'Surat Rekomendasi Beasiswa', nomor_surat: null, status: 'diajukan', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-26T08:00:00'), updated_at: new Date('2026-01-26T08:00:00') },
-    { id_surat: 5, id_mahasiswa: 9, jenis_surat: 'Surat Keterangan Bebas Pustaka', nomor_surat: null, status: 'diajukan', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-26T09:00:00'), updated_at: new Date('2026-01-26T09:00:00') },
-
+    { id_surat: 1, id_mahasiswa: 1, jenis_surat: 'Surat Keterangan Lulus', nomor_surat: null, status: 'diajukan', catatan: null, created_at: new Date('2026-01-25T08:00:00'), updated_at: new Date('2026-01-25T08:00:00') },
+    { id_surat: 2, id_mahasiswa: 3, jenis_surat: 'Surat Keterangan Aktif Kuliah', nomor_surat: null, status: 'diajukan', catatan: null, created_at: new Date('2026-01-25T09:00:00'), updated_at: new Date('2026-01-25T09:00:00') },
+    { id_surat: 3, id_mahasiswa: 5, jenis_surat: 'Surat Pengantar PKL', nomor_surat: null, status: 'diajukan', catatan: null, created_at: new Date('2026-01-25T10:00:00'), updated_at: new Date('2026-01-25T10:00:00') },
+    { id_surat: 4, id_mahasiswa: 7, jenis_surat: 'Surat Rekomendasi Beasiswa', nomor_surat: null, status: 'diajukan', catatan: null, created_at: new Date('2026-01-26T08:00:00'), updated_at: new Date('2026-01-26T08:00:00') },
+    { id_surat: 5, id_mahasiswa: 9, jenis_surat: 'Surat Keterangan Bebas Pustaka', nomor_surat: null, status: 'diajukan', catatan: null, created_at: new Date('2026-01-26T09:00:00'), updated_at: new Date('2026-01-26T09:00:00') },
+    
     // Ketua Prodi: 7 surat dengan status "disetujui_admin_prodi"
-    { id_surat: 6, id_mahasiswa: 2, jenis_surat: 'Surat Izin Penelitian', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-24T08:00:00'), updated_at: new Date('2026-01-26T10:00:00') },
-    { id_surat: 7, id_mahasiswa: 4, jenis_surat: 'Surat Keterangan Pindah Prodi', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-24T09:00:00'), updated_at: new Date('2026-01-26T11:00:00') },
-    { id_surat: 8, id_mahasiswa: 6, jenis_surat: 'Surat Keterangan Cuti Akademik', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-24T10:00:00'), updated_at: new Date('2026-01-26T12:00:00') },
-    { id_surat: 9, id_mahasiswa: 8, jenis_surat: 'Surat Pengantar Magang', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-24T11:00:00'), updated_at: new Date('2026-01-26T13:00:00') },
-    { id_surat: 10, id_mahasiswa: 10, jenis_surat: 'Surat Keterangan Mahasiswa Aktif', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T08:00:00'), updated_at: new Date('2026-01-27T08:00:00') },
-    { id_surat: 11, id_mahasiswa: 11, jenis_surat: 'Surat Rekomendasi Lomba', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T09:00:00'), updated_at: new Date('2026-01-27T09:00:00') },
-    { id_surat: 12, id_mahasiswa: 13, jenis_surat: 'Surat Keterangan Kelakuan Baik', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T10:00:00'), updated_at: new Date('2026-01-27T10:00:00') },
-
+    { id_surat: 6, id_mahasiswa: 2, jenis_surat: 'Surat Izin Penelitian', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, created_at: new Date('2026-01-24T08:00:00'), updated_at: new Date('2026-01-26T10:00:00') },
+    { id_surat: 7, id_mahasiswa: 4, jenis_surat: 'Surat Keterangan Pindah Prodi', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, created_at: new Date('2026-01-24T09:00:00'), updated_at: new Date('2026-01-26T11:00:00') },
+    { id_surat: 8, id_mahasiswa: 6, jenis_surat: 'Surat Keterangan Cuti Akademik', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, created_at: new Date('2026-01-24T10:00:00'), updated_at: new Date('2026-01-26T12:00:00') },
+    { id_surat: 9, id_mahasiswa: 8, jenis_surat: 'Surat Pengantar Magang', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, created_at: new Date('2026-01-24T11:00:00'), updated_at: new Date('2026-01-26T13:00:00') },
+    { id_surat: 10, id_mahasiswa: 10, jenis_surat: 'Surat Keterangan Mahasiswa Aktif', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, created_at: new Date('2026-01-25T08:00:00'), updated_at: new Date('2026-01-27T08:00:00') },
+    { id_surat: 11, id_mahasiswa: 11, jenis_surat: 'Surat Rekomendasi Lomba', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, created_at: new Date('2026-01-25T09:00:00'), updated_at: new Date('2026-01-27T09:00:00') },
+    { id_surat: 12, id_mahasiswa: 13, jenis_surat: 'Surat Keterangan Kelakuan Baik', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, created_at: new Date('2026-01-25T10:00:00'), updated_at: new Date('2026-01-27T10:00:00') },
+    
     // Admin Fakultas: 4 surat dengan status "disetujui_kaprodi"
-    { id_surat: 13, id_mahasiswa: 1, jenis_surat: 'Surat Pengantar Skripsi', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-23T08:00:00'), updated_at: new Date('2026-01-27T11:00:00') },
-    { id_surat: 14, id_mahasiswa: 12, jenis_surat: 'Surat Izin Seminar Proposal', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-23T09:00:00'), updated_at: new Date('2026-01-27T12:00:00') },
-    { id_surat: 15, id_mahasiswa: 14, jenis_surat: 'Surat Keterangan Lulus', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-23T10:00:00'), updated_at: new Date('2026-01-27T13:00:00') },
-    { id_surat: 16, id_mahasiswa: 15, jenis_surat: 'Surat Rekomendasi Program Pertukaran', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-23T11:00:00'), updated_at: new Date('2026-01-27T14:00:00') },
-
+    { id_surat: 13, id_mahasiswa: 1, jenis_surat: 'Surat Pengantar Skripsi', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, created_at: new Date('2026-01-23T08:00:00'), updated_at: new Date('2026-01-27T11:00:00') },
+    { id_surat: 14, id_mahasiswa: 12, jenis_surat: 'Surat Izin Seminar Proposal', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, created_at: new Date('2026-01-23T09:00:00'), updated_at: new Date('2026-01-27T12:00:00') },
+    { id_surat: 15, id_mahasiswa: 14, jenis_surat: 'Surat Keterangan Lulus', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, created_at: new Date('2026-01-23T10:00:00'), updated_at: new Date('2026-01-27T13:00:00') },
+    { id_surat: 16, id_mahasiswa: 15, jenis_surat: 'Surat Rekomendasi Program Pertukaran', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, created_at: new Date('2026-01-23T11:00:00'), updated_at: new Date('2026-01-27T14:00:00') },
+    
     // Supervisor: 6 surat dengan status "disetujui_admin_fakultas"
-    { id_surat: 17, id_mahasiswa: 3, jenis_surat: 'Surat Pengantar Penelitian Lapangan', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T08:00:00'), updated_at: new Date('2026-01-28T08:00:00') },
-    { id_surat: 18, id_mahasiswa: 5, jenis_surat: 'Surat Keterangan Prestasi', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T09:00:00'), updated_at: new Date('2026-01-28T09:00:00') },
-    { id_surat: 19, id_mahasiswa: 7, jenis_surat: 'Surat Rekomendasi Beasiswa S2', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T10:00:00'), updated_at: new Date('2026-01-28T10:00:00') },
-    { id_surat: 20, id_mahasiswa: 9, jenis_surat: 'Surat Izin Observasi', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T11:00:00'), updated_at: new Date('2026-01-28T11:00:00') },
-    { id_surat: 21, id_mahasiswa: 11, jenis_surat: 'Surat Keterangan MBKM', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T12:00:00'), updated_at: new Date('2026-01-28T12:00:00') },
-    { id_surat: 22, id_mahasiswa: 13, jenis_surat: 'Surat Pengantar Studi Banding', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T13:00:00'), updated_at: new Date('2026-01-28T13:00:00') },
-
+    { id_surat: 17, id_mahasiswa: 3, jenis_surat: 'Surat Pengantar Penelitian Lapangan', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, created_at: new Date('2026-01-22T08:00:00'), updated_at: new Date('2026-01-28T08:00:00') },
+    { id_surat: 18, id_mahasiswa: 5, jenis_surat: 'Surat Keterangan Prestasi', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, created_at: new Date('2026-01-22T09:00:00'), updated_at: new Date('2026-01-28T09:00:00') },
+    { id_surat: 19, id_mahasiswa: 7, jenis_surat: 'Surat Rekomendasi Beasiswa S2', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, created_at: new Date('2026-01-22T10:00:00'), updated_at: new Date('2026-01-28T10:00:00') },
+    { id_surat: 20, id_mahasiswa: 9, jenis_surat: 'Surat Izin Observasi', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, created_at: new Date('2026-01-22T11:00:00'), updated_at: new Date('2026-01-28T11:00:00') },
+    { id_surat: 21, id_mahasiswa: 11, jenis_surat: 'Surat Keterangan MBKM', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, created_at: new Date('2026-01-22T12:00:00'), updated_at: new Date('2026-01-28T12:00:00') },
+    { id_surat: 22, id_mahasiswa: 13, jenis_surat: 'Surat Pengantar Studi Banding', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, created_at: new Date('2026-01-22T13:00:00'), updated_at: new Date('2026-01-28T13:00:00') },
+    
     // Manajer TU: 3 surat dengan status "disetujui_supervisor"
-    { id_surat: 23, id_mahasiswa: 2, jenis_surat: 'Surat Keterangan Pindah Kampus', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-21T08:00:00'), updated_at: new Date('2026-01-29T08:00:00') },
-    { id_surat: 24, id_mahasiswa: 6, jenis_surat: 'Surat Keterangan Aktif Organisasi', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-21T09:00:00'), updated_at: new Date('2026-01-29T09:00:00') },
-    { id_surat: 25, id_mahasiswa: 10, jenis_surat: 'Surat Rekomendasi Magang Internasional', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-21T10:00:00'), updated_at: new Date('2026-01-29T10:00:00') },
-
-    // Staf Fakultas: 5 surat dengan status "disetujui_manajer_tu"
-    { id_surat: 26, id_mahasiswa: 4, jenis_surat: 'Surat Keterangan Wisuda', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T08:00:00'), updated_at: new Date('2026-01-29T11:00:00') },
-    { id_surat: 27, id_mahasiswa: 8, jenis_surat: 'Surat Pengantar Legalisir', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T09:00:00'), updated_at: new Date('2026-01-29T12:00:00') },
-    { id_surat: 28, id_mahasiswa: 12, jenis_surat: 'Surat Keterangan Alumni', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T10:00:00'), updated_at: new Date('2026-01-29T13:00:00') },
-    { id_surat: 29, id_mahasiswa: 14, jenis_surat: 'Surat Keterangan Nilai', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T11:00:00'), updated_at: new Date('2026-01-29T14:00:00') },
-    { id_surat: 30, id_mahasiswa: 15, jenis_surat: 'Surat Rekomendasi Kerja', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T12:00:00'), updated_at: new Date('2026-01-29T15:00:00') },
-
+    { id_surat: 23, id_mahasiswa: 2, jenis_surat: 'Surat Keterangan Pindah Kampus', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, created_at: new Date('2026-01-21T08:00:00'), updated_at: new Date('2026-01-29T08:00:00') },
+    { id_surat: 24, id_mahasiswa: 6, jenis_surat: 'Surat Keterangan Aktif Organisasi', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, created_at: new Date('2026-01-21T09:00:00'), updated_at: new Date('2026-01-29T09:00:00') },
+    { id_surat: 25, id_mahasiswa: 10, jenis_surat: 'Surat Rekomendasi Magang Internasional', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, created_at: new Date('2026-01-21T10:00:00'), updated_at: new Date('2026-01-29T10:00:00') },
+    
+    // Staff Fakultas: 5 surat dengan status "disetujui_manajer_tu"
+    { id_surat: 26, id_mahasiswa: 4, jenis_surat: 'Surat Keterangan Wisuda', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, created_at: new Date('2026-01-20T08:00:00'), updated_at: new Date('2026-01-29T11:00:00') },
+    { id_surat: 27, id_mahasiswa: 8, jenis_surat: 'Surat Pengantar Legalisir', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, created_at: new Date('2026-01-20T09:00:00'), updated_at: new Date('2026-01-29T12:00:00') },
+    { id_surat: 28, id_mahasiswa: 12, jenis_surat: 'Surat Keterangan Alumni', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, created_at: new Date('2026-01-20T10:00:00'), updated_at: new Date('2026-01-29T13:00:00') },
+    { id_surat: 29, id_mahasiswa: 14, jenis_surat: 'Surat Keterangan Nilai', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, created_at: new Date('2026-01-20T11:00:00'), updated_at: new Date('2026-01-29T14:00:00') },
+    { id_surat: 30, id_mahasiswa: 15, jenis_surat: 'Surat Rekomendasi Kerja', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, created_at: new Date('2026-01-20T12:00:00'), updated_at: new Date('2026-01-29T15:00:00') },
+    
     // Sudah Selesai (Arsip): 8 surat dengan status "sudah_diberi_nomor"
-    { id_surat: 31, id_mahasiswa: 1, jenis_surat: 'Surat Keterangan Transkrip', nomor_surat: 'INV/2026/01/001', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-15T08:00:00'), updated_at: new Date('2026-01-28T15:00:00') },
-    { id_surat: 32, id_mahasiswa: 3, jenis_surat: 'Surat Keterangan Bebas Tanggungan', nomor_surat: 'INV/2026/01/002', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-16T08:00:00'), updated_at: new Date('2026-01-28T16:00:00') },
-    { id_surat: 33, id_mahasiswa: 5, jenis_surat: 'Surat Pengantar KP', nomor_surat: 'INV/2026/01/003', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-17T08:00:00'), updated_at: new Date('2026-01-29T08:00:00') },
-    { id_surat: 34, id_mahasiswa: 7, jenis_surat: 'Surat Keterangan Lulus Sidang', nomor_surat: 'INV/2026/01/004', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-18T08:00:00'), updated_at: new Date('2026-01-29T09:00:00') },
-    { id_surat: 35, id_mahasiswa: 9, jenis_surat: 'Surat Rekomendasi Dosen', nomor_surat: 'INV/2026/01/005', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-19T08:00:00'), updated_at: new Date('2026-01-29T10:00:00') },
-    { id_surat: 36, id_mahasiswa: 11, jenis_surat: 'Surat Keterangan Dispensasi', nomor_surat: 'INV/2026/01/006', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-19T09:00:00'), updated_at: new Date('2026-01-29T11:00:00') },
-    { id_surat: 37, id_mahasiswa: 13, jenis_surat: 'Surat Izin Mengikuti Konferensi', nomor_surat: 'INV/2026/01/007', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-19T10:00:00'), updated_at: new Date('2026-01-29T12:00:00') },
-    { id_surat: 38, id_mahasiswa: 15, jenis_surat: 'Surat Keterangan Selesai Studi', nomor_surat: 'INV/2026/01/008', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-19T11:00:00'), updated_at: new Date('2026-01-29T13:00:00') }
+    { id_surat: 31, id_mahasiswa: 1, jenis_surat: 'Surat Keterangan Transkrip', nomor_surat: 'INV/2026/01/001', status: 'sudah_diberi_nomor', catatan: null, created_at: new Date('2026-01-15T08:00:00'), updated_at: new Date('2026-01-28T15:00:00') },
+    { id_surat: 32, id_mahasiswa: 3, jenis_surat: 'Surat Keterangan Bebas Tanggungan', nomor_surat: 'INV/2026/01/002', status: 'sudah_diberi_nomor', catatan: null, created_at: new Date('2026-01-16T08:00:00'), updated_at: new Date('2026-01-28T16:00:00') },
+    { id_surat: 33, id_mahasiswa: 5, jenis_surat: 'Surat Pengantar KP', nomor_surat: 'INV/2026/01/003', status: 'sudah_diberi_nomor', catatan: null, created_at: new Date('2026-01-17T08:00:00'), updated_at: new Date('2026-01-29T08:00:00') },
+    { id_surat: 34, id_mahasiswa: 7, jenis_surat: 'Surat Keterangan Lulus Sidang', nomor_surat: 'INV/2026/01/004', status: 'sudah_diberi_nomor', catatan: null, created_at: new Date('2026-01-18T08:00:00'), updated_at: new Date('2026-01-29T09:00:00') },
+    { id_surat: 35, id_mahasiswa: 9, jenis_surat: 'Surat Rekomendasi Dosen', nomor_surat: 'INV/2026/01/005', status: 'sudah_diberi_nomor', catatan: null, created_at: new Date('2026-01-19T08:00:00'), updated_at: new Date('2026-01-29T10:00:00') },
+    { id_surat: 36, id_mahasiswa: 11, jenis_surat: 'Surat Keterangan Dispensasi', nomor_surat: 'INV/2026/01/006', status: 'sudah_diberi_nomor', catatan: null, created_at: new Date('2026-01-19T09:00:00'), updated_at: new Date('2026-01-29T11:00:00') },
+    { id_surat: 37, id_mahasiswa: 13, jenis_surat: 'Surat Izin Mengikuti Konferensi', nomor_surat: 'INV/2026/01/007', status: 'sudah_diberi_nomor', catatan: null, created_at: new Date('2026-01-19T10:00:00'), updated_at: new Date('2026-01-29T12:00:00') },
+    { id_surat: 38, id_mahasiswa: 15, jenis_surat: 'Surat Keterangan Selesai Studi', nomor_surat: 'INV/2026/01/008', status: 'sudah_diberi_nomor', catatan: null, created_at: new Date('2026-01-19T11:00:00'), updated_at: new Date('2026-01-29T13:00:00') }
   ];
 
   public surat_proses: SuratProses[] = [];
@@ -379,7 +379,7 @@ export class MockDatabase {
     }
     return MockDatabase.instance;
   }
-
+  
   // Save data to localStorage for persistence
   public saveToLocalStorage() {
     if (typeof window !== 'undefined') {
@@ -411,7 +411,7 @@ export class MockDatabase {
       }
     }
   }
-
+  
   // Load data from localStorage
   private loadFromLocalStorage() {
     if (typeof window !== 'undefined') {
@@ -419,7 +419,7 @@ export class MockDatabase {
         const stored = localStorage.getItem('__mockdb_data__');
         if (stored) {
           const data = JSON.parse(stored);
-
+          
           // Restore surat
           if (data.surat) {
             this.surat = data.surat.map((s: any) => ({
@@ -429,7 +429,7 @@ export class MockDatabase {
               tanggal_lulus_pemohon: s.tanggal_lulus_pemohon ? new Date(s.tanggal_lulus_pemohon) : undefined
             }));
           }
-
+          
           // Restore lampiran
           if (data.lampiran) {
             this.lampiran = data.lampiran.map((l: any) => ({
@@ -437,7 +437,7 @@ export class MockDatabase {
               uploaded_at: new Date(l.uploaded_at)
             }));
           }
-
+          
           // Restore mahasiswa (might have updated data)
           if (data.mahasiswa) {
             this.mahasiswa = data.mahasiswa.map((m: any) => ({
@@ -446,11 +446,11 @@ export class MockDatabase {
               tanggalLulus: m.tanggalLulus ? new Date(m.tanggalLulus) : undefined
             }));
           }
-
+          
           // Restore counters
           if (data.nextSuratId) this.nextSuratId = data.nextSuratId;
           if (data.nextLampiranId) this.nextLampiranId = data.nextLampiranId;
-
+          
           console.log('[MockDB] Data loaded from localStorage:', {
             surat: this.surat.length,
             lampiran: this.lampiran.length,
@@ -463,10 +463,15 @@ export class MockDatabase {
     }
   }
 
-
+  static getInstance(): MockDatabase {
+    if (!MockDatabase.instance) {
+      MockDatabase.instance = new MockDatabase();
+    }
+    return MockDatabase.instance;
+  }
 
   // ==================== HELPER METHODS ====================
-
+  
   getMahasiswaById(id: number): Mahasiswa | undefined {
     return this.mahasiswa.find(m => m.id_mahasiswa === id);
   }
@@ -479,7 +484,9 @@ export class MockDatabase {
     return this.surat.find(s => s.id_surat === id);
   }
 
-
+  getSuratByMahasiswa(idMahasiswa: number): Surat[] {
+    return this.surat.filter(s => s.id_mahasiswa === idMahasiswa);
+  }
 
   getProsesBySurat(idSurat: number): SuratProses[] {
     return this.surat_proses.filter(sp => sp.id_surat === idSurat);
@@ -535,8 +542,8 @@ export class MockDatabase {
         ...s,
         can_edit: s.status === 'draft' || s.status === 'revisi',
         can_cancel: s.status === 'draft' || s.status === 'diajukan',
-        instruksi_pengambilan: s.status === 'completed'
-          ? 'Silakan ke Akademik membawa pas foto 2x3 untuk cap basah'
+        instruksi_pengambilan: s.status === 'completed' 
+          ? 'Silakan ke Akademik membawa pas foto 2x3 untuk cap basah' 
           : undefined
       }));
   }
@@ -612,7 +619,6 @@ export class MockDatabase {
       nomor_surat: null,
       status: 'diajukan',
       catatan: null,
-      kaprodi_signature: null,
       created_at: new Date(),
       updated_at: new Date()
     };
@@ -711,7 +717,7 @@ export class MockDatabase {
   }
 
   /**
-   * Staf fakultas memberikan nomor surat
+   * Staff fakultas memberikan nomor surat
    */
   beriNomorSurat(idSurat: number, idPegawai: number, nomorSurat?: string): PenomoranSurat {
     const surat = this.getSuratById(idSurat);
@@ -752,7 +758,7 @@ export class MockDatabase {
     const year = new Date().getFullYear();
     const month = String(new Date().getMonth() + 1).padStart(2, '0');
     const counter = String(this.penomoran_surat.length + 1).padStart(3, '0');
-
+    
     // Format: INV/YYYY/MM/XXX
     return `INV/${year}/${month}/${counter}`;
   }
@@ -792,7 +798,7 @@ export class MockDatabase {
       { id_surat: 3, id_mahasiswa: 5, jenis_surat: 'Surat Pengantar PKL', nomor_surat: null, status: 'diajukan', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T10:00:00'), updated_at: new Date('2026-01-25T10:00:00') },
       { id_surat: 4, id_mahasiswa: 7, jenis_surat: 'Surat Rekomendasi Beasiswa', nomor_surat: null, status: 'diajukan', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-26T08:00:00'), updated_at: new Date('2026-01-26T08:00:00') },
       { id_surat: 5, id_mahasiswa: 9, jenis_surat: 'Surat Keterangan Bebas Pustaka', nomor_surat: null, status: 'diajukan', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-26T09:00:00'), updated_at: new Date('2026-01-26T09:00:00') },
-
+      
       // Ketua Prodi: 7 surat
       { id_surat: 6, id_mahasiswa: 2, jenis_surat: 'Surat Izin Penelitian', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-24T08:00:00'), updated_at: new Date('2026-01-26T10:00:00') },
       { id_surat: 7, id_mahasiswa: 4, jenis_surat: 'Surat Keterangan Pindah Prodi', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-24T09:00:00'), updated_at: new Date('2026-01-26T11:00:00') },
@@ -801,13 +807,13 @@ export class MockDatabase {
       { id_surat: 10, id_mahasiswa: 10, jenis_surat: 'Surat Keterangan Mahasiswa Aktif', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T08:00:00'), updated_at: new Date('2026-01-27T08:00:00') },
       { id_surat: 11, id_mahasiswa: 11, jenis_surat: 'Surat Rekomendasi Lomba', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T09:00:00'), updated_at: new Date('2026-01-27T09:00:00') },
       { id_surat: 12, id_mahasiswa: 13, jenis_surat: 'Surat Keterangan Kelakuan Baik', nomor_surat: null, status: 'disetujui_admin_prodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-25T10:00:00'), updated_at: new Date('2026-01-27T10:00:00') },
-
+      
       // Admin Fakultas: 4 surat
       { id_surat: 13, id_mahasiswa: 1, jenis_surat: 'Surat Pengantar Skripsi', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-23T08:00:00'), updated_at: new Date('2026-01-27T11:00:00') },
       { id_surat: 14, id_mahasiswa: 12, jenis_surat: 'Surat Izin Seminar Proposal', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-23T09:00:00'), updated_at: new Date('2026-01-27T12:00:00') },
       { id_surat: 15, id_mahasiswa: 14, jenis_surat: 'Surat Keterangan Lulus', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-23T10:00:00'), updated_at: new Date('2026-01-27T13:00:00') },
       { id_surat: 16, id_mahasiswa: 15, jenis_surat: 'Surat Rekomendasi Program Pertukaran', nomor_surat: null, status: 'disetujui_kaprodi', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-23T11:00:00'), updated_at: new Date('2026-01-27T14:00:00') },
-
+      
       // Supervisor: 6 surat
       { id_surat: 17, id_mahasiswa: 3, jenis_surat: 'Surat Pengantar Penelitian Lapangan', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T08:00:00'), updated_at: new Date('2026-01-28T08:00:00') },
       { id_surat: 18, id_mahasiswa: 5, jenis_surat: 'Surat Keterangan Prestasi', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T09:00:00'), updated_at: new Date('2026-01-28T09:00:00') },
@@ -815,19 +821,19 @@ export class MockDatabase {
       { id_surat: 20, id_mahasiswa: 9, jenis_surat: 'Surat Izin Observasi', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T11:00:00'), updated_at: new Date('2026-01-28T11:00:00') },
       { id_surat: 21, id_mahasiswa: 11, jenis_surat: 'Surat Keterangan MBKM', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T12:00:00'), updated_at: new Date('2026-01-28T12:00:00') },
       { id_surat: 22, id_mahasiswa: 13, jenis_surat: 'Surat Pengantar Studi Banding', nomor_surat: null, status: 'disetujui_admin_fakultas', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-22T13:00:00'), updated_at: new Date('2026-01-28T13:00:00') },
-
+      
       // Manajer TU: 3 surat
       { id_surat: 23, id_mahasiswa: 2, jenis_surat: 'Surat Keterangan Pindah Kampus', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-21T08:00:00'), updated_at: new Date('2026-01-29T08:00:00') },
       { id_surat: 24, id_mahasiswa: 6, jenis_surat: 'Surat Keterangan Aktif Organisasi', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-21T09:00:00'), updated_at: new Date('2026-01-29T09:00:00') },
       { id_surat: 25, id_mahasiswa: 10, jenis_surat: 'Surat Rekomendasi Magang Internasional', nomor_surat: null, status: 'disetujui_supervisor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-21T10:00:00'), updated_at: new Date('2026-01-29T10:00:00') },
-
-      // Staf Fakultas: 5 surat
+      
+      // Staff Fakultas: 5 surat
       { id_surat: 26, id_mahasiswa: 4, jenis_surat: 'Surat Keterangan Wisuda', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T08:00:00'), updated_at: new Date('2026-01-29T11:00:00') },
       { id_surat: 27, id_mahasiswa: 8, jenis_surat: 'Surat Pengantar Legalisir', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T09:00:00'), updated_at: new Date('2026-01-29T12:00:00') },
       { id_surat: 28, id_mahasiswa: 12, jenis_surat: 'Surat Keterangan Alumni', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T10:00:00'), updated_at: new Date('2026-01-29T13:00:00') },
       { id_surat: 29, id_mahasiswa: 14, jenis_surat: 'Surat Keterangan Nilai', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T11:00:00'), updated_at: new Date('2026-01-29T14:00:00') },
       { id_surat: 30, id_mahasiswa: 15, jenis_surat: 'Surat Rekomendasi Kerja', nomor_surat: null, status: 'disetujui_manajer_tu', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-20T12:00:00'), updated_at: new Date('2026-01-29T15:00:00') },
-
+      
       // Arsip: 8 surat
       { id_surat: 31, id_mahasiswa: 1, jenis_surat: 'Surat Keterangan Transkrip', nomor_surat: 'INV/2026/01/001', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-15T08:00:00'), updated_at: new Date('2026-01-28T15:00:00') },
       { id_surat: 32, id_mahasiswa: 3, jenis_surat: 'Surat Keterangan Bebas Tanggungan', nomor_surat: 'INV/2026/01/002', status: 'sudah_diberi_nomor', catatan: null, kaprodi_signature: null, created_at: new Date('2026-01-16T08:00:00'), updated_at: new Date('2026-01-28T16:00:00') },
@@ -857,7 +863,7 @@ export function demoAlurSurat() {
   console.log('\n========== DEMO ALUR LENGKAP PENGAJUAN SURAT ==========\n');
 
   const db = MockDatabase.getInstance();
-
+  
   // Reset database
   db.reset();
 
@@ -893,8 +899,8 @@ export function demoAlurSurat() {
   db.prosesSurat(surat.id_surat, 5, 'approve', 'Siap untuk diberi nomor');
   console.log('');
 
-  // 7. Staf Fakultas memberikan nomor surat
-  console.log('7️⃣ Staf Fakultas memberikan nomor surat...');
+  // 7. Staff Fakultas memberikan nomor surat
+  console.log('7️⃣ Staff Fakultas memberikan nomor surat...');
   db.beriNomorSurat(surat.id_surat, 6);
   const suratFinal = db.getSuratById(surat.id_surat)!;
   console.log('   Nomor Surat:', suratFinal.nomor_surat);

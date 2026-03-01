@@ -12,6 +12,8 @@ import { Label } from '@/components/ui/label';
 import { authService } from '@/services/authService';
 import AppHeader from '@/components/AppHeader';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 export default function LoginPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -70,7 +72,7 @@ export default function LoginPageContent() {
 
     const handleSSOLogin = () => {
         // TODO: Implement SSO login
-        window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/sso`;
+        window.location.href = `${API_URL}/api/auth/sso`;
     };
 
     return (

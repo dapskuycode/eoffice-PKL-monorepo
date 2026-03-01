@@ -4,15 +4,17 @@ import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth-server';
 import ProfileContent from './ProfileContent';
 import { App } from 'antd';
+import { User, Mail, Phone, Calendar, MapPin, GraduationCap, Building2, Save } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3079';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getMahasiswaProfile(cookies: string) {
   try {
-    const response = await fetch(`${API_URL}/mahasiswa/dashboard/profile`, {
+    const response = await fetch(`${API_URL} /mahasiswa/dashboard / profile`, {
       headers: {
         Cookie: cookies,
       },
+      credentials: 'include',
       cache: 'no-store',
     });
 
@@ -41,7 +43,7 @@ export default async function MahasiswaProfile() {
   const cookieStore = await getCookies();
   const cookieHeader = cookieStore
     .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .map((cookie) => `${cookie.name}=${cookie.value} `)
     .join('; ');
 
   // Fetch profile data

@@ -16,8 +16,7 @@ import { mahasiswaService } from '@/services/mahasiswaService';
 import { sklService } from '@/services/sklService';
 
 import ProgressStepper from '@/components/ProgressStepper';
-import FormDataDiriWithDropdowns from '@/components/forms/FormDataDiriWithDropdowns';
-import { MahasiswaData } from '@/components/forms/FormDataDiri';
+import FormDataDiri, { MahasiswaData } from '@/components/forms/FormDataDiri';
 
 const { Title, Text } = Typography;
 
@@ -29,7 +28,6 @@ function DataDiriSKLContent() {
   const [loading, setLoading] = useState<boolean>(true);
   const [dataMahasiswa, setDataMahasiswa] = useState<MahasiswaData>();
   const [draftId, setDraftId] = useState<string | null>(null);
-  const [draftStatus, setDraftStatus] = useState<string | null>(null);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [editSourceId, setEditSourceId] = useState<string | null>(null);
 
@@ -79,63 +77,61 @@ function DataDiriSKLContent() {
           departemen: profile.departemen,
           prodi: profile.programStudi,
           tempatLahir: profile.tempatLahir || "",
-          tanggalLahir: profile.tanggalLahir
-            ? new Date(profile.tanggalLahir).toLocaleDateString('sv')
+          tanggalLahir: profile.tanggalLahir 
+            ? new Date(profile.tanggalLahir).toISOString().split('T')[0]
             : "",
           no_hp: profile.noHp || "",
           alamat: profile.alamat || "",
         };
 
-        // Initialize merged data with profile data
-        let mergedData: MahasiswaData = { ...userData };
-
-        // 1. If there's a draft ID, load draft from database
+        // If there's a draft ID, load draft from database
         if (currentDraftId) {
           try {
             const draft = await sklService.getPengajuanDetail(currentDraftId);
-            if (draft) {
-              setDraftStatus(draft.status);
-              // Load data untuk DRAFT atau REVISI
-              if (draft.status === 'DRAFT' || draft.status === 'REVISI') {
-                setDraftId(currentDraftId);
-                mergedData = {
-                  ...mergedData,
-                  nama: draft.namaSementara || userData.nama,
-                  nim: draft.nimSementara || userData.nim,
-                  email: draft.emailSementara || userData.email,
-                  prodi: draft.prodiSementara || userData.prodi,
-                  departemen: draft.departemenSementara || userData.departemen,
-                  tempatLahir: draft.tempatLahirSementara || userData.tempatLahir,
-                  tanggalLahir: draft.tanggalLahirSementara
-                    ? new Date(draft.tanggalLahirSementara).toLocaleDateString('sv')
-                    : userData.tanggalLahir,
-                  no_hp: draft.noHpSementara || userData.no_hp,
-                  alamat: draft.alamatSementara || userData.alamat,
-                };
-              }
+            // Load data untuk DRAFT atau REVISI
+            if (draft && (draft.status === 'DRAFT' || draft.status === 'REVISI')) {
+              setDraftId(currentDraftId);
+              setDataMahasiswa({
+                ...userData,
+                nama: draft.namaSementara || userData.nama,
+                email: draft.emailSementara || userData.email,
+                tempatLahir: draft.tempatLahirSementara || userData.tempatLahir,
+                tanggalLahir: draft.tanggalLahirSementara 
+                  ? new Date(draft.tanggalLahirSementara).toISOString().split('T')[0]
+                  : userData.tanggalLahir,
+                no_hp: draft.noHpSementara || userData.no_hp,
+                alamat: draft.alamatSementara || userData.alamat,
+              });
+              return;
             }
           } catch (error) {
-            console.error('Error loading draft from DB:', error);
+            console.error('Error loading draft:', error);
           }
         }
 
-        // 2. Cek localStorage untuk draft atau edit mode - Overwrite DB data if exists (user's latest local edits)
-        const savedDraftLocal = localStorage.getItem("skl_data_diri");
-        if (savedDraftLocal) {
+        // Cek localStorage untuk draft atau edit mode
+        const savedDraft = localStorage.getItem("skl_data_diri");
+        if (savedDraft) {
           try {
-            const draftData = JSON.parse(savedDraftLocal) as MahasiswaData;
-            console.log('Merging saved draft from localStorage:', draftData);
-            mergedData = {
-              ...mergedData,
-              ...draftData
-            };
+            const draftData = JSON.parse(savedDraft) as MahasiswaData;
+            console.log('Loading saved draft from localStorage:', draftData);
+            // Merge: semua field dari draft (termasuk nama dan email untuk edit mode)
+            setDataMahasiswa({
+              ...userData,
+              nama: draftData.nama || userData.nama,
+              email: draftData.email || userData.email,
+              tempatLahir: draftData.tempatLahir || userData.tempatLahir,
+              tanggalLahir: draftData.tanggalLahir || userData.tanggalLahir,
+              no_hp: draftData.no_hp || userData.no_hp,
+              alamat: draftData.alamat || userData.alamat,
+            });
           } catch (e) {
             console.error('Error parsing saved draft:', e);
+            setDataMahasiswa(userData);
           }
+        } else {
+          setDataMahasiswa(userData);
         }
-
-        setDataMahasiswa(mergedData);
-        formRef.current?.setFieldsValue(mergedData);
 
       } catch (error) {
         message.error("Gagal mengambil data mahasiswa.");
@@ -172,29 +168,25 @@ function DataDiriSKLContent() {
         id: draftId || undefined,
         mahasiswaId: profile.id,
         namaSementara: values.nama,
-        nimSementara: values.nim,
         emailSementara: values.email,
-        prodiSementara: values.prodi,
-        departemenSementara: values.departemen,
         noHpSementara: values.no_hp,
         alamatSementara: values.alamat,
         tempatLahirSementara: values.tempatLahir,
         tanggalLahirSementara: values.tanggalLahir,
         draftStep: 1,
-        createLog: true,
       };
 
       console.log('Saving draft with data:', draftData);
       const savedDraft = await sklService.saveDraft(draftData);
       console.log('Draft saved result:', savedDraft);
-
+      
       if (savedDraft) {
         setDraftId(savedDraft.id);
         localStorage.setItem("skl_draft_id", savedDraft.id);
         message.success("Draft berhasil disimpan!");
         console.log('Draft ID saved:', savedDraft.id);
       }
-
+      
       setDataMahasiswa(values);
     } catch (error) {
       console.error('Error saving draft:', error);
@@ -216,30 +208,7 @@ function DataDiriSKLContent() {
 
       // Simpan data ke LocalStorage
       localStorage.setItem("skl_data_diri", JSON.stringify(values));
-
-      // Jika ada draftId, simpan juga ke database agar sinkron
-      if (draftId) {
-        console.log('Auto-saving draft to DB during transition:', draftId);
-        const profile = await mahasiswaService.getProfile();
-        if (profile) {
-          const draftData = {
-            id: draftId,
-            mahasiswaId: profile.id,
-            namaSementara: values.nama,
-            nimSementara: values.nim,
-            emailSementara: values.email,
-            prodiSementara: values.prodi,
-            departemenSementara: values.departemen,
-            noHpSementara: values.no_hp,
-            alamatSementara: values.alamat,
-            tempatLahirSementara: values.tempatLahir,
-            tanggalLahirSementara: values.tanggalLahir,
-            draftStep: 1,
-          };
-          await sklService.saveDraft(draftData);
-        }
-      }
-
+      
       // Pindah ke halaman berikutnya
       router.push("/mahasiswa/form/detail");
     } catch (error) {
@@ -255,90 +224,93 @@ function DataDiriSKLContent() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
-      <div style={{ margin: "0 auto", width: "100%", maxWidth: "1200px", padding: "24px 48px" }}>
 
-        {/* Edit Mode Badge */}
-        {isEditMode && editSourceId && (
-          <div style={{
-            marginBottom: "24px",
-            padding: "12px 24px",
-            backgroundColor: "#fff7e6",
-            border: "1px solid #ffd666",
-            borderRadius: "8px",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px"
-          }}>
-            <span style={{ fontSize: "20px" }}>✏️</span>
-            <div>
-              <Text strong style={{ color: "#d46b08", fontSize: "16px" }}>Mode Edit</Text>
-              <br />
-              <Text type="secondary" style={{ fontSize: "14px" }}>
-                Anda sedang mengedit surat (ID: {editSourceId}). Setelah submit, data akan diperbarui dan status kembali ke 'Menunggu Verifikasi'.
-              </Text>
+        <div style={{ backgroundColor: "#fff", padding: "12px 48px", fontSize: "14px", color: "#666" }}>
+          <span>Form Pengajuan Surat</span> / <span>PKL</span> / <span style={{ color: "#000" }}>Identitas Pemohon</span>
+        </div>
+
+        <div style={{ margin: "0 auto", width: "100%", maxWidth: "1200px", padding: "24px 48px" }}>
+          
+          {/* Edit Mode Badge */}
+          {isEditMode && editSourceId && (
+            <div style={{ 
+              marginBottom: "24px", 
+              padding: "12px 24px", 
+              backgroundColor: "#fff7e6", 
+              border: "1px solid #ffd666",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px"
+            }}>
+              <span style={{ fontSize: "20px" }}>✏️</span>
+              <div>
+                <Text strong style={{ color: "#d46b08", fontSize: "16px" }}>Mode Edit</Text>
+                <br />
+                <Text type="secondary" style={{ fontSize: "14px" }}>
+                  Anda sedang mengedit surat (ID: {editSourceId}). Setelah submit, data akan diperbarui dan status kembali ke 'Menunggu Verifikasi'.
+                </Text>
+              </div>
             </div>
+          )}
+
+          <div style={{ marginBottom: "32px" }}>
+            <Title level={2} style={{ margin: 0, fontWeight: 700, color: "#262626" }}>
+              Identitas Pemohon
+            </Title>
+            <Text type="secondary" style={{ fontSize: "16px" }}>
+              Data berikut diambil dari profil Anda. Silakan lengkapi atau perbarui data yang diperlukan sebelum melanjutkan.
+            </Text>
           </div>
-        )}
 
-        <div style={{ marginBottom: "32px" }}>
-          <Title level={2} style={{ margin: 0, fontWeight: 700, color: "#262626" }}>
-            Identitas Pemohon
-          </Title>
-          <Text type="secondary" style={{ fontSize: "16px" }}>
-            Data berikut diambil dari profil Anda. Silakan lengkapi atau perbarui data yang diperlukan sebelum melanjutkan.
-          </Text>
-        </div>
+          <div style={{ marginBottom: "40px", padding: "32px", borderRadius: "8px" }}>
+            <ProgressStepper steps={steps} />
+          </div>
 
-        <div style={{ marginBottom: "40px", padding: "32px", borderRadius: "8px" }}>
-          <ProgressStepper steps={steps} />
-        </div>
+          <FormDataDiri
+             formRef={formRef}
+             initialValues={dataMahasiswa} 
+          />
 
-        <FormDataDiriWithDropdowns
-          formRef={formRef}
-          initialValues={dataMahasiswa}
-        />
+          <div style={{ marginTop: "32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Button
+              size="large"
+              style={{ borderRadius: "6px", padding: "0 32px" }}
+              onClick={() => router.push('/mahasiswa/dashboard')}
+            >
+              Kembali ke Dashboard
+            </Button>
 
-        <div style={{ marginTop: "32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Button
-            size="large"
-            style={{ borderRadius: "6px", padding: "0 32px" }}
-            onClick={() => router.push('/mahasiswa/dashboard')}
-          >
-            Kembali ke Dashboard
-          </Button>
-
-          <Space size={16}>
-            {(!draftStatus || draftStatus === 'DRAFT') && (
+            <Space size={16}>
               <Button
                 size="large"
-                style={{
-                  borderRadius: "6px",
-                  fontWeight: 600
+                style={{ 
+                  borderRadius: "6px", 
+                  fontWeight: 600 
                 }}
                 onClick={handleSaveDraft}
               >
                 Simpan Draft
               </Button>
-            )}
-            <Button
-              type="primary"
-              size="large"
-              style={{
-                borderRadius: "6px",
-                padding: "0 32px",
-                fontWeight: 600,
-                backgroundColor: "#1890ff",
-                borderColor: "#1890ff",
-              }}
-              onClick={handleNext}
-            >
-              Lanjut ke Detail Pengajuan
-            </Button>
-          </Space>
+              <Button
+                type="primary"
+                size="large"
+                style={{ 
+                  borderRadius: "6px", 
+                  padding: "0 32px", 
+                  fontWeight: 600,
+                  backgroundColor: "#1890ff",
+                  borderColor: "#1890ff",
+                }}
+                onClick={handleNext}
+              >
+                Lanjut ke Detail Pengajuan
+              </Button>
+            </Space>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
 
 export default function DataDiriSKL() {

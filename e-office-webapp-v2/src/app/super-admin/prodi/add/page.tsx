@@ -9,11 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Save } from 'lucide-react';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 export default function AddProdiPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [departemen, setDepartemen] = useState<any[]>([]);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     code: '',
@@ -26,7 +28,7 @@ export default function AddProdiPage() {
 
   const loadDepartemen = async () => {
     try {
-      const response = await fetch('http://localhost:3001/super-admin/departemen?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/departemen?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -43,7 +45,7 @@ export default function AddProdiPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/super-admin/prodi', {
+      const response = await fetch(`${API_URL}/super-admin/prodi`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

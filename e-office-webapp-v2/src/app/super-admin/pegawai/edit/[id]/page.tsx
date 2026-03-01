@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Save } from 'lucide-react';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 export default function EditPegawaiPage() {
   const router = useRouter();
   const params = useParams() as { id: string };
@@ -41,7 +43,7 @@ export default function EditPegawaiPage() {
 
   const loadDepartemen = async () => {
     try {
-      const response = await fetch('http://localhost:3001/super-admin/departemen?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/departemen?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -55,7 +57,7 @@ export default function EditPegawaiPage() {
 
   const loadProdi = async () => {
     try {
-      const response = await fetch('http://localhost:3001/super-admin/prodi?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/prodi?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -69,7 +71,7 @@ export default function EditPegawaiPage() {
 
   const loadRoles = async () => {
     try {
-      const response = await fetch('http://localhost:3001/master/role?limit=100', {
+      const response = await fetch(`${API_URL}/master/role?limit=100`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -88,7 +90,7 @@ export default function EditPegawaiPage() {
   const loadPegawai = async () => {
     try {
       setLoadingData(true);
-      const response = await fetch(`http://localhost:3001/super-admin/pegawai/${id}`, {
+      const response = await fetch(`${API_URL}/super-admin/pegawai/${id}`, {
         credentials: 'include',
       });
 
@@ -129,7 +131,7 @@ export default function EditPegawaiPage() {
 
     try {
       // 1. Update user data
-      const userResponse = await fetch(`http://localhost:3001/master/user/${formData.userId}`, {
+      const userResponse = await fetch(`${API_URL}/master/user/${formData.userId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -145,7 +147,7 @@ export default function EditPegawaiPage() {
       }
 
       // 2. Update pegawai data
-      const pegawaiResponse = await fetch(`http://localhost:3001/super-admin/pegawai/${id}`, {
+      const pegawaiResponse = await fetch(`${API_URL}/super-admin/pegawai/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -164,7 +166,7 @@ export default function EditPegawaiPage() {
       }
 
       // 3. Get current roles from database
-      const currentRolesResponse = await fetch(`http://localhost:3001/super-admin/user-role/${formData.userId}`, {
+      const currentRolesResponse = await fetch(`${API_URL}/super-admin/user-role/${formData.userId}`, {
         credentials: 'include',
       });
 
@@ -177,7 +179,7 @@ export default function EditPegawaiPage() {
       // 4. Update role: remove all old roles, add new single role
       // Remove all existing roles
       for (const roleId of currentRoleIds) {
-        await fetch('http://localhost:3001/super-admin/user-role', {
+        await fetch(`${API_URL}/super-admin/user-role`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -190,7 +192,7 @@ export default function EditPegawaiPage() {
 
       // Add new selected role
       if (formData.selectedRole) {
-        await fetch('http://localhost:3001/super-admin/user-role', {
+        await fetch(`${API_URL}/super-admin/user-role`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',

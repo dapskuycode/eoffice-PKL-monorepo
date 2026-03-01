@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, Edit, Trash2 } from 'lucide-react';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 export default function ProdiPage() {
   const router = useRouter();
   const [prodi, setProdi] = useState<any[]>([]);
@@ -23,14 +25,14 @@ export default function ProdiPage() {
   const loadProdi = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3001/super-admin/prodi?limit=100', {
+      const response = await fetch(`${API_URL}/super-admin/prodi?limit=100`, {
         credentials: 'include',
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         let prodiData = data.data || [];
-        
+
         // Filter by search term
         if (searchTerm) {
           prodiData = prodiData.filter((p: any) =>
@@ -38,7 +40,7 @@ export default function ProdiPage() {
             p.kode?.toLowerCase().includes(searchTerm.toLowerCase())
           );
         }
-        
+
         setProdi(prodiData);
       }
     } catch (error) {
@@ -55,13 +57,13 @@ export default function ProdiPage() {
 
   const handleDelete = async () => {
     if (!selectedProdi) return;
-    
+
     try {
-      const response = await fetch(`http://localhost:3001/super-admin/prodi/${selectedProdi.id}`, {
+      const response = await fetch(`${API_URL}/super-admin/prodi/${selectedProdi.id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
-      
+
       if (response.ok) {
         setShowDeleteModal(false);
         setSelectedProdi(null);
@@ -75,7 +77,7 @@ export default function ProdiPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
       <AppHeader greetingOnly={true} />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">

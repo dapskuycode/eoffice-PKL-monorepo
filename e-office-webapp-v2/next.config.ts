@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
+        hostname: '10.137.58.124',
+        port: '20052',
+        pathname: '/files/**',
+      },
+      {
+        protocol: 'http',
         hostname: 'localhost',
         port: '9000',
         pathname: '/e-office-storage/**',

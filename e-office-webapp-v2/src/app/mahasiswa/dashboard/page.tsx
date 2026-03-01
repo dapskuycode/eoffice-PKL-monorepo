@@ -3,12 +3,14 @@ export const dynamic = 'force-dynamic';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth-server';
 import DashboardContent from './DashboardContent';
+import { ArrowRight, FileText, Clock, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3079';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getDashboardData(cookies: string) {
   try {
-    const response = await fetch(`${API_URL}/mahasiswa/dashboard`, {
+    const response = await fetch(`${API_URL} /mahasiswa/dashboard`, {
+      credentials: 'include',
       headers: {
         Cookie: cookies,
       },
@@ -40,7 +42,7 @@ export default async function MahasiswaDashboard() {
   const cookieStore = await getCookies();
   const cookieHeader = cookieStore
     .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .map((cookie) => `${cookie.name}=${cookie.value} `)
     .join('; ');
 
   // Fetch dashboard data

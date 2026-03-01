@@ -24,7 +24,6 @@ const getStatusColor = (status: string): 'gray' | 'blue' | 'green' | 'red' | 'or
     COMPLETED: 'green',
     REVISI: 'orange',
     DITOLAK: 'red',
-    BATAL: 'gray',
   };
   return statusColorMap[status] || 'gray';
 };
@@ -40,11 +39,10 @@ const getStatusLabel = (status: string): string => {
     REGISTERED: 'Terdaftar',
     APPROVED_SUPERVISOR: 'Disetujui Supervisor',
     SIAP_CETAK: 'Siap Cetak',
-    STEP_KONVENSIONAL: 'Finalisasi Surat',
+    STEP_KONVENSIONAL: 'Proses Pencetakan',
     COMPLETED: 'Selesai',
     REVISI: 'Perlu Revisi',
     DITOLAK: 'Ditolak',
-    BATAL: 'Dibatalkan',
   };
   return statusLabelMap[status] || status;
 };
@@ -63,7 +61,7 @@ const getRoleDisplayName = (actor: any, statusBaru: string, catatan?: string): s
     REGISTERED: 'Admin Fakultas',
     APPROVED_SUPERVISOR: 'Supervisor',
     SIAP_CETAK: 'Supervisor',
-    STEP_KONVENSIONAL: 'Staf Fakultas',
+    STEP_KONVENSIONAL: 'Staff Fakultas',
     COMPLETED: 'Pegawai UPA',
   };
 
@@ -82,7 +80,7 @@ const getRoleDisplayName = (actor: any, statusBaru: string, catatan?: string): s
       if (catatanLower.includes('dari admin prodi:') || catatanLower.includes('oleh admin prodi:')) return 'Admin Prodi';
       if (catatanLower.includes('dari ketua prodi:') || catatanLower.includes('oleh ketua prodi:') || catatanLower.includes('dari kaprodi:') || catatanLower.includes('oleh kaprodi:')) return 'Ketua Prodi';
       if (catatanLower.includes('dari admin fakultas:') || catatanLower.includes('oleh admin fakultas:')) return 'Admin Fakultas';
-      if (catatanLower.includes('dari staf fakultas:') || catatanLower.includes('oleh staf fakultas:')) return 'Staf Fakultas';
+      if (catatanLower.includes('dari staff fakultas:') || catatanLower.includes('oleh staff fakultas:')) return 'Staff Fakultas';
       if (catatanLower.includes('dari manajer tu:') || catatanLower.includes('oleh manajer tu:')) return 'Manajer TU';
       if (catatanLower.includes('dari pegawai upa:') || catatanLower.includes('oleh pegawai upa:')) return 'Pegawai UPA';
     }
@@ -94,7 +92,7 @@ const getRoleDisplayName = (actor: any, statusBaru: string, catatan?: string): s
   if (actorName.includes('ketua') || actorName.includes('kaprodi')) return 'Ketua Prodi';
   if (actorName.includes('admin fakultas')) return 'Admin Fakultas';
   if (actorName.includes('admin prodi') || actorName.includes('admin')) return 'Admin Prodi';
-  if (actorName.includes('staf')) return 'Staf Fakultas';
+  if (actorName.includes('staff')) return 'Staff Fakultas';
   if (actorName.includes('manajer')) return 'Manajer TU';
   if (actorName.includes('pegawai') || actorName.includes('upa')) return 'Pegawai UPA';
 
@@ -116,7 +114,7 @@ const RiwayatSurat: React.FC<RiwayatSuratProps> = ({
   const fetchRiwayat = async () => {
     try {
       setLoading(true);
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3079';
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
       const response = await fetch(`${API_URL}/skl/pengajuan/${pengajuanId}/riwayat`, {
         method: 'GET',
         credentials: 'include',

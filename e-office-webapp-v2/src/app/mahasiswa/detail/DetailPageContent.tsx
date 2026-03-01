@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import {
     Card, Descriptions, Button, Space, Typography,
     Divider, Row, Col, Spin, App, Modal, Image,
-    Tag, Timeline, Alert, Badge
+    Tag, Timeline, Alert, Badge, Empty
 } from 'antd';
 import {
     ArrowLeftOutlined,
@@ -28,6 +28,9 @@ import { useAuth } from '@/hooks/useAuth';
 
 const { Title, Text, Paragraph } = Typography;
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL || 'http://localhost:9000/e-office-storage';
+
 export default function DetailPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -38,6 +41,11 @@ export default function DetailPageContent() {
     const [loading, setLoading] = useState(true);
     const [pengajuan, setPengajuan] = useState<SklPengajuan | null>(null);
     const [riwayat, setRiwayat] = useState<any[]>([]);
+    const [pdfPreview, setPdfPreview] = useState<{ visible: boolean; url: string; title: string }>({
+        visible: false,
+        url: '',
+        title: ''
+    });
 
     useEffect(() => {
         if (pengajuanId) {
@@ -162,7 +170,7 @@ export default function DetailPageContent() {
                                 <FileTextOutlined />
                                 <span>Detail Pengajuan SKL</span>
                                 <Tag color={getStatusColor(pengajuan.status)} className="ml-2">
-                                    {pengajuan.status.replace(/_/g, ' ')}
+                                    {pengajuan.status?.replace(/_/g, ' ')}
                                 </Tag>
                             </Space>
                         }
@@ -238,22 +246,55 @@ export default function DetailPageContent() {
                     >
                         <div className="flex flex-wrap gap-4">
                             {(pengajuan.lampiran || []).length > 0 ? (
-                                pengajuan.lampiran!.map((l: any, idx: number) => (
-                                    <div key={idx} className="flex flex-col items-center p-3 border rounded-lg hover:bg-gray-50 transition-colors w-32">
-                                        <div className="w-16 h-16 mb-2 flex items-center justify-center bg-blue-50 text-blue-500 rounded">
-                                            <FileTextOutlined style={{ fontSize: 24 }} />
-                                        </div>
-                                        <Text strong style={{ fontSize: 11, textAlign: 'center' }}>{l.jenisDokumen.replace(/_/g, ' ')}</Text>
-                                        <Image
-                                            src={`${API_URL}/files/${l.pathFile}`}
-                                            alt={l.jenisDokumen}
-                                            className="hidden"
-                                            preview={{
-                                                mask: <div className="text-xs">Zoom</div>
+                                pengajuan.lampiran!.map((l: any, idx: number) => {
+                                    const isAbsoluteUrl = l.pathFile?.startsWith('http');
+                                    const fileUrl = isAbsoluteUrl ? l.pathFile : `${API_URL}/files/${l.pathFile}`;
+                                    const isImage = /\.(jpg|jpeg|png|gif)$/i.test(l.pathFile);
+
+                                    return (
+                                        <div
+                                            key={idx}
+                                            className="flex flex-col items-center p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-all w-32 cursor-pointer group shadow-sm bg-white"
+                                            onClick={() => {
+                                                if (isImage) {
+                                                    // Trigger antd image preview
+                                                    const img = document.getElementById(`img-preview-${idx}`);
+                                                    if (img) img.click();
+                                                } else {
+                                                    setPdfPreview({
+                                                        visible: true,
+                                                        url: fileUrl,
+                                                        title: l.jenisDokumen?.replace(/_/g, ' ') || 'Pratinjau PDF'
+                                                    });
+                                                }
                                             }}
-                                        />
-                                    </div>
-                                ))
+                                        >
+                                            <div className="w-16 h-16 mb-2 flex items-center justify-center bg-gray-50 text-blue-500 rounded-lg group-hover:bg-blue-100 transition-colors">
+                                                <FileTextOutlined style={{ fontSize: 24 }} />
+                                            </div>
+                                            <Text strong style={{ fontSize: 11, textAlign: 'center', marginBottom: 4 }} className="group-hover:text-blue-600">
+                                                {l.jenisDokumen?.replace(/_/g, ' ')}
+                                            </Text>
+                                            <Text type="secondary" style={{ fontSize: 9 }}>
+                                                Klik untuk Pratinjau
+                                            </Text>
+
+                                            {isImage && (
+                                                <div style={{ display: 'none' }}>
+                                                    <Image
+                                                        id={`img-preview-${idx}`}
+                                                        src={fileUrl}
+                                                        alt={l.jenisDokumen}
+                                                        preview={{
+                                                            mask: <div className="text-xs">Lihat</div>,
+                                                            src: fileUrl,
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })
                             ) : (
                                 <Empty description="Tidak ada lampiran" />
                             )}
@@ -284,7 +325,7 @@ export default function DetailPageContent() {
                                     children: (
                                         <div className="pb-4">
                                             <div className="flex justify-between items-center mb-1">
-                                                <Text strong style={{ fontSize: 13 }}>{item.status.replace(/_/g, ' ')}</Text>
+                                                <Text strong style={{ fontSize: 13 }}>{item.status?.replace(/_/g, ' ')}</Text>
                                                 <Text type="secondary" style={{ fontSize: 11 }}>
                                                     {new Date(item.timestamp).toLocaleDateString('id-ID', {
                                                         day: 'numeric', month: 'short'
@@ -322,6 +363,36 @@ export default function DetailPageContent() {
                     </Card>
                 </Col>
             </Row>
+
+            {/* PDF Preview Modal */}
+            <Modal
+                title={pdfPreview.title}
+                open={pdfPreview.visible}
+                onCancel={() => setPdfPreview({ ...pdfPreview, visible: false })}
+                footer={[
+                    <Button key="close" onClick={() => setPdfPreview({ ...pdfPreview, visible: false })}>
+                        Tutup
+                    </Button>,
+                    <Button
+                        key="download"
+                        type="primary"
+                        icon={<ScanOutlined />}
+                        onClick={() => window.open(pdfPreview.url, '_blank')}
+                    >
+                        Buka di Tab Baru / Download
+                    </Button>
+                ]}
+                width={1000}
+                centered
+                styles={{ body: { padding: 0, height: '75vh' } }}
+                destroyOnClose
+            >
+                <iframe
+                    src={pdfPreview.url}
+                    style={{ width: '100%', height: '100%', border: 'none' }}
+                    title="PDF Viewer"
+                />
+            </Modal>
         </div>
     );
 }

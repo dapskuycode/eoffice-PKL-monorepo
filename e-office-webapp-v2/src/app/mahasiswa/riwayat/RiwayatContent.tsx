@@ -20,6 +20,7 @@ import { sklService } from '@/services/sklService';
 import Image from 'next/image';
 
 const { Title, Text } = Typography;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Fungsi untuk print surat - SIMPLIFIED APPROACH
 const printSurat = (selectedSurat: any) => {
@@ -49,7 +50,7 @@ const printSurat = (selectedSurat: any) => {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>\${filename}</title>
+      <title>${filename}</title>
       <style>
         /* ===== PAGE SETUP ===== */
         @page {
@@ -137,7 +138,7 @@ const printSurat = (selectedSurat: any) => {
       </style>
     </head>
     <body>
-      \${element.outerHTML}
+      ${element.outerHTML}
     </body>
     </html>
   `);
@@ -200,12 +201,12 @@ const StatCard = ({ title, value, icon, color, loading, onClick, isActive }: any
                 style={{
                     borderRadius: 12,
                     boxShadow: isHovered
-                        ? `0 8px 24px \${color}30`
+                        ? `0 8px 24px ${color}30`
                         : isActive
-                            ? `0 4px 12px \${color}40`
+                            ? `0 4px 12px ${color}40`
                             : '0 2px 10px rgba(0,0,0,0.03)',
                     height: '100%',
-                    border: isActive ? `2px solid \${color}` : 'none',
+                    border: isActive ? `2px solid ${color}` : 'none',
                     transition: 'all 0.3s ease',
                     pointerEvents: 'none'
                 }}
@@ -217,8 +218,8 @@ const StatCard = ({ title, value, icon, color, loading, onClick, isActive }: any
                     loading={loading}
                     prefix={
                         <div style={{
-                            width: 40, height: 40, borderRadius: 10,
-                            background: `\${color}15`, color: color,
+                            width: 40, height: 10, borderRadius: 10,
+                            background: `${color}15`, color: color,
                             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, marginRight: 8
                         }}>
                             {icon}
@@ -231,7 +232,7 @@ const StatCard = ({ title, value, icon, color, loading, onClick, isActive }: any
     );
 };
 
-export default function RiwayatPengajuanContent() {
+export default function RiwayatContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { modal, message } = App.useApp();
@@ -276,7 +277,7 @@ export default function RiwayatPengajuanContent() {
                 .filter((p: any) => p.status === 'DRAFT')
                 .map((p: any) => ({
                     key: p.id,
-                    id: p.nomorSkl || `#\${p.id}`,
+                    id: p.nomorSkl || `#${p.id}`,
                     perihal: 'Surat Keterangan Lulus',
                     lastEdit: new Date(p.updatedAt || p.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
                     idSurat: p.id,
@@ -289,7 +290,7 @@ export default function RiwayatPengajuanContent() {
                     const statusDisplay = getStatusDisplay(p.status);
                     return {
                         key: p.id,
-                        id: p.nomorSkl || `#\${p.id}`,
+                        id: p.nomorSkl || `#${p.id}`,
                         perihal: 'Surat Keterangan Lulus',
                         waktuPengiriman: new Date(p.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
                         tanggalDiterima: p.status === 'COMPLETED'
@@ -405,7 +406,7 @@ export default function RiwayatPengajuanContent() {
                         icon={<EditOutlined />}
                         onClick={() => {
                             localStorage.setItem('skl_draft_id', record.idSurat);
-                            router.push(`/mahasiswa/form/dataDiri?draftId=\${record.idSurat}`);
+                            router.push(`/mahasiswa/form/dataDiri?draftId=${record.idSurat}`);
                         }}
                     />
                     <Button
@@ -477,7 +478,7 @@ export default function RiwayatPengajuanContent() {
                 <Button
                     type="text"
                     icon={<EyeOutlined />}
-                    onClick={() => router.push(`/mahasiswa/detail?id=\${record.idSurat}`)}
+                    onClick={() => router.push(`/mahasiswa/detail?id=${record.idSurat}`)}
                 />
             ),
         },
@@ -669,7 +670,7 @@ export default function RiwayatPengajuanContent() {
                             <div>
                                 <div className="no-print" style={{ textAlign: 'center', padding: '20px', marginBottom: '20px', backgroundColor: '#d1fae5', borderRadius: '8px' }}>
                                     <div style={{ color: '#10b981', fontWeight: 600, fontSize: '16px', marginBottom: '8px' }}>
-                                        ✓ Surat sudah difinalisasi oleh UPA {selectedSurat.nomorSkl ? `dengan nomor: SKL/\${selectedSurat.nomorSkl}` : ''}
+                                        ✓ Surat sudah difinalisasi oleh UPA {selectedSurat.nomorSkl ? `dengan nomor: SKL/${selectedSurat.nomorSkl}` : ''}
                                     </div>
                                     <div style={{ color: '#059669', fontSize: '14px' }}>
                                         Silakan cetak surat Anda. Jangan lupa membawa pas foto 4x6 dan meminta cap basah di Akademik.
@@ -689,7 +690,7 @@ export default function RiwayatPengajuanContent() {
                                             boxShadow: '0 0 20px rgba(0,0,0,0.1)',
                                             padding: '2cm',
                                             position: 'relative',
-                                            transform: `scale(\${zoom / 100})`,
+                                            transform: `scale(${zoom / 100})`,
                                             transformOrigin: 'top center',
                                             margin: '0 auto',
                                             color: 'black',

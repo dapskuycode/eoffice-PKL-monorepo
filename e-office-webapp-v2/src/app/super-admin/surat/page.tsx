@@ -21,6 +21,8 @@ const STATUS_MAP: Record<string, { label: string; color: string }> = {
   DITOLAK: { label: 'Ditolak', color: 'bg-red-100 text-red-800' },
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 export default function SuratPage() {
   const router = useRouter();
   const [surat, setSurat] = useState<any[]>([]);
@@ -36,7 +38,7 @@ export default function SuratPage() {
   const loadSurat = async () => {
     try {
       setLoading(true);
-      let url = `http://localhost:3001/super-admin/surat?page=${currentPage}&limit=10`;
+      let url = `${API_URL}/super-admin/surat?page=${currentPage}&limit=10`;
       if (filterStatus) url += `&status=${filterStatus}`;
 
       const response = await fetch(url, { credentials: 'include' });
@@ -57,7 +59,7 @@ export default function SuratPage() {
     if (!confirm('Yakin ingin menghapus data surat ini?')) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/super-admin/surat/${id}`, {
+      const response = await fetch(`${API_URL}/super-admin/surat/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
