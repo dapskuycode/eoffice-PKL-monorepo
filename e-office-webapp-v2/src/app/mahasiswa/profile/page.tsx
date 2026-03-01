@@ -10,7 +10,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getMahasiswaProfile(cookies: string) {
   try {
-    const response = await fetch(`${API_URL} /mahasiswa/dashboard / profile`, {
+    const response = await fetch(`${API_URL}/mahasiswa/dashboard/profile`, {
       headers: {
         Cookie: cookies,
       },
