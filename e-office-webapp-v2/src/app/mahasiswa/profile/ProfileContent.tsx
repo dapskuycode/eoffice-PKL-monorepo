@@ -120,7 +120,7 @@ export default function ProfileContent({ mahasiswa }: ProfileContentProps) {
 
           {/* Admin Contact Alert */}
           <Alert
-            message="Informasi Kontak Admin"
+            title="Informasi Kontak Admin"
             description="Ketika ada perubahan atau pertanyaan, silakan hubungi admin dengan nomor: 0812-3456-7890"
             type="info"
             icon={<InfoCircleOutlined />}

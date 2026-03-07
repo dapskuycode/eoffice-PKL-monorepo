@@ -16,9 +16,9 @@ export const UPALayout: React.FC<UPALayoutProps> = ({ children }) => {
     const [collapsed, setCollapsed] = useState(false);
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{ height: '100vh' }}>
             <AppHeader />
-            <Layout>
+            <Layout style={{ overflow: 'hidden' }}>
                 <Sider
                     trigger={null}
                     collapsible
@@ -27,6 +27,7 @@ export const UPALayout: React.FC<UPALayoutProps> = ({ children }) => {
                     style={{
                         background: '#fff',
                         boxShadow: '2px 0 8px rgba(0, 0, 0, 0.1)',
+                        overflow: 'auto',
                     }}
                 >
                     <SidebarMenu role="upa" collapsed={collapsed} />
@@ -35,7 +36,7 @@ export const UPALayout: React.FC<UPALayoutProps> = ({ children }) => {
                     style={{
                         padding: '24px',
                         background: '#f5f5f5',
-                        overflow: 'auto',
+                        overflowY: 'auto',
                     }}
                 >
                     {children}

@@ -517,7 +517,6 @@ export default function UpaReviewSurat() {
 
                         <div className="mt-12 flex justify-between">
                           <div className="text-center">
-                            <p className="mb-2">Semarang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                             <p className="mb-4">Ketua Program Studi</p>
                             {pengajuan.ttdKetuaProdi && (
                               <div className="inline-block mb-2">

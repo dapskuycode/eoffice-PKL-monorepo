@@ -213,7 +213,7 @@ const StatCard = ({ title, value, icon, color, loading, onClick, isActive }: any
         <Statistic
           title={<span style={{ fontSize: 13, fontWeight: 500, color: '#8c8c8c' }}>{title}</span>}
           value={value}
-          valueStyle={{ fontSize: 24, fontWeight: 700, color: isActive ? color : '#262626' }}
+          styles={{ content: { fontSize: 24, fontWeight: 700, color: isActive ? color : '#262626' } }}
           loading={loading}
           prefix={
             <div style={{
@@ -405,7 +405,7 @@ function RiwayatPengajuanContent() {
       dataIndex: 'perihal',
       key: 'perihal',
       render: (text: string, record: any) => (
-        <Space direction="vertical" size="small">
+        <Space orientation="vertical" size="small">
           <Text>{text}</Text>
           {record.status === 'REVISI' && (
             <Tag color="orange">PERLU REVISI</Tag>
@@ -579,9 +579,9 @@ function RiwayatPengajuanContent() {
 
       {/* 3. Main Content Tabs */}
       <Card
-        bordered={false}
+        variant="borderless"
         style={{ borderRadius: 16, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', overflow: 'hidden' }}
-        bodyStyle={{ padding: '0 24px 24px' }}
+        styles={{ body: { padding: '0 24px 24px' } }}
       >
         <Tabs
           defaultActiveKey="ongoing"
@@ -776,15 +776,15 @@ function RiwayatPengajuanContent() {
                       </div>
 
                       <p style={{ marginBottom: '16px' }}>
-                        Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi {selectedSurat.mahasiswa?.programStudi?.name || 'N/A'} Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal {new Date(selectedSurat.tglLulus).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} dengan Indeks Prestasi Kumulatif (IPK) {selectedSurat.ipkTerakhir}/4.00 dengan Jumlah Satuan Kredit Semester (SKS) 144
+                        Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi {selectedSurat.mahasiswa?.programStudi?.name || 'N/A'} Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal {new Date(selectedSurat.tglLulus).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} dengan Indeks Prestasi Kumulatif (IPK) {selectedSurat.ipkTerakhir}/4.00 dengan Jumlah Satuan Kredit Semester (SKS) {selectedSurat.jumlahSks || 144}
                       </p>
 
                       <p style={{ marginBottom: '48px' }}>
                         Demikian surat permohonan kami, atas perhatiannya kami sampaikan terimakasih.
                       </p>
 
-                      <div style={{ position: 'relative', marginTop: '100px' }}>
-                        {/* Soft Green Sticky Note - Screen Only */}
+                      <div style={{ position: 'relative', marginTop: '48px' }}>
+                        {/* Soft Green Sticky Note - Screen Only (overlays signature area like UPA) */}
                         {selectedSurat.nomorSkl && (
                           <div className="print:hidden" style={{
                             position: 'absolute',
@@ -820,7 +820,7 @@ function RiwayatPengajuanContent() {
                               </div>
 
                               <p style={{ fontSize: '10.5px', color: '#4b5563', marginBottom: '8px', lineHeight: '1.4' }}>
-                                Harap membawa pas foto <b style={{ color: '#1f2937' }}>4x2 (2 lembar)</b> dan meminta cap basah di Akademik.
+                                Harap membawa pas foto <b style={{ color: '#1f2937' }}>4x6 (2 lembar)</b> dan meminta cap basah di Akademik.
                               </p>
 
                               <p style={{ fontSize: '12px', fontWeight: '600', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
@@ -840,7 +840,7 @@ function RiwayatPengajuanContent() {
                             </div>
                             <div style={{ marginTop: '4px' }}>
                               <p style={{ fontWeight: 'bold', textDecoration: 'underline', marginBottom: '2px' }}>
-                                {selectedSurat.mahasiswa?.programStudi?.ketuaProdi?.user?.name}
+                                {selectedSurat.mahasiswa?.programStudi?.ketuaProdi?.user?.name || '(Nama Ketua Prodi)'}
                               </p>
                               <p style={{ fontSize: '12px' }}>NIP. {selectedSurat.mahasiswa?.programStudi?.ketuaProdi?.nip || '-'}</p>
                             </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { Badge, Popover, List, Modal, Typography, Space } from 'antd';
+import { Badge, Popover, Modal, Typography } from 'antd';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { mahasiswaService } from '@/services/mahasiswaService';
@@ -61,37 +61,35 @@ export default function AppHeader() {
       <div style={{ padding: '8px 16px', borderBottom: '1px solid #f0f0f0', fontWeight: 'bold' }}>
         Aktivitas Terbaru
       </div>
-      <List
-        dataSource={notifications}
-        renderItem={(item) => (
-          <List.Item
-            key={item.id}
-            style={{ padding: '12px 16px', cursor: 'pointer' }}
-            onClick={() => {
-              setHasNew(false);
-              router.push(`/mahasiswa/detail?id=${item.pengajuanId}`);
-            }}
-            className="hover:bg-gray-50"
-          >
-            <List.Item.Meta
-              title={
-                <Space direction="vertical" size={0}>
-                  <Text strong style={{ fontSize: 13 }}>{item.actor?.name || 'Sistem'}</Text>
-                  <Text type="secondary" style={{ fontSize: 11 }}>
-                    {new Date(item.timestamp).toLocaleDateString('id-ID', {
-                      day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-                    })}
-                  </Text>
-                </Space>
-              }
-              description={
-                <Text style={{ fontSize: 12 }}>{item.catatan || 'Status diperbarui'}</Text>
-              }
-            />
-          </List.Item>
-        )}
-        locale={{ emptyText: 'Tidak ada aktivitas baru' }}
-      />
+      {notifications.length > 0 ? (
+        <div>
+          {notifications.map((item: any) => (
+            <div
+              key={item.id}
+              style={{ padding: '12px 16px', cursor: 'pointer', borderBottom: '1px solid #f0f0f0' }}
+              className="hover:bg-gray-50"
+              onClick={() => {
+                setHasNew(false);
+                router.push(`/mahasiswa/detail?id=${item.pengajuanId}`);
+              }}
+            >
+              <div>
+                <Text strong style={{ fontSize: 13, display: 'block' }}>{item.actor?.name || 'Sistem'}</Text>
+                <Text type="secondary" style={{ fontSize: 11 }}>
+                  {new Date(item.timestamp).toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                  })}
+                </Text>
+              </div>
+              <Text style={{ fontSize: 12, color: '#8c8c8c', display: 'block', marginTop: 4 }}>{item.catatan || 'Status diperbarui'}</Text>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ padding: '24px 16px', textAlign: 'center', color: '#8c8c8c', fontSize: 13 }}>
+          Tidak ada aktivitas baru
+        </div>
+      )}
       <div style={{ padding: '8px', textAlign: 'center', borderTop: '1px solid #f0f0f0' }}>
         <Link href="/mahasiswa/riwayat" style={{ fontSize: 12 }} onClick={() => setHasNew(false)}>
           Lihat Semua Riwayat
@@ -113,7 +111,7 @@ export default function AppHeader() {
   };
 
   return (
-    <header className="text-white px-6 py-4 flex items-center justify-between" style={{ background: '#0079BD' }}>
+    <header className="text-white px-6 py-4 flex items-center justify-between" style={{ background: '#0079BD', position: 'sticky', top: 0, zIndex: 1000 }}>
       <div className="flex items-center gap-4">
         <div className="w-10 h-10 flex items-center justify-center">
           <img src="/logoundipwhite.png" alt="Logo UNDIP" className="w-full h-full object-contain" />

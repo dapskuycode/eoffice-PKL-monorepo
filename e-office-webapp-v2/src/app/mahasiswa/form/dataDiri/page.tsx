@@ -193,7 +193,7 @@ function DataDiriSKLContent() {
         localStorage.setItem("skl_draft_id", savedDraft.id);
         message.success("Draft berhasil disimpan!");
         console.log('Draft ID saved:', savedDraft.id);
-        
+
         // Redirect to riwayat page to see the saved draft
         setTimeout(() => {
           router.push('/mahasiswa/riwayat');
@@ -254,7 +254,7 @@ function DataDiriSKLContent() {
 
   if (loading) {
     return (
-      <Spin size="large" tip="Memuat Data..." fullscreen />
+      <Spin size="large" description="Memuat Data..." fullscreen />
     );
   }
 

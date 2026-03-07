@@ -22,7 +22,7 @@ export const MahasiswaLayout: React.FC<MahasiswaLayoutProps> = ({
 }) => {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
-  
+
   // Hide sidebar on form pages
   const isFormPage = pathname?.includes('/form');
 

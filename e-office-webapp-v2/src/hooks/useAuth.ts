@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { message } from 'antd';
 import { authService } from '@/services/authService';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -91,7 +90,7 @@ export const useAuth = () => {
       if (result?.user) {
         setUser(result.user as AuthUser);
         setIsAuthenticated(true);
-        message.success('Login berhasil');
+        console.log('Login berhasil');
 
         // Redirect based on role
         const roles = result.user.roleNames || [result.user.role];
@@ -112,10 +111,10 @@ export const useAuth = () => {
         return true;
       }
 
-      message.error('Email atau password salah');
+      console.error('Email atau password salah');
       return false;
     } catch (error: any) {
-      message.error(error.message || 'Login gagal');
+      console.error(error.message || 'Login gagal');
       return false;
     } finally {
       setLoading(false);
@@ -127,7 +126,7 @@ export const useAuth = () => {
       await authService.logout();
       setUser(null);
       setIsAuthenticated(false);
-      message.success('Logout berhasil');
+      console.log('Logout berhasil');
       router.push('/auth/login');
     } catch (error) {
       console.error('Logout error:', error);

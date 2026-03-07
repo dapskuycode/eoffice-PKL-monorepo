@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Card, Descriptions, Button, Space, Typography,
   Divider, Row, Col, Spin, App, Modal,
-  Tag, Alert, List, Tooltip, Image
+  Tag, Alert, Tooltip, Image
 } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -37,7 +37,7 @@ const { Title, Text, Paragraph } = Typography;
 function DetailPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { message } = App.useApp();
+  const { message, modal } = App.useApp();
   const { user: session } = useAuth();
   const pengajuanId = searchParams?.get('id') || null;
 
@@ -258,7 +258,7 @@ function DetailPageContent() {
   const handleDeleteSurat = () => {
     if (!pengajuanId || !session?.id) return;
 
-    Modal.confirm({
+    modal.confirm({
       title: 'Batalkan Pengajuan',
       icon: <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />,
       content: 'Apakah Anda yakin ingin membatalkan pengajuan ini? Status akan diubah menjadi BATAL.',
@@ -287,9 +287,9 @@ function DetailPageContent() {
       message.warning('File tidak tersedia');
       return;
     }
-    
+
     console.log('Opening preview:', { url, title, type });
-    
+
     // Clean up title - extract only filename without query params
     let cleanTitle = title;
     if (title.includes('?')) {
@@ -380,12 +380,12 @@ function DetailPageContent() {
 
         {/* LEFT COLUMN: Main Information */}
         <Col xs={24} lg={16}>
-          <Space vertical size="large" style={{ width: '100%' }}>
+          <Space orientation="vertical" size="large" style={{ width: '100%' }}>
 
             {/* 2. Status Alerts (Contextual) */}
             {(pengajuan.status === 'REVISION' || pengajuan.status === 'REVISI') && (
               <Alert
-                message="Pengajuan Perlu Revisi"
+                title="Pengajuan Perlu Revisi"
                 description={
                   <div>
                     <Paragraph style={{ marginBottom: 8 }}>{pengajuan.catatan || "Mohon perbaiki data sesuai catatan dari admin."}</Paragraph>
@@ -400,7 +400,7 @@ function DetailPageContent() {
             )}
             {pengajuan.status === 'DITOLAK' && (
               <Alert
-                message="Pengajuan Ditolak"
+                title="Pengajuan Ditolak"
                 description={pengajuan.catatan || "Mohon cek riwayat atau hubungi admin."}
                 type="error"
                 showIcon
@@ -408,7 +408,7 @@ function DetailPageContent() {
             )}
             {pengajuan.status === 'COMPLETED' && (
               <Alert
-                message="Surat Selesai"
+                title="Surat Selesai"
                 description="Surat Keterangan Lulus Anda telah terbit. Silakan cek di kolom Riwayat Surat untuk mengunduh."
                 type="success"
                 showIcon
@@ -416,7 +416,7 @@ function DetailPageContent() {
             )}
 
             {/* 3. Identitas Card */}
-            <Card title="Informasi Mahasiswa" bordered={false} style={{ borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <Card title="Informasi Mahasiswa" variant="borderless" style={{ borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
               <Descriptions column={{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }} bordered size="middle">
                 <Descriptions.Item label={<Space><UserOutlined /> Nama</Space>}>
                   {mahasiswa?.nama || '-'}
@@ -444,7 +444,7 @@ function DetailPageContent() {
                 </Descriptions.Item>
               </Descriptions>
 
-              <Divider dashed orientation={"left" as any} style={{ borderColor: '#d9d9d9', color: '#8c8c8c', fontSize: 13 }}>Data Akademik</Divider>
+              <Divider dashed titlePlacement="left" style={{ borderColor: '#d9d9d9', color: '#8c8c8c', fontSize: 13 }}>Data Akademik</Divider>
 
               <Descriptions column={2} size="middle">
                 <Descriptions.Item label="Jenis Surat">{detailSKL?.jenisSurat}</Descriptions.Item>
@@ -461,13 +461,11 @@ function DetailPageContent() {
             </Card>
 
             {/* 4. Lampiran Grid */}
-            <Card title="Dokumen Lampiran" bordered={false} style={{ borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <Card title="Dokumen Lampiran" variant="borderless" style={{ borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
               {lampiranList && lampiranList.length > 0 ? (
-                <List
-                  grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 3 }}
-                  dataSource={lampiranList}
-                  renderItem={(item: any) => (
-                    <List.Item>
+                <Row gutter={[16, 16]}>
+                  {lampiranList.map((item: any) => (
+                    <Col key={item.id} xs={24} sm={12} md={12} lg={12} xl={8} xxl={8}>
                       <Card
                         hoverable
                         size="small"
@@ -496,9 +494,9 @@ function DetailPageContent() {
                           </div>
                         </div>
                       </Card>
-                    </List.Item>
-                  )}
-                />
+                    </Col>
+                  ))}
+                </Row>
               ) : (
                 <Text type="secondary">Tidak ada lampiran diunggah.</Text>
               )}
@@ -517,7 +515,7 @@ function DetailPageContent() {
                         src={signature}
                         width={150}
                         alt="Tanda tangan"
-                        preview={{ mask: <><EyeOutlined /> Lihat</> }}
+                        preview={{ cover: <><EyeOutlined /> Lihat</> }}
                       />
                     </div>
                   </div>
@@ -530,10 +528,10 @@ function DetailPageContent() {
 
         {/* RIGHT COLUMN: Timeline & Actions */}
         <Col xs={24} lg={8}>
-          <Space direction="vertical" size="large" style={{ width: '100%', position: 'sticky', top: 20 }}>
+          <Space orientation="vertical" size="large" style={{ width: '100%', position: 'sticky', top: 20 }}>
 
             {/* 5. Riwayat (Timeline) */}
-            <Card title="Riwayat Proses" bordered={false} style={{ borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+            <Card title="Riwayat Proses" variant="borderless" style={{ borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
               {pengajuanId && (
                 <RiwayatSurat pengajuanId={pengajuanId} title="" />
               )}
@@ -543,14 +541,14 @@ function DetailPageContent() {
             {(pengajuan.status === 'REVISI' || pengajuan.status === 'SUBMITTED') && (
               <Card
                 title={<span style={{ color: pengajuan.status === 'REVISI' ? '#d46b08' : '#096dd9' }}>Aksi Pengajuan</span>}
-                bordered={false}
+                variant="borderless"
                 style={{
                   borderRadius: 12,
                   boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
                   overflow: 'hidden'
                 }}
               >
-                <Space direction="vertical" style={{ width: '100%' }} size="middle">
+                <Space orientation="vertical" style={{ width: '100%' }} size="middle">
                   <div style={{
                     padding: '12px',
                     background: pengajuan.status === 'REVISI' ? '#fff7e6' : '#f0faff',

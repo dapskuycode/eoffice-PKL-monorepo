@@ -105,7 +105,7 @@ const StatCard = ({ title, value, icon, color, bgColor, onClick }: any) => {
       }}
     >
       <Card
-        bordered={false}
+        variant="borderless"
         style={{
           height: '100%',
           borderRadius: 12,
@@ -218,7 +218,7 @@ export default function DashboardContent({ data, session }: DashboardContentProp
       {/* Notifikasi Perhatian (Revisi & Ditolak) */}
       {!isDismissed && attentionRequired.length > 0 && (
         <Card
-          bordered={false}
+          variant="borderless"
           style={{
             marginBottom: 24,
             borderRadius: 12,
@@ -322,7 +322,7 @@ export default function DashboardContent({ data, session }: DashboardContentProp
         <Col xs={24} lg={14} xl={16}>
           <Card
             title={<Title level={4} style={{ margin: 0 }}>Pengajuan Terakhir</Title>}
-            bordered={false}
+            variant="borderless"
             style={{ borderRadius: 12, height: '100%', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
             extra={
               latestPengajuan && (
@@ -335,7 +335,7 @@ export default function DashboardContent({ data, session }: DashboardContentProp
             {latestPengajuan ? (
               <Row gutter={[24, 24]}>
                 <Col xs={24} md={12}>
-                  <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                  <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
                     <div>
                       <Text type="secondary">Status Saat Ini</Text>
                       <div style={{ marginTop: 8 }}>
@@ -433,11 +433,11 @@ export default function DashboardContent({ data, session }: DashboardContentProp
                     </div>
                     {latestPengajuan.riwayat && latestPengajuan.riwayat.length > 0 ? (
                       <Timeline
-                        mode="left"
+                        mode="start"
                         style={{ marginLeft: 16 }}
                         items={latestPengajuan.riwayat.slice(0, 3).map((r: any) => ({
                           color: r.status === 'COMPLETED' ? 'green' : r.status === 'DITOLAK' ? 'red' : 'blue',
-                          children: (() => {
+                          content: (() => {
                             const roles = r.actor?.userRole?.map((ur: any) => ur.role?.name).join(', ') || 'Sistem';
                             const actorDisplay = r.actor?.name ? `${r.actor.name} (${roles})` : 'Sistem';
                             return (
