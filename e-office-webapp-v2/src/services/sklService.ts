@@ -1,5 +1,17 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+// Helper to get auth headers including Bearer token
+function getAuthHeaders(): HeadersInit {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 export interface CreateSklPengajuanData {
   mahasiswaId: string;
   tglLulus: string;
@@ -109,9 +121,7 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan`, {
         method: 'GET',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -134,13 +144,12 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan/${id}`, {
         method: 'GET',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
-        console.error('Failed to fetch pengajuan detail:', response.status);
+        const errBody = await response.text();
+        console.error('Failed to fetch pengajuan detail:', response.status, errBody);
         return null;
       }
 
@@ -166,9 +175,7 @@ export const sklService = {
       const response = await fetch(url, {
         method,
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
       });
 
@@ -196,9 +203,7 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan/${id}`, {
         method: 'DELETE',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -222,9 +227,7 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan`, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
       });
 
@@ -249,9 +252,7 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan/${id}`, {
         method: 'PATCH',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
       });
 
@@ -276,9 +277,7 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan/${id}/status`, {
         method: 'PATCH',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
       });
 
@@ -303,9 +302,7 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan/${id}/riwayat`, {
         method: 'GET',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -328,9 +325,7 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan/${pengajuanId}/lampiran`, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
       });
 
@@ -355,9 +350,7 @@ export const sklService = {
       const response = await fetch(`${API_URL}/skl/pengajuan/${pengajuanId}/lampiran/${jenis}`, {
         method: 'DELETE',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {

@@ -362,6 +362,7 @@ enum StatusPengajuan {
   SUBMITTED // Mahasiswa sudah submit, menunggu verifikasi Admin Prodi
   REVISI // Perlu revisi dari mahasiswa
   DITOLAK // Ditolak oleh Admin Prodi atau Supervisor
+  BATAL // Dibatalkan oleh mahasiswa
   VERIFIED_ADMIN // Admin Prodi sudah verifikasi & generate surat, menunggu tanda tangan Kaprodi
   APPROVED_KAPRODI // Kaprodi sudah tanda tangan, menunggu penomoran dari Admin Prodi
   REGISTERING // Admin Prodi sudah kasih nomor, menunggu registrasi Admin Fakultas
@@ -380,6 +381,7 @@ enum JenisLampiranSkl {
   BERITA_ACARA_UJIAN
   BEBAS_PUSTAKA
   PAS_FOTO
+  BUKTI_SUBMIT
   LAINNYA
 
   @@map("jenis_lampiran_skl")
@@ -395,10 +397,14 @@ model PengajuanSkl {
   // Data Input Mahasiswa
   tglLulus    DateTime
   ipkTerakhir Float
+  jumlahSks   Int      @default(0)
 
   // Data Identitas Sementara (untuk di surat saja, tidak mengubah master mahasiswa)
   namaSementara         String?
+  nimSementara          String?
   emailSementara        String?
+  prodiSementara        String?
+  departemenSementara   String?
   noHpSementara         String?
   alamatSementara       String?
   tempatLahirSementara  String?

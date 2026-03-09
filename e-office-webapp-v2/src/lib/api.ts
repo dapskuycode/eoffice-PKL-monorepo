@@ -1,16 +1,15 @@
 import { treaty } from "@elysiajs/eden"
-import type  { App } from "@backend/autogen.routes";
+import type { App } from "@backend/autogen.routes";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const client = treaty<App>(API_URL, {
-  headers: () => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (token) {
-      return {
-        Authorization: `Bearer ${token}`
-      };
-    }
-    return {};
+  fetch: {
+    credentials: 'include',
+  },
+  headers: (): Record<string, string> => {
+    if (typeof window === 'undefined') return {};
+    const token = localStorage.getItem('token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
   }
 });
