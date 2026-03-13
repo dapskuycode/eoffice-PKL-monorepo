@@ -1,8 +1,9 @@
 // FILE: src/components/forms/FormDataDiri.tsx
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ProFormInstance } from "@ant-design/pro-components";
 import DynamicForm, { FieldConfig } from "./DynamicForm";
+import { masterDataService } from "@/services/masterDataService";
 
 // --- TIPE DATA ---
 export interface MahasiswaData {
@@ -24,8 +25,8 @@ interface FormDataDiriProps {
   initialValues?: MahasiswaData;
 }
 
-// --- KONFIGURASI FIELDS ---
-const dataDiriFields: FieldConfig[] = [
+// --- KONFIGURASI FIELDS AWAL ---
+const initialDataDiriFields: FieldConfig[] = [
   {
     name: "nama",
     label: "Nama Lengkap",
@@ -103,10 +104,49 @@ const dataDiriFields: FieldConfig[] = [
 
 // --- KOMPONEN FORM ---
 const FormDataDiri: React.FC<FormDataDiriProps> = ({ formRef, initialValues }) => {
+  const [fields, setFields] = useState<FieldConfig[]>(initialDataDiriFields);
+
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const [departemenList, prodiList] = await Promise.all([
+          masterDataService.getDepartemenList(),
+          masterDataService.getProdiList(),
+        ]);
+
+        const departemenOptions = departemenList.map(dep => ({
+          label: dep.name,
+          value: dep.name, // using name as value to match previous behavior 
+        }));
+
+        const prodiOptions = prodiList.map(prodi => ({
+          label: prodi.name,
+          value: prodi.name, // using name as value to match previous behavior
+        }));
+
+        setFields(prevFields =>
+          prevFields.map(field => {
+            if (field.name === "departemen") {
+              return { ...field, options: departemenOptions };
+            }
+            if (field.name === "prodi") {
+              return { ...field, options: prodiOptions };
+            }
+            return field;
+          })
+        );
+      } catch (error) {
+        console.error("Failed to fetch options for FormDataDiri", error);
+      }
+    };
+
+    fetchMasterData();
+  }, []);
+
   return (
     <DynamicForm
       formRef={formRef}
-      fields={dataDiriFields}
+      fields={fields}
       initialValues={initialValues}
     />
   );

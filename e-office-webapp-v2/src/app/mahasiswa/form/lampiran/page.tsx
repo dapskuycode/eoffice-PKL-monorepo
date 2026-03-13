@@ -394,24 +394,8 @@ function LampiranContent() {
         >
           {previewFile && (
             <>
-              {/* For existing files from edit mode (has dataUrl/filePath but no originFileObj) */}
-              {(previewFile as any).isExisting && ((previewFile as any).dataUrl || (previewFile as any).filePath) ? (
-                previewFile.type?.includes('pdf') || (previewFile as any).filePath?.includes('.pdf') ? (
-                  <iframe
-                    src={(previewFile as any).dataUrl || (previewFile as any).filePath}
-                    style={{ width: "100%", height: "70vh", border: "none" }}
-                  />
-                ) : (
-                  <img
-                    src={(previewFile as any).dataUrl || (previewFile as any).filePath}
-                    alt={previewFile.name}
-                    style={{ width: "100%", maxHeight: "70vh", objectFit: "contain" }}
-                  />
-                )
-              ) : null}
-
-              {/* For new uploaded files (has originFileObj) */}
-              {previewFile.originFileObj && (
+              {/* If it has originFileObj (newly uploaded) */}
+              {previewFile.originFileObj ? (
                 previewFile.type === "application/pdf" ? (
                   <iframe
                     src={URL.createObjectURL(previewFile.originFileObj)}
@@ -424,7 +408,32 @@ function LampiranContent() {
                     style={{ width: "100%", maxHeight: "70vh", objectFit: "contain" }}
                   />
                 )
-              )}
+              ) :
+                /* If it has dataUrl or filePath (loaded from draft / existing) */
+                ((previewFile as any).dataUrl || (previewFile as any).filePath) ? (
+                  previewFile.type?.includes("pdf") ||
+                    (previewFile as any).filePath?.includes(".pdf") ? (
+                    <iframe
+                      src={(previewFile as any).dataUrl || (previewFile as any).filePath}
+                      style={{ width: "100%", height: "70vh", border: "none" }}
+                    />
+                  ) : (
+                    <img
+                      src={(previewFile as any).dataUrl || (previewFile as any).filePath}
+                      alt={previewFile.name}
+                      style={{ width: "100%", maxHeight: "70vh", objectFit: "contain" }}
+                    />
+                  )
+                ) : (
+                  <div style={{ padding: "40px", textAlign: "center" }}>
+                    <ExclamationCircleOutlined style={{ fontSize: "48px", color: "#faad14", marginBottom: "16px" }} />
+                    <Typography.Title level={4}>File tidak dapat dipratinjau</Typography.Title>
+                    <Typography.Text type="secondary">
+                      File ini diload dari draft sebagian dan data lengkapnya tidak tersedia di memori pratinjau. <br />
+                      Silakan unggah ulang jika Anda ingin melihat isinya.
+                    </Typography.Text>
+                  </div>
+                )}
             </>
           )}
         </Modal>

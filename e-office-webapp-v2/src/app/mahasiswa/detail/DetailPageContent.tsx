@@ -112,8 +112,9 @@ export default function DetailPageContent() {
         // Map existing data to storage keys
         const dataDiriParams = {
             nama: pengajuan.namaSementara || user?.nama,
-            nim: pengajuan.mahasiswa?.nim,
+            nim: pengajuan.nimSementara || pengajuan.mahasiswa?.nim,
             email: pengajuan.emailSementara || user?.email,
+            departemen: pengajuan.departemenSementara || pengajuan.mahasiswa?.departemen,
             prodi: pengajuan.prodiSementara || pengajuan.mahasiswa?.programStudi?.name,
             noHp: pengajuan.noHpSementara || pengajuan.mahasiswa?.noHp,
             alamat: pengajuan.alamatSementara || pengajuan.mahasiswa?.alamat,
@@ -123,21 +124,81 @@ export default function DetailPageContent() {
         localStorage.setItem('skl_data_diri', JSON.stringify(dataDiriParams));
 
         const detailParams = {
-            tglLulus: pengajuan.tglLulus,
-            ipkTerakhir: pengajuan.ipkTerakhir,
-            jumlahSks: pengajuan.jumlahSks,
+            tanggalLulus: pengajuan.tglLulus,
+            ipk: pengajuan.ipkTerakhir?.toString(),
+            jumlahSks: pengajuan.jumlahSks?.toString(),
         };
         localStorage.setItem('skl_detail_pengajuan', JSON.stringify(detailParams));
 
-        // Map lampiran
-        const lampiranForEdit = (pengajuan.lampiran || []).map(l => ({
-            jenisDokumen: l.jenisDokumen,
-            pathFile: l.pathFile
-        }));
+        // Map lampiran array to expected object format { ktm: {}, ... }
+        const jenisToKeyMap: Record<string, string> = {
+            'KTM': 'ktm',
+            'TRANSKRIP_NILAI': 'transkrip',
+            'BERITA_ACARA_UJIAN': 'beritaAcara',
+            'BEBAS_PUSTAKA': 'ujianSarjana',
+            'PAS_FOTO': 'pasFoto',
+            'BUKTI_SUBMIT': 'buktiSubmit',
+            'LAINNYA': 'lainnya'
+        };
+
+        const lampiranForEdit: Record<string, any> = {};
+        (pengajuan.lampiran || []).forEach(l => {
+            const key = jenisToKeyMap[l.jenisDokumen];
+            if (key) {
+                const isPdf = l.pathFile?.toLowerCase().endsWith('.pdf');
+                lampiranForEdit[key] = {
+                    uid: l.id || Date.now().toString() + Math.random().toString().substring(2, 6),
+                    name: l.jenisDokumen + (isPdf ? '.pdf' : '.jpg'),
+                    type: isPdf ? 'application/pdf' : 'image/jpeg',
+                    size: 1024, // Dummy size
+                    filePath: l.pathFile?.startsWith('http') ? l.pathFile : `${API_URL}/files/${l.pathFile}`,
+                    isExisting: true,
+                    hasFile: true
+                };
+            }
+        });
+
         localStorage.setItem('skl_lampiran', JSON.stringify(lampiranForEdit));
         if (pengajuan.tandatangan) localStorage.setItem('skl_signature', pengajuan.tandatangan);
 
         router.push(`/mahasiswa/form/dataDiri?draftId=${pengajuanId}&edit=true`);
+    };
+
+    const handleBatal = () => {
+        if (!pengajuan) return;
+
+        modal.confirm({
+            title: 'Batalkan Pengajuan',
+            icon: <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />,
+            content: (
+                <div>
+                    <p>Apakah Anda yakin ingin membatalkan pengajuan ini?</p>
+                    <p style={{ color: '#ff4d4f' }}>
+                        Pengajuan yang dibatalkan tidak dapat diteruskan kembali. Anda harus membuat pengajuan baru.
+                    </p>
+                </div>
+            ),
+            okText: 'Ya, Batalkan',
+            okType: 'danger',
+            cancelText: 'Tidak',
+            onOk: async () => {
+                setLoading(true);
+                try {
+                    await sklService.updateStatus(pengajuanId!, {
+                        status: 'BATAL',
+                        actorId: user?.id || '',
+                        catatan: 'Dibatalkan oleh mahasiswa'
+                    });
+
+                    message.success('Pengajuan berhasil dibatalkan');
+                    await loadData();
+                } catch (error) {
+                    console.error('Error membatalkan pengajuan:', error);
+                    message.error('Gagal membatalkan pengajuan');
+                    setLoading(false);
+                }
+            }
+        });
     };
 
     if (loading) {
@@ -175,11 +236,23 @@ export default function DetailPageContent() {
                             </Space>
                         }
                         extra={
-                            pengajuan.status === 'REVISI' && (
-                                <Button type="primary" icon={<EditOutlined />} onClick={handlesEdit}>
-                                    Revisi Sekarang
-                                </Button>
-                            )
+                            <>
+                                {pengajuan.status === 'REVISI' && (
+                                    <Button type="primary" icon={<EditOutlined />} onClick={handlesEdit}>
+                                        Revisi Sekarang
+                                    </Button>
+                                )}
+                                {(pengajuan.status === 'SUBMITTED' || pengajuan.status === 'DRAFT') && (
+                                    <Space>
+                                        <Button danger icon={<RollbackOutlined />} onClick={handleBatal}>
+                                            Batal Pengajuan
+                                        </Button>
+                                        <Button type="primary" icon={<EditOutlined />} onClick={handlesEdit}>
+                                            Edit Pengajuan
+                                        </Button>
+                                    </Space>
+                                )}
+                            </>
                         }
                         className="shadow-sm rounded-xl mb-6"
                     >

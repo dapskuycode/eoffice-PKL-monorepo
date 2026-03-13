@@ -388,7 +388,7 @@ function RiwayatPengajuanContent() {
             icon={<EditOutlined />}
             onClick={() => {
               localStorage.setItem('skl_draft_id', record.idSurat);
-              router.push(`/mahasiswa/form/dataDiri?draftId=\${record.idSurat}`);
+              router.push(`/mahasiswa/form/dataDiri?draftId=${record.idSurat}`);
             }}
           />
           <Button
@@ -462,7 +462,7 @@ function RiwayatPengajuanContent() {
         <Button
           type="text"
           icon={<EyeOutlined />}
-          onClick={() => router.push(`/mahasiswa/detail?id=\${record.idSurat}`)}
+          onClick={() => router.push(`/mahasiswa/detail?id=${record.idSurat}`)}
         />
       ),
     },

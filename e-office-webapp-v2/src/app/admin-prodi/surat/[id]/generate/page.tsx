@@ -207,7 +207,7 @@ export default function GenerateSuratPage() {
 
   // Data yang ditampilkan: prioritas data sementara > data master
   const namaLengkap = pengajuan.namaSementara || pengajuan.mahasiswa?.user?.name || 'N/A';
-  const nim = pengajuan.mahasiswa?.nim || 'N/A';
+  const nim = pengajuan.nimSementara || pengajuan.mahasiswa?.nim || 'N/A';
   const email = pengajuan.emailSementara || pengajuan.mahasiswa?.user?.email || 'N/A';
   const noHp = pengajuan.noHpSementara || pengajuan.mahasiswa?.noHp || 'N/A';
   const alamat = pengajuan.alamatSementara || pengajuan.mahasiswa?.alamat || 'N/A';
@@ -217,7 +217,7 @@ export default function GenerateSuratPage() {
     : (pengajuan.mahasiswa?.tanggalLahir
       ? new Date(pengajuan.mahasiswa.tanggalLahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
       : 'N/A');
-  const programStudi = pengajuan.mahasiswa?.programStudi?.name || 'N/A';
+  const programStudi = pengajuan.prodiSementara || pengajuan.mahasiswa?.programStudi?.name || 'N/A';
 
   const handleZoomIn = () => {
     setZoom(prev => Math.min(prev + 10, 150));
