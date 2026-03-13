@@ -204,7 +204,7 @@ export default function DetailPageContent() {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <Spin size="large" tip="Memuat detail pengajuan..." />
+                <Spin size="large" description="Memuat detail pengajuan..." />
             </div>
         );
     }
@@ -257,7 +257,7 @@ export default function DetailPageContent() {
                         className="shadow-sm rounded-xl mb-6"
                     >
                         <Alert
-                            message={<Text strong>Penting!</Text>}
+                            title={<Text strong>Penting!</Text>}
                             description={
                                 pengajuan.status === 'COMPLETED'
                                     ? "Pengajuan Anda telah disetujui dan selesai. Silakan cek menu Riwayat untuk mengunduh surat."
@@ -392,10 +392,10 @@ export default function DetailPageContent() {
                     >
                         {riwayat.length > 0 ? (
                             <Timeline
-                                mode="left"
+                                mode="start"
                                 items={riwayat.map((item, idx) => ({
                                     color: idx === 0 ? getStatusColor(item.status) : 'gray',
-                                    children: (
+                                    content: (
                                         <div className="pb-4">
                                             <div className="flex justify-between items-center mb-1">
                                                 <Text strong style={{ fontSize: 13 }}>{item.status?.replace(/_/g, ' ')}</Text>
@@ -458,7 +458,7 @@ export default function DetailPageContent() {
                 width={1000}
                 centered
                 styles={{ body: { padding: 0, height: '75vh' } }}
-                destroyOnClose
+                destroyOnHidden
             >
                 <iframe
                     src={pdfPreview.url}

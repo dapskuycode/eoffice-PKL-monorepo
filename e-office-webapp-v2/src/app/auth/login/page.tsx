@@ -9,7 +9,7 @@ const LoginPageContent = dynamic(
     ssr: false,
     loading: () => (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Spin size="large" tip="Loading Login..." />
+        <Spin size="large" description="Loading Login..." />
       </div>
     )
   }

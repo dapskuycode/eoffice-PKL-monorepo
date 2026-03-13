@@ -295,7 +295,7 @@ function DetailContent() {
 
   if (loading) {
     return (
-      <Spin size="large" tip="Memuat Data..." fullscreen />
+      <Spin size="large" description="Memuat Data..." fullscreen />
     );
   }
 

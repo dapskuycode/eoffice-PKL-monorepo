@@ -433,11 +433,11 @@ export default function DashboardContent({ data, session }: DashboardContentProp
                     </div>
                     {latestPengajuan.riwayat && latestPengajuan.riwayat.length > 0 ? (
                       <Timeline
-                        mode="left"
+                        mode="start"
                         style={{ marginLeft: 16 }}
                         items={latestPengajuan.riwayat.slice(0, 3).map((r: any) => ({
                           color: r.status === 'COMPLETED' ? 'green' : r.status === 'DITOLAK' ? 'red' : 'blue',
-                          children: (() => {
+                          content: (() => {
                             const roles = r.actor?.userRole?.map((ur: any) => ur.role?.name).join(', ') || 'Sistem';
                             const actorDisplay = r.actor?.name ? `${r.actor.name} (${roles})` : 'Sistem';
                             return (

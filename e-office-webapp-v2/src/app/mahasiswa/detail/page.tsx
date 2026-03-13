@@ -9,7 +9,7 @@ const DetailPageContent = dynamic(
     ssr: false,
     loading: () => (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Spin size="large" tip="Loading Detail..." />
+        <Spin size="large" description="Loading Detail..." />
       </div>
     )
   }
