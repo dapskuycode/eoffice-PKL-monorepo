@@ -5,7 +5,7 @@ import { getSession } from '@/lib/auth-server';
 import DashboardContent from './DashboardContent';
 import { ArrowRight, FileText, Clock, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 async function getDashboardData(cookies: string) {
   try {

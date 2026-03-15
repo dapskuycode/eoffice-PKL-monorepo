@@ -52,6 +52,7 @@ export default function AdminFakultasDashboard() {
 
       console.log('Dashboard data received:', data);
       console.log('Pengajuan count:', data?.pengajuan?.length);
+      console.log('All pengajuan statuses:', data?.pengajuan?.map((p: any) => ({ id: p.id.substring(0, 8), status: p.status })));
 
       if (data && data.pengajuan) {
         console.log('First pengajuan:', data.pengajuan[0]);

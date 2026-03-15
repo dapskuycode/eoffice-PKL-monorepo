@@ -17,7 +17,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { mahasiswaService } from '@/services/mahasiswaService';
 import { sklService } from '@/services/sklService';
-import Image from 'next/image';
+import NextImage from 'next/image';
 
 const { Title, Text } = Typography;
 
@@ -200,25 +200,62 @@ function getStatusDisplay(status: string) {
 }
 
 // --- Komponen Card Statistik Kecil ---
-const StatCard = ({ title, value, icon, color, loading }: any) => (
-  <Card bordered={false} bodyStyle={{ padding: 20 }} style={{ borderRadius: 12, boxShadow: '0 2px 10px rgba(0,0,0,0.03)', height: '100%' }}>
-    <Statistic
-      title={<span style={{ fontSize: 13, fontWeight: 500, color: '#8c8c8c' }}>{title}</span>}
-      value={value}
-      valueStyle={{ fontSize: 24, fontWeight: 700, color: '#262626' }}
-      loading={loading}
-      prefix={
-        <div style={{
-          width: 40, height: 40, borderRadius: 10,
-          background: `${color}15`, color: color,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, marginRight: 8
-        }}>
-          {icon}
-        </div>
-      }
-    />
-  </Card>
-);
+const StatCard = ({ title, value, icon, color, loading, onClick, isActive }: any) => {
+  const [isHovered, setIsHovered] = React.useState(false);
+
+  return (
+    <div
+      onClick={onClick}
+      onMouseDown={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      role="button"
+      tabIndex={0}
+      onKeyPress={(e) => e.key === 'Enter' && onClick?.()}
+      style={{
+        cursor: 'pointer',
+        height: '100%',
+        userSelect: 'none',
+        transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
+        transition: 'transform 0.2s ease'
+      }}
+    >
+      <Card
+        variant="borderless"
+        styles={{ body: { padding: 20 } }}
+        style={{
+          borderRadius: 12,
+          boxShadow: isHovered
+            ? `0 8px 24px ${color}30`
+            : isActive
+              ? `0 4px 12px ${color}40`
+              : '0 2px 10px rgba(0,0,0,0.03)',
+          height: '100%',
+          border: isActive ? `2px solid ${color}` : 'none',
+          transition: 'all 0.3s ease',
+          pointerEvents: 'none'
+        }}
+      >
+        <Statistic
+          title={<span style={{ fontSize: 13, fontWeight: 500, color: '#8c8c8c' }}>{title}</span>}
+          value={value}
+          styles={{ content: { fontSize: 24, fontWeight: 700, color: isActive ? color : '#262626' } }}
+          loading={loading}
+          prefix={
+            <div style={{
+              width: 40, height: 40, borderRadius: 10,
+              background: `${color}15`, color: color,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, marginRight: 8
+            }}>
+              {icon}
+            </div>
+          }
+          suffix={isActive && <span style={{ fontSize: 12, color: color, marginLeft: 8 }}>●</span>}
+        />
+      </Card>
+    </div>
+  );
+};
 
 function RiwayatPengajuanContent() {
   const router = useRouter();
@@ -325,6 +362,22 @@ function RiwayatPengajuanContent() {
   const handleZoomIn = () => setZoom(prev => Math.min(prev + 10, 150));
   const handleZoomOut = () => setZoom(prev => Math.max(prev - 10, 50));
 
+
+  const handleViewLampiran = async (record: any) => {
+    try {
+      const pengajuanData = await sklService.getPengajuanDetail(record.idSurat);
+      if (!pengajuanData) {
+        message.error('Data draft tidak ditemukan');
+        return;
+      }
+      setSelectedDraftLampiran(pengajuanData.lampiran || []);
+      setLampiranModalVisible(true);
+    } catch (error) {
+      console.error('Error fetching lampiran:', error);
+      message.error('Gagal memuat lampiran');
+    }
+  };
+
   const handleDeleteDraft = async (record: any) => {
     modal.confirm({
       title: 'Hapus Draft',
@@ -365,7 +418,7 @@ function RiwayatPengajuanContent() {
       dataIndex: 'perihal',
       key: 'perihal',
       render: (text: string, record: any) => (
-        <Space direction="vertical" size="small">
+        <Space orientation="vertical" size="small">
           <Text>{text}</Text>
           {record.status === 'REVISI' && (
             <Tag color="orange">PERLU REVISI</Tag>
@@ -511,9 +564,9 @@ function RiwayatPengajuanContent() {
 
       {/* 3. Main Content Tabs */}
       <Card
-        bordered={false}
+        variant="borderless"
         style={{ borderRadius: 16, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', overflow: 'hidden' }}
-        bodyStyle={{ padding: '0 24px 24px' }}
+        styles={{ body: { padding: '0 24px 24px' } }}
       >
         <Tabs
           defaultActiveKey="ongoing"
@@ -700,35 +753,71 @@ function RiwayatPengajuanContent() {
                         </table>
                       </div>
 
-                      <p style={{ marginBottom: '12px' }}>
-                        Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi {selectedSurat.mahasiswa?.programStudi?.name || 'N/A'} Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal {new Date(selectedSurat.tglLulus).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} dengan Indeks Prestasi Kumulatif (IPK) {selectedSurat.ipkTerakhir}/4.00 dengan Jumlah Satuan Kredit Semester (SKS) 144
+                      <p style={{ marginBottom: '16px' }}>
+                        Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi {selectedSurat.mahasiswa?.programStudi?.name || 'N/A'} Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal {new Date(selectedSurat.tglLulus).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} dengan Indeks Prestasi Kumulatif (IPK) {selectedSurat.ipkTerakhir}/4.00 dengan Jumlah Satuan Kredit Semester (SKS) {selectedSurat.jumlahSks || 144}
                       </p>
 
                       <p style={{ marginBottom: '24px' }}>
                         Demikian surat permohonan kami, atas perhatiannya kami sampaikan terimakasih.
                       </p>
 
-                      {/* Signature Section - Refined 3 Column Layout */}
-                      <div style={{ marginTop: '32px' }}>
-                        <div className="signature-section" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', alignItems: 'flex-start' }}>
-                          {/* Kiri: Ketua Prodi */}
-                          <div className="signature-block" style={{ textAlign: 'center' }}>
-                            <p style={{ marginBottom: '12px' }}>Ketua Program Studi</p>
-                            <div className="signature-wrapper" style={{ height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              {selectedSurat.ttdKetuaProdi ? (
-                                <Image
-                                  src={selectedSurat.ttdKetuaProdi}
-                                  alt="Tanda Tangan Kaprodi"
-                                  width={120}
-                                  height={80}
-                                  style={{ objectFit: 'contain' }}
-                                />
-                              ) : (
-                                <div style={{ height: '80px' }}></div>
+                      <div style={{ position: 'relative', marginTop: '48px' }}>
+                        {/* Soft Green Sticky Note - Screen Only (overlays signature area like UPA) */}
+                        {selectedSurat.nomorSkl && (
+                          <div className="print:hidden" style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%) rotate(1deg)',
+                            zIndex: 40,
+                            pointerEvents: 'none',
+                            width: '240px'
+                          }}>
+                            <div style={{
+                              backgroundColor: '#f0fdf4',
+                              border: '1px solid #bbf7d0',
+                              borderRadius: '8px',
+                              boxShadow: '0 8px 16px rgba(0,0,0,0.06)',
+                              padding: '16px',
+                              textAlign: 'center',
+                              fontFamily: 'sans-serif'
+                            }}>
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: '#166534', fontWeight: '700', fontSize: '14px', marginBottom: '10px' }}>
+                                <span style={{ fontSize: '18px' }}>📝</span>
+                                <span style={{ textDecoration: 'underline', textDecorationColor: '#86efac', textUnderlineOffset: '4px' }}>Surat Sudah Selesai</span>
+                              </div>
+
+                              <p style={{ fontSize: '11px', color: '#374151', marginBottom: '8px', lineHeight: '1.5' }}>
+                                Surat Keterangan Lulus<br />sudah selesai dengan nomor:
+                              </p>
+
+                              <div style={{ backgroundColor: '#fff', padding: '8px', borderRadius: '4px', border: '1.5px solid #dcfce7', marginBottom: '10px', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)' }}>
+                                <span style={{ fontSize: '14px', fontWeight: '800', color: '#064e3b', letterSpacing: '0.5px' }}>
+                                  {selectedSurat.nomorSkl}
+                                </span>
+                              </div>
+
+                              <p style={{ fontSize: '10.5px', color: '#4b5563', marginBottom: '8px', lineHeight: '1.4' }}>
+                                Harap membawa pas foto <b style={{ color: '#1f2937' }}>4x6 (2 lembar)</b> dan meminta cap basah di Akademik.
+                              </p>
+
+                              <p style={{ fontSize: '12px', fontWeight: '600', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                                Terima kasih <span style={{ fontSize: '14px' }}>🙏</span>
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <div className="signature-block" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: '250px' }}>
+                            <p style={{ marginBottom: '4px' }}>Ketua Program Studi</p>
+                            <div className="signature-wrapper" style={{ height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                              {selectedSurat.ttdKetuaProdi && (
+                                <NextImage src={selectedSurat.ttdKetuaProdi} alt="TTD Kaprodi" width={120} height={80} style={{ objectFit: 'contain' }} />
                               )}
                             </div>
-                            <div style={{ marginTop: '12px' }}>
-                              <p style={{ fontWeight: '700', textDecoration: 'underline', marginBottom: '0' }}>
+                            <div style={{ marginTop: '4px' }}>
+                              <p style={{ fontWeight: 'bold', textDecoration: 'underline', marginBottom: '2px' }}>
                                 {selectedSurat.mahasiswa?.programStudi?.ketuaProdi?.user?.name || '(Nama Ketua Prodi)'}
                               </p>
                               <p style={{ fontSize: '11pt' }}>NIP. {selectedSurat.mahasiswa?.programStudi?.ketuaProdi?.nip || '................................'}</p>
@@ -784,18 +873,10 @@ function RiwayatPengajuanContent() {
                             <p style={{ marginBottom: '12px' }}>
                               Semarang, {new Date(selectedSurat.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </p>
-                            <p style={{ marginBottom: '12px' }}>Pemohon,</p>
-                            <div className="signature-wrapper" style={{ height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              {selectedSurat.tandatangan ? (
-                                <Image
-                                  src={selectedSurat.tandatangan}
-                                  alt="Tanda Tangan Mahasiswa"
-                                  width={120}
-                                  height={80}
-                                  style={{ objectFit: 'contain' }}
-                                />
-                              ) : (
-                                <div style={{ height: '80px' }}></div>
+                            <p style={{ marginBottom: '4px' }}>Pemohon,</p>
+                            <div className="signature-wrapper" style={{ height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                              {selectedSurat.tandatangan && (
+                                <NextImage src={selectedSurat.tandatangan} alt="TTD Mahasiswa" width={120} height={80} style={{ objectFit: 'contain' }} />
                               )}
                             </div>
                             <div style={{ marginTop: '12px' }}>

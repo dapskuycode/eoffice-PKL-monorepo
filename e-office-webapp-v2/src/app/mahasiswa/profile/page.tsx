@@ -6,7 +6,7 @@ import ProfileContent from './ProfileContent';
 import { App } from 'antd';
 import { User, Mail, Phone, Calendar, MapPin, GraduationCap, Building2, Save } from 'lucide-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 async function getMahasiswaProfile(cookies: string) {
   try {

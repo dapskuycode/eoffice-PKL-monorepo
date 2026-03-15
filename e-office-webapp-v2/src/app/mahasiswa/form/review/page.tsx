@@ -73,6 +73,30 @@ interface DetailPengajuan {
 // or it's defined elsewhere. If not, this might cause a type error.
 type DetailPengajuanData = DetailPengajuan;
 
+// Helper function to create a lightweight version of lampiran for localStorage
+// This strips out large base64 data to prevent QuotaExceededError
+function createLampiranMetadata(lampiran: LampiranData): LampiranData {
+  const metadata: LampiranData = {};
+  
+  Object.entries(lampiran).forEach(([key, file]) => {
+    if (file) {
+      metadata[key as keyof LampiranData] = {
+        uid: file.uid,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        // Exclude originFileObj and large dataUrl (base64) from localStorage
+        // Only keep filePath if it's a MinIO URL (not base64)
+        filePath: file.filePath && !file.filePath.startsWith('data:') ? file.filePath : undefined,
+        dataUrl: file.dataUrl && !file.dataUrl.startsWith('data:') ? file.dataUrl : undefined,
+        isExisting: file.isExisting,
+      };
+    }
+  });
+  
+  return metadata;
+}
+
 function ReviewSuratContent() {
   const router = useRouter();
   const { message, modal } = App.useApp();
@@ -195,26 +219,104 @@ function ReviewSuratContent() {
           }
         }
 
-        // Load lampiran - first try window object (full data), fallback to localStorage (metadata)
-        const savedLampiran = localStorage.getItem("skl_lampiran");
-        if (typeof window !== 'undefined' && (window as any).__skl_lampiran_full__) {
-          setLampiran((window as any).__skl_lampiran_full__);
-        } else if (savedLampiran) {
-          setLampiran(JSON.parse(savedLampiran));
+        // Load lampiran - priority: database > window object > localStorage
+        let lampiranLoaded = false;
+        
+        if (currentDraftId) {
+          try {
+            const draftDetail = await sklService.getPengajuanDetail(currentDraftId);
+            if (draftDetail && draftDetail.lampiran && draftDetail.lampiran.length > 0) {
+              console.log('Loading lampiran from database:', draftDetail.lampiran);
+              const lampiranFromDb: LampiranData = {};
+              
+              draftDetail.lampiran.forEach((item: any) => {
+                const fileUpload: FileUpload = {
+                  uid: item.id,
+                  name: item.namaFile || item.jenisDokumen,
+                  size: 0,
+                  type: item.pathFile.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg',
+                  dataUrl: item.pathFile,
+                  filePath: item.pathFile,
+                  isExisting: true,
+                };
+                
+                // Map jenisDokumen to field name
+                switch (item.jenisDokumen) {
+                  case 'KTM':
+                    lampiranFromDb.ktm = fileUpload;
+                    break;
+                  case 'BERITA_ACARA_UJIAN':
+                    lampiranFromDb.beritaAcara = fileUpload;
+                    break;
+                  case 'BEBAS_PUSTAKA':
+                    lampiranFromDb.ujianSarjana = fileUpload;
+                    break;
+                  case 'PAS_FOTO':
+                    lampiranFromDb.pasFoto = fileUpload;
+                    break;
+                  case 'TRANSKRIP_NILAI':
+                    lampiranFromDb.transkrip = fileUpload;
+                    break;
+                  case 'BUKTI_SUBMIT':
+                    lampiranFromDb.buktiSubmit = fileUpload;
+                    break;
+                  case 'LAINNYA':
+                    lampiranFromDb.lainnya = fileUpload;
+                    break;
+                }
+              });
+              
+              setLampiran(lampiranFromDb);
+              lampiranLoaded = true;
+              console.log('Loaded lampiran from database:', lampiranFromDb);
+            }
+          } catch (err) {
+            console.error('Failed to load lampiran from database:', err);
+          }
+        }
+        
+        // Fallback to window object or localStorage if not loaded from database
+        if (!lampiranLoaded) {
+          const savedLampiran = localStorage.getItem("skl_lampiran");
+          if (typeof window !== 'undefined' && (window as any).__skl_lampiran_full__) {
+            setLampiran((window as any).__skl_lampiran_full__);
+          } else if (savedLampiran) {
+            setLampiran(JSON.parse(savedLampiran));
+          }
         }
 
-        // Load signature - priority: database > localStorage
+        // Load signature - priority: database (from draft or edit source) > localStorage
+        let signatureLoaded = false;
+
+        // Try loading from current draft first
+        if (currentDraftId) {
+          try {
+            const draftDetail = await sklService.getPengajuanDetail(currentDraftId);
+            if (draftDetail?.tandatangan) {
+              console.log('Loading signature from draft:', draftDetail.tandatangan);
+              setSignature(draftDetail.tandatangan);
+              // Determine type from the signature format
+              if (draftDetail.tandatangan.startsWith('data:image')) {
+                setSignatureType('handwriting');
+              } else {
+                setSignatureType('upload');
+              }
+              signatureLoaded = true;
+            }
+          } catch (err) {
+            console.error('Failed to load signature from draft:', err);
+          }
+        }
+
+        // If not loaded and in edit mode, try edit source
         const isEditMode = localStorage.getItem('skl_edit_mode') === 'true';
         const editSourceId = localStorage.getItem('skl_edit_source_id');
 
-        let signatureLoaded = false;
-
-        if (isEditMode && editSourceId) {
-          // If in edit mode, try to load signature from database first
+        if (!signatureLoaded && isEditMode && editSourceId) {
           try {
             const pengajuanDetail = await sklService.getPengajuanDetail(editSourceId);
             if (pengajuanDetail?.tandatangan) {
-              console.log('Loading signature from database:', pengajuanDetail.tandatangan);
+              console.log('Loading signature from edit source:', pengajuanDetail.tandatangan);
               setSignature(pengajuanDetail.tandatangan);
               // Determine type from the signature format
               if (pengajuanDetail.tandatangan.startsWith('data:image')) {
@@ -225,7 +327,7 @@ function ReviewSuratContent() {
               signatureLoaded = true;
             }
           } catch (err) {
-            console.error('Failed to load signature from database:', err);
+            console.error('Failed to load signature from edit source:', err);
           }
         }
 
@@ -827,6 +929,9 @@ function ReviewSuratContent() {
                     <Descriptions.Item label="IPK">
                       <span style={{ color: "#262626" }}>{detailPengajuan.ipk || '-'}</span>
                     </Descriptions.Item>
+                    <Descriptions.Item label="Jumlah SKS">
+                      <span style={{ color: "#262626" }}>{detailPengajuan.jumlahSks || '-'} SKS</span>
+                    </Descriptions.Item>
                   </Descriptions>
                 ) : (
                   <Empty
@@ -994,9 +1099,222 @@ function ReviewSuratContent() {
                     borderColor: "#1890ff",
                     color: "#1890ff",
                   }}
-                  onClick={() => {
-                    localStorage.setItem("skl_lampiran", JSON.stringify(lampiran));
-                    message.success("Draft berhasil disimpan!");
+                  onClick={async () => {
+                    setLoading(true);
+                    
+                    try {
+                      const profile = await mahasiswaService.getProfile();
+                      
+                      if (!profile) {
+                        message.error("Data profil tidak ditemukan. Silakan login kembali.");
+                        setLoading(false);
+                        return;
+                      }
+
+                      // Get or create draft ID
+                      let draftId = localStorage.getItem('skl_draft_id');
+                      
+                      if (!draftId) {
+                        // Create new draft first with data from previous steps
+                        const dataDiriStr = localStorage.getItem("skl_data_diri");
+                        const detailStr = localStorage.getItem("skl_detail_pengajuan");
+                        const dataDiri = dataDiriStr ? JSON.parse(dataDiriStr) : {};
+                        const detail = detailStr ? JSON.parse(detailStr) : {};
+
+                        const newDraft = await sklService.saveDraft({
+                          mahasiswaId: profile.id,
+                          namaSementara: dataDiri.nama,
+                          nimSementara: dataDiri.nim,
+                          emailSementara: dataDiri.email,
+                          prodiSementara: dataDiri.prodi,
+                          departemenSementara: dataDiri.departemen,
+                          noHpSementara: dataDiri.no_hp,
+                          alamatSementara: dataDiri.alamat,
+                          tempatLahirSementara: dataDiri.tempatLahir,
+                          tanggalLahirSementara: dataDiri.tanggalLahir,
+                          tglLulus: detail.tanggalLulus,
+                          ipkTerakhir: detail.ipk ? parseFloat(detail.ipk) : undefined,
+                          jumlahSks: detail.jumlahSks ? parseInt(detail.jumlahSks) : undefined,
+                          draftStep: 4,
+                          createLog: true
+                        });
+
+                        if (!newDraft || !newDraft.id) {
+                          message.error("Gagal membuat draft baru.");
+                          setLoading(false);
+                          return;
+                        }
+
+                        draftId = newDraft.id;
+                        localStorage.setItem('skl_draft_id', draftId);
+                        console.log('Created new draft ID:', draftId);
+                      }
+
+                      // Get lampiran data from window object or state
+                      const lampiranToSave = typeof window !== 'undefined' && (window as any).__skl_lampiran_full__
+                        ? (window as any).__skl_lampiran_full__
+                        : lampiran;
+
+                      // Save only metadata to localStorage to prevent QuotaExceededError
+                      // Full file data is stored in window object (current session) and database (persistent)
+                      const lampiranMetadata = createLampiranMetadata(lampiranToSave);
+                      try {
+                        localStorage.setItem("skl_lampiran", JSON.stringify(lampiranMetadata));
+                      } catch (storageError) {
+                        console.warn('Failed to save lampiran metadata to localStorage:', storageError);
+                        // Continue anyway, as full data is in window object
+                      }
+                      
+                      // Store full lampiran data in window object for current session
+                      if (typeof window !== 'undefined') {
+                        (window as any).__skl_lampiran_full__ = lampiranToSave;
+                      }
+
+                      // 1. Upload signature to MinIO if it's base64
+                      let signatureUrl: string | undefined = signature || undefined;
+                      if (signature && signature.startsWith('data:image')) {
+                        try {
+                          // Convert base64 to blob
+                          const base64Response = await fetch(signature);
+                          const blob = await base64Response.blob();
+                          const signatureFile = new File([blob], `signature_${Date.now()}.png`, { type: 'image/png' });
+
+                          // Upload to MinIO
+                          const uploadResult = await uploadService.uploadFile(signatureFile, 'signature');
+                          if (uploadResult) {
+                            signatureUrl = uploadResult.url;
+                            console.log('Signature uploaded to MinIO:', uploadResult.url);
+
+                            // Update localStorage with MinIO URL
+                            localStorage.setItem(
+                              "skl_signature",
+                              JSON.stringify({
+                                data: uploadResult.url,
+                                type: signatureType,
+                              })
+                            );
+                          }
+                        } catch (err) {
+                          console.error('Failed to upload signature:', err);
+                          message.warning('Gagal mengupload tandatangan, tetapi draft akan tetap disimpan');
+                        }
+                      }
+
+                      // 2. Upload lampiran files to MinIO and save to database
+                      // Map lampiran to upload
+                      const lampiranMap: { [key: string]: { file: any, jenis: string } } = {
+                        ktm: { file: lampiranToSave.ktm, jenis: 'KTM' },
+                        transkrip: { file: lampiranToSave.transkrip, jenis: 'TRANSKRIP_NILAI' },
+                        beritaAcara: { file: lampiranToSave.beritaAcara, jenis: 'BERITA_ACARA_UJIAN' },
+                        ujianSarjana: { file: lampiranToSave.ujianSarjana, jenis: 'BEBAS_PUSTAKA' },
+                        pasFoto: { file: lampiranToSave.pasFoto, jenis: 'PAS_FOTO' },
+                        buktiSubmit: { file: lampiranToSave.buktiSubmit, jenis: 'BUKTI_SUBMIT' },
+                        lainnya: { file: lampiranToSave.lainnya, jenis: 'LAINNYA' },
+                      };
+
+                      // Check existing lampiran in database to avoid duplicates
+                      let existingLampiran: any[] = [];
+                      try {
+                        const currentDraft = await sklService.getPengajuanDetail(draftId);
+                        if (currentDraft && currentDraft.lampiran) {
+                          existingLampiran = currentDraft.lampiran;
+                          console.log('Existing lampiran in database:', existingLampiran);
+                        }
+                      } catch (err) {
+                        console.warn('Could not fetch existing lampiran:', err);
+                      }
+
+                      let uploadedCount = 0;
+                      let failedCount = 0;
+                      let skippedCount = 0;
+
+                      for (const [key, { file, jenis }] of Object.entries(lampiranMap)) {
+                        // Skip if file is from existing pengajuan (already uploaded)
+                        if (file && (file as any).isExisting) {
+                          console.log(`Skipping ${key} - existing file from previous submission`);
+                          skippedCount++;
+                          continue;
+                        }
+
+                        // Check if this jenis already exists in database
+                        const alreadyExists = existingLampiran.some(l => l.jenisDokumen === jenis);
+                        if (alreadyExists && !file?.originFileObj) {
+                          console.log(`Skipping ${key} - already in database and no new file`);
+                          skippedCount++;
+                          continue;
+                        }
+
+                        if (file && file.originFileObj) {
+                          try {
+                            console.log(`Uploading ${jenis} to MinIO for draft...`);
+                            
+                            // Delete existing lampiran of this type first to avoid duplicates
+                            if (alreadyExists) {
+                              console.log(`Deleting existing ${jenis} before uploading new one`);
+                              await sklService.deleteLampiranByCategory(draftId, jenis);
+                            }
+                            
+                            // Upload file to MinIO
+                            const uploadResult = await uploadService.uploadFile(file.originFileObj, 'lampiran');
+
+                            if (uploadResult) {
+                              console.log(`Upload successful for ${jenis}:`, uploadResult);
+                              
+                              // Save lampiran reference to database
+                              await sklService.addLampiran(draftId, {
+                                jenisDokumen: jenis as any,
+                                pathFile: uploadResult.url,
+                              });
+                              
+                              console.log(`Saved ${jenis} to database:`, uploadResult.fileName);
+                              uploadedCount++;
+                            }
+                          } catch (err) {
+                            console.error(`Failed to upload ${jenis}:`, err);
+                            failedCount++;
+                            // Don't throw error, continue with other files
+                          }
+                        }
+                      }
+
+                      // Get detail data for updating
+                      const detailStr = localStorage.getItem("skl_detail_pengajuan");
+                      const detailData = detailStr ? JSON.parse(detailStr) : {};
+
+                      // 3. Sync draft step and signature to DB
+                      await sklService.saveDraft({
+                        id: draftId,
+                        mahasiswaId: profile.id,
+                        tglLulus: detailData.tanggalLulus,
+                        ipkTerakhir: detailData.ipk ? parseFloat(detailData.ipk) : undefined,
+                        jumlahSks: detailData.jumlahSks ? parseInt(detailData.jumlahSks) : undefined,
+                        tandatangan: signatureUrl,
+                        draftStep: 4,
+                        createLog: true
+                      });
+
+                      const totalFiles = Object.values(lampiranToSave).filter((f: any) => !!f).length;
+
+                      if (uploadedCount > 0) {
+                        message.success(`Draft berhasil disimpan dengan ${uploadedCount} lampiran baru! (Total: ${totalFiles} lampiran)`);
+                      } else if (skippedCount > 0 && uploadedCount === 0) {
+                        message.success(`Draft berhasil disimpan! Semua lampiran sudah tersimpan (${skippedCount} file).`);
+                      } else if (failedCount > 0) {
+                        message.warning("Draft disimpan tapi ada lampiran yang gagal diupload.");
+                      } else {
+                        message.success("Draft berhasil disimpan!");
+                      }
+                      
+                      // Redirect to riwayat page
+                      setTimeout(() => {
+                        router.push('/mahasiswa/riwayat');
+                      }, 1000);
+                    } catch (err) {
+                      console.error('Save draft error:', err);
+                      message.error("Gagal menyimpan draft.");
+                    } finally {
+                      setLoading(false);
+                    }
                   }}
                 >
                   Simpan Draft
@@ -1027,22 +1345,66 @@ function ReviewSuratContent() {
           width={800}
           centered
         >
-          {previewFile && (
-            previewFile.dataUrl ? (
-              previewFile.type === "application/pdf" ? (
-                <iframe
-                  src={previewFile.dataUrl}
-                  style={{ width: "100%", height: "70vh", border: "none" }}
-                />
+          {previewFile && (() => {
+            // Helper function to check if URL is PDF
+            const isPdfUrl = (url: string) => {
+              return url.includes('.pdf') || url.toLowerCase().includes('application/pdf');
+            };
+            
+            // Check for dataUrl (MinIO URL or base64) first
+            if (previewFile.dataUrl) {
+              const isPdf = previewFile.type === "application/pdf" || isPdfUrl(previewFile.dataUrl);
+              return isPdf ? (
+                <div>
+                  <iframe
+                    src={previewFile.dataUrl}
+                    style={{ width: "100%", height: "70vh", border: "none" }}
+                    onLoad={() => console.log('PDF loaded successfully')}
+                    onError={(e) => {
+                      console.error('Failed to load PDF:', previewFile.dataUrl);
+                      message.error('Gagal memuat PDF. Periksa apakah MinIO berjalan dan file masih ada.');
+                    }}
+                  />
+                </div>
               ) : (
                 <img
                   src={previewFile.dataUrl}
                   alt={previewFile.name}
                   style={{ width: "100%", maxHeight: "70vh", objectFit: "contain" }}
+                  onLoad={() => console.log('Image loaded successfully')}
+                  onError={(e) => {
+                    console.error('Failed to load image:', previewFile.dataUrl);
+                    message.error('Gagal memuat gambar. Periksa apakah MinIO berjalan dan file masih ada.');
+                  }}
                 />
-              )
-            ) : previewFile.originFileObj ? (
-              previewFile.type === "application/pdf" ? (
+              );
+            } else if (previewFile.filePath) {
+              const isPdf = isPdfUrl(previewFile.filePath);
+              return isPdf ? (
+                <iframe
+                  src={previewFile.filePath}
+                  style={{ width: "100%", height: "70vh", border: "none" }}
+                  onLoad={() => console.log('PDF loaded successfully')}
+                  onError={(e) => {
+                    console.error('Failed to load PDF:', previewFile.filePath);
+                    message.error('Gagal memuat PDF. Periksa apakah MinIO berjalan dan file masih ada.');
+                  }}
+                />
+              ) : (
+                <img
+                  src={previewFile.filePath}
+                  alt={previewFile.name}
+                  style={{ width: "100%", maxHeight: "70vh", objectFit: "contain" }}
+                  onLoad={() => console.log('Image loaded successfully')}
+                  onError={(e) => {
+                    console.error('Failed to load image:', previewFile.filePath);
+                    message.error('Gagal memuat gambar. Periksa apakah MinIO berjalan dan file masih ada.');
+                  }}
+                />
+              );
+            } else if (previewFile.originFileObj) {
+              const isPdf = previewFile.type === "application/pdf";
+              return isPdf ? (
                 <iframe
                   src={URL.createObjectURL(previewFile.originFileObj)}
                   style={{ width: "100%", height: "70vh", border: "none" }}
@@ -1053,13 +1415,16 @@ function ReviewSuratContent() {
                   alt={previewFile.name}
                   style={{ width: "100%", maxHeight: "70vh", objectFit: "contain" }}
                 />
-              )
-            ) : (
-              <div style={{ textAlign: "center", color: "#8c8c8c" }}>
-                File tidak dapat ditampilkan
-              </div>
-            )
-          )}
+              );
+            } else {
+              return (
+                <div style={{ textAlign: "center", color: "#8c8c8c", padding: "40px" }}>
+                  <div style={{ fontSize: "16px", marginBottom: "10px" }}>File tidak dapat ditampilkan</div>
+                  <div style={{ fontSize: "12px" }}>Tidak ada sumber preview yang valid</div>
+                </div>
+              );
+            }
+          })()}
         </Modal>
 
         {/* Signature Modal */}

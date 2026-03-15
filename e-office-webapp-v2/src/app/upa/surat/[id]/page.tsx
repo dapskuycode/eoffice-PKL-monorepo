@@ -511,13 +511,12 @@ export default function UpaReviewSurat() {
                           </div>
                         </div>
 
-                        <p>Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi {programStudi} Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal {new Date(pengajuan.tglLulus).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} dengan Indeks Prestasi Kumulatif (IPK) {pengajuan.ipkTerakhir}/4.00 dengan Jumlah Satuan Kredit Semester (SKS) 144</p>
+                        <p>Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi {programStudi} Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal {new Date(pengajuan.tglLulus).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} dengan Indeks Prestasi Kumulatif (IPK) {pengajuan.ipkTerakhir}/4.00 dengan Jumlah Satuan Kredit Semester (SKS) {pengajuan.jumlahSks || 144}</p>
 
                         <p>Demikian surat permohonan kami, atas perhatiannya kami sampaikan terimakasih.</p>
 
                         <div className="mt-12 flex justify-between">
                           <div className="text-center">
-                            <p className="mb-2">Semarang, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                             <p className="mb-4">Ketua Program Studi</p>
                             {pengajuan.ttdKetuaProdi && (
                               <div className="inline-block mb-2">

@@ -6,6 +6,7 @@ import AppHeader from '@/components/AppHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Eye, Trash2 } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
   DRAFT: { label: 'Draft', color: 'bg-gray-100 text-gray-800' },

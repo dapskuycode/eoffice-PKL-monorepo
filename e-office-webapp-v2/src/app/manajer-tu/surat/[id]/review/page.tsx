@@ -359,18 +359,76 @@ export default function ManajerTuReviewSurat() {
 
                         <p>Demikian surat permohonan kami, atas perhatiannya kami sampaikan terimakasih.</p>
 
-                        <div className="mt-12 flex justify-between">
-                          <div className="text-center">
-                            <p className="mb-4">Ketua Program Studi</p>
-                            {pengajuan.ttdKetuaProdi && (
-                              <div className="inline-block mb-2">
-                                <Image 
-                                  src={pengajuan.ttdKetuaProdi}
-                                  alt="Tanda Tangan Kaprodi"
-                                  width={100}
-                                  height={60}
-                                  className="object-contain"
-                                />
+                        <div className="flex gap-2 mb-8">
+                          <span className="font-bold">Perihal</span>
+                          <span>:</span>
+                          <span className="font-bold">Surat Keterangan Lulus</span>
+                        </div>
+
+                        <div className="space-y-4 text-sm leading-relaxed" style={{ textAlign: 'justify' }}>
+                          <div className="flex gap-8">
+                            <span className="w-20 flex-shrink-0">Yth.</span>
+                            <span>Dekan<br />Fakultas Sains dan Matematika Universitas Diponegoro<br />Semarang.</span>
+                          </div>
+
+                          <p>Dengan ini kami mengajukan permohonan pembuatan Surat Keterangan Lulus atas nama :</p>
+
+                          <div className="space-y-1 ml-8">
+                            <div className="flex">
+                              <span className="w-48 flex-shrink-0">Nama</span>
+                              <span className="flex-shrink-0 mr-2">:</span>
+                              <span>{namaLengkap}</span>
+                            </div>
+                            <div className="flex">
+                              <span className="w-48 flex-shrink-0">NIM</span>
+                              <span className="flex-shrink-0 mr-2">:</span>
+                              <span>{nim}</span>
+                            </div>
+                            <div className="flex">
+                              <span className="w-48 flex-shrink-0">Tempat/Tanggal Lahir</span>
+                              <span className="flex-shrink-0 mr-2">:</span>
+                              <span>{tempatLahir}, {tanggalLahir}</span>
+                            </div>
+                            <div className="flex">
+                              <span className="w-48 flex-shrink-0">Alamat</span>
+                              <span className="flex-shrink-0 mr-2">:</span>
+                              <span>{alamat}</span>
+                            </div>
+                            <div className="flex">
+                              <span className="w-48 flex-shrink-0">No Telepon/HP</span>
+                              <span className="flex-shrink-0 mr-2">:</span>
+                              <span>{noHp}</span>
+                            </div>
+                            <div className="flex">
+                              <span className="w-48 flex-shrink-0">Program Studi</span>
+                              <span className="flex-shrink-0 mr-2">:</span>
+                              <span>{programStudi}</span>
+                            </div>
+                          </div>
+
+                          <p>Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi {programStudi} Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal {new Date(pengajuan.tglLulus).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} dengan Indeks Prestasi Kumulatif (IPK) {pengajuan.ipkTerakhir}/4.00 dengan Jumlah Satuan Kredit Semester (SKS) {pengajuan.jumlahSks || 144}</p>
+
+                          <p>Demikian surat permohonan kami, atas perhatiannya kami sampaikan terimakasih.</p>
+
+                          <div className="mt-12 flex justify-between">
+                            <div className="text-center">
+                              <p className="mb-4">Ketua Program Studi</p>
+                              {pengajuan.ttdKetuaProdi && (
+                                <div className="inline-block mb-2">
+                                  <Image
+                                    src={pengajuan.ttdKetuaProdi}
+                                    alt="Tanda Tangan Kaprodi"
+                                    width={100}
+                                    height={60}
+                                    className="object-contain"
+                                  />
+                                </div>
+                              )}
+                              <div className="mt-2">
+                                <p className="font-semibold">
+                                  {pengajuan.mahasiswa?.programStudi?.ketuaProdi?.user?.name || '(Nama Ketua Prodi)'}
+                                </p>
+                                <p>NIP. {pengajuan.mahasiswa?.programStudi?.ketuaProdi?.nip || '(NIP Ketua Prodi)'}</p>
                               </div>
                             )}
                             <div className="mt-2">

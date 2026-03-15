@@ -76,13 +76,13 @@ export default function MahasiswaPortalPage() {
 
       {/* 2. INFO BOX & STATISTIK (Sesuai Screenshot) */}
       <Card
-        bordered={false}
+        variant="borderless"
         style={{
           borderRadius: 12,
           boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
           marginBottom: 32
         }}
-        bodyStyle={{ padding: '24px' }}
+        styles={{ body: { padding: '24px' } }}
       >
         <Row gutter={[32, 24]} align="middle">
           {/* Bagian Kiri: Teks Bantuan */}
@@ -101,7 +101,7 @@ export default function MahasiswaPortalPage() {
 
           {/* Divider Vertical (Hanya muncul di layar besar) */}
           <Col xs={0} md={1} style={{ display: 'flex', justifyContent: 'center' }}>
-            <Divider type="vertical" style={{ height: '60px', borderColor: '#f0f0f0' }} />
+            <Divider orientation="vertical" style={{ height: '60px', borderColor: '#f0f0f0' }} />
           </Col>
 
           {/* Bagian Kanan: Statistik */}
@@ -114,7 +114,7 @@ export default function MahasiswaPortalPage() {
                   title={<span style={{ fontSize: 13, color: '#8c8c8c' }}>Surat Diproses</span>}
                   value={stats.diproses}
                   prefix={<ClockCircleOutlined style={{ fontSize: 18 }} />}
-                  valueStyle={{ fontSize: 20, fontWeight: 600 }}
+                  styles={{ content: { fontSize: 20, fontWeight: 600 } }}
                 />
               )}
               {loading ? (
@@ -124,7 +124,7 @@ export default function MahasiswaPortalPage() {
                   title={<span style={{ fontSize: 13, color: '#8c8c8c' }}>Surat Selesai</span>}
                   value={stats.selesai}
                   prefix={<CheckCircleOutlined style={{ fontSize: 18 }} />}
-                  valueStyle={{ fontSize: 20, color: '#52c41a', fontWeight: 600 }}
+                  styles={{ content: { fontSize: 20, color: '#52c41a', fontWeight: 600 } }}
                 />
               )}
             </div>
@@ -147,7 +147,7 @@ export default function MahasiswaPortalPage() {
               border: '1px solid #d9d9d9',
               display: 'flex', flexDirection: 'column'
             }}
-            bodyStyle={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+            styles={{ body: { flex: 1, display: 'flex', flexDirection: 'column' } }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
               <div style={{

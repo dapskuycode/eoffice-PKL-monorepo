@@ -1,7 +1,7 @@
 import { treaty } from "@elysiajs/eden"
 import type { App } from "@backend/autogen.routes";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export const client = treaty<App>(API_URL, {
   fetch: {

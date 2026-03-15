@@ -1,16 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-
-// Helper to get auth headers including Bearer token
-function getAuthHeaders(): HeadersInit {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-  }
-  return headers;
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export interface CreateSklPengajuanData {
   mahasiswaId: string;

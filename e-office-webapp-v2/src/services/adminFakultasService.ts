@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export const adminFakultasService = {
   /**
@@ -20,6 +20,9 @@ export const adminFakultasService = {
       }
 
       const allPengajuan = await response.json();
+
+      console.log('[adminFakultasService] Total pengajuan from API:', allPengajuan.length);
+      console.log('[adminFakultasService] All statuses:', allPengajuan.map((p: any) => ({ id: p.id.substring(0, 8), status: p.status })));
 
       // Filter: Admin Fakultas sees REGISTERING dan REGISTERED serta status seterusnya (tetap tampil)
       const pengajuanList = allPengajuan.filter((p: any) => {
@@ -44,6 +47,9 @@ export const adminFakultasService = {
 
         return false;
       });
+
+      console.log('[adminFakultasService] Filtered pengajuan:', pengajuanList.length);
+      console.log('[adminFakultasService] Filtered statuses:', pengajuanList.map((p: any) => ({ id: p.id.substring(0, 8), status: p.status })));
 
       return {
         pengajuan: pengajuanList || [],

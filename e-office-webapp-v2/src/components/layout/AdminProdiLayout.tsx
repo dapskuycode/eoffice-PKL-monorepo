@@ -18,9 +18,9 @@ export const AdminProdiLayout: React.FC<AdminProdiLayoutProps> = ({ children }) 
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ height: '100vh' }}>
       <AppHeader />
-      <Layout>
+      <Layout style={{ overflow: 'hidden' }}>
         <Sider
           trigger={null}
           collapsible
@@ -30,6 +30,7 @@ export const AdminProdiLayout: React.FC<AdminProdiLayoutProps> = ({ children }) 
             background: '#fff',
             boxShadow: '2px 0 8px rgba(0, 0, 0, 0.05)',
             borderRight: '1px solid #f0f0f0',
+            overflow: 'auto',
           }}
         >
           <SidebarMenu role="admin_prodi" collapsed={collapsed} />
@@ -38,7 +39,7 @@ export const AdminProdiLayout: React.FC<AdminProdiLayoutProps> = ({ children }) 
           style={{
             padding: '24px',
             background: '#f9f9f9',
-            overflow: 'auto',
+            overflowY: 'auto',
           }}
         >
           {children}

@@ -149,16 +149,9 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ role, collapsed }) => {
   };
 
   const handleLogout = () => {
-    Modal.confirm({
-      title: 'Konfirmasi Logout',
-      content: 'Apakah Anda yakin ingin keluar dari sistem?',
-      okText: 'Logout',
-      cancelText: 'Batal',
-      okButtonProps: { danger: true, className: 'rounded-xl font-bold font-sans' },
-      cancelButtonProps: { className: 'rounded-xl font-bold font-sans' },
-      centered: true,
-      onOk: () => logout(),
-    });
+    if (window.confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
+      logout();
+    }
   };
 
   // Get selected key based on current pathname
