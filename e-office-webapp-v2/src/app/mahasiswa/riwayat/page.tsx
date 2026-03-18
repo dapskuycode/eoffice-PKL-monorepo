@@ -824,50 +824,6 @@ function RiwayatPengajuanContent() {
                             </div>
                           </div>
 
-                          {/* Tengah: Sticky Note */}
-                          <div className="sticky-note-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            {selectedSurat.nomorSkl && (
-                              <div className="sticky-note" style={{
-                                backgroundColor: '#f0fdf4',
-                                border: '1px solid #bbf7d0',
-                                borderRadius: '8px',
-                                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                                padding: '16px',
-                                textAlign: 'center',
-                                width: '7.5cm',
-                                transform: 'rotate(-2deg)',
-                                fontFamily: 'sans-serif'
-                              }}>
-                                <div className="sticky-note-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#166534', fontWeight: '700', fontSize: '14px', marginBottom: '12px' }}>
-                                  <span style={{ fontSize: '18px' }}>📝</span>
-                                  <span style={{ textDecoration: 'underline', textDecorationColor: '#86efac', textUnderlineOffset: '4px' }}>Surat Sudah Selesai</span>
-                                </div>
-                                <p style={{ fontSize: '12px', color: '#374151', marginBottom: '10px', lineHeight: '1.5', textAlign: 'center' }}>
-                                  Surat Keterangan Lulus sudah selesai dengan nomor:
-                                </p>
-                                <div style={{
-                                  backgroundColor: 'white',
-                                  padding: '10px',
-                                  borderRadius: '4px',
-                                  border: '1px dashed #86efac',
-                                  color: '#166534',
-                                  fontWeight: '800',
-                                  fontSize: '14px',
-                                  letterSpacing: '0.75px',
-                                  marginBottom: '12px'
-                                }}>
-                                  SKL/{selectedSurat.nomorSkl}
-                                </div>
-                                <p style={{ fontSize: '11px', color: '#065f46', lineHeight: '1.4', marginBottom: '10px' }}>
-                                  Harap mahasiswa membawa <strong>pas foto 4x2 (2 lembar)</strong> dan meminta cap basah di Akademik.
-                                </p>
-                                <p style={{ fontSize: '12px', fontWeight: '700', color: '#166534' }}>
-                                  Terima kasih 🙏
-                                </p>
-                              </div>
-                            )}
-                          </div>
-
                           {/* Kanan: Pemohon */}
                           <div className="signature-block" style={{ textAlign: 'center' }}>
                             <p style={{ marginBottom: '12px' }}>

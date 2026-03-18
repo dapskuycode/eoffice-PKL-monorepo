@@ -181,7 +181,7 @@ export default function UpaDashboard() {
                           <td className="p-4">{indexOfFirstItem + index + 1}</td>
                           <td className="p-4 font-medium">{item.namaSementara || item.mahasiswa?.user?.name || 'N/A'}</td>
                           <td className="p-4">{item.mahasiswa?.nim || 'N/A'}</td>
-                          <td className="p-4">{item.mahasiswa?.programStudi?.nama || 'N/A'}</td>
+                          <td className="p-4">{item.mahasiswa?.programStudi?.name || 'N/A'}</td>
                           <td className="p-4">
                             {new Date(item.createdAt).toLocaleDateString('id-ID', {
                               day: 'numeric',

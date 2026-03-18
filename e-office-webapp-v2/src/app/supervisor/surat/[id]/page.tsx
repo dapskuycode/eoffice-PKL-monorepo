@@ -470,87 +470,38 @@ export default function SupervisorReviewSurat() {
 
                           <p>Demikian surat permohonan kami, atas perhatiannya kami sampaikan terimakasih.</p>
 
-                          <div className="mt-12 flex justify-between">
-                            <div className="text-center">
-                              <p className="mb-4">Ketua Program Studi</p>
-                              {pengajuan.ttdKetuaProdi && (
-                                <div className="inline-block mb-2">
-                                  <Image
-                                    src={pengajuan.ttdKetuaProdi}
-                                    alt="Tanda Tangan Kaprodi"
-                                    width={100}
-                                    height={60}
-                                    className="object-contain"
-                                  />
-                                </div>
-                              )}
-                              <div className="mt-2">
-                                <p className="font-semibold">
-                                  {pengajuan.mahasiswa?.programStudi?.ketuaProdi?.user?.name || '(Nama Ketua Prodi)'}
-                                </p>
-                                <p>NIP. {pengajuan.mahasiswa?.programStudi?.ketuaProdi?.nip || '(NIP Ketua Prodi)'}</p>
+                          <div className="mt-16 flex justify-between items-start">
+                            <div className="flex flex-col items-center text-center w-60">
+                              <p className="mb-1">Ketua Program Studi</p>
+                              <div className="h-20 flex items-center justify-center w-full my-1">
+                                {pengajuan.ttdKetuaProdi && (
+                                  <Image src={pengajuan.ttdKetuaProdi} alt="TTD Kaprodi" width={110} height={70} className="object-contain" />
+                                )}
+                              </div>
+                              <div className="mt-1">
+                                <p className="font-bold underline mb-1">{pengajuan.mahasiswa?.programStudi?.ketuaProdi?.user?.name}</p>
+                                <p className="text-xs">NIP. {pengajuan.mahasiswa?.programStudi?.ketuaProdi?.nip || '-'}</p>
                               </div>
                             </div>
 
-                            <p>Dengan ini kami mengajukan permohonan pembuatan Surat Keterangan Lulus atas nama :</p>
-
-                            <div className="space-y-1 ml-8">
-                              {[
-                                { label: 'Nama', value: namaLengkap },
-                                { label: 'NIM', value: nim },
-                                { label: 'Tempat/Tanggal Lahir', value: `${tempatLahir}, ${tanggalLahir}` },
-                                { label: 'Alamat', value: alamat },
-                                { label: 'No Telepon/HP', value: noHp },
-                                { label: 'Program Studi', value: programStudi },
-                              ].map((item, idx) => (
-                                <div key={idx} className="flex">
-                                  <span className="w-48 flex-shrink-0 text-gray-600">{item.label}</span>
-                                  <span className="mr-2">:</span>
-                                  <span className="font-medium">{item.value || '-'}</span>
-                                </div>
-                              ))}
-                            </div>
-
-                            <p>Telah dinyatakan lulus ujian Sarjana pada Departemen/Program Studi {programStudi} Fakultas Sains dan Matematika Universitas Diponegoro pada tanggal {new Date(pengajuan.tglLulus || new Date()).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} dengan Indeks Prestasi Kumulatif (IPK) {pengajuan.ipkTerakhir || '0.00'}/4.00 dengan Jumlah Satuan Kredit Semester (SKS) {pengajuan.jumlahSks || 0}</p>
-
-                            <p>Demikian surat permohonan kami, atas perhatiannya kami sampaikan terimakasih.</p>
-
-                            <div className="mt-16 flex justify-between items-start">
-                              <div className="flex flex-col items-center text-center w-60">
-                                <p className="mb-1">Ketua Program Studi</p>
-                                <div className="h-20 flex items-center justify-center w-full my-1">
-                                  {pengajuan.ttdKetuaProdi && (
-                                    <Image src={pengajuan.ttdKetuaProdi} alt="TTD Kaprodi" width={110} height={70} className="object-contain" />
-                                  )}
-                                </div>
-                                <div className="mt-1">
-                                  <p className="font-bold underline mb-1">{pengajuan.mahasiswa?.programStudi?.ketuaProdi?.user?.name}</p>
-                                  <p className="text-xs">NIP. {pengajuan.mahasiswa?.programStudi?.ketuaProdi?.nip || '-'}</p>
-                                </div>
+                            <div className="flex flex-col items-center text-center w-60">
+                              <p className="mb-1 text-gray-600">Semarang, {new Date(pengajuan.createdAt || new Date()).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                              <p className="mb-1">Pemohon,</p>
+                              <div className="h-20 flex items-center justify-center w-full my-1">
+                                {pengajuan.tandatangan && (
+                                  <Image src={pengajuan.tandatangan} alt="TTD Mahasiswa" width={110} height={70} className="object-contain" />
+                                )}
                               </div>
-
-                              <div className="flex flex-col items-center text-center w-60">
-                                <p className="mb-1 text-gray-600">Semarang, {new Date(pengajuan.createdAt || new Date()).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                                <p className="mb-1">Pemohon,</p>
-                                <div className="h-20 flex items-center justify-center w-full my-1">
-                                  {pengajuan.tandatangan && (
-                                    <Image src={pengajuan.tandatangan} alt="TTD Mahasiswa" width={110} height={70} className="object-contain" />
-                                  )}
-                                </div>
-                                <div className="mt-1">
-                                  <p className="font-bold underline mb-1">{namaLengkap}</p>
-                                  <p className="text-xs">NIM {nim || '-'}</p>
-                                </div>
-                              )}
-                              <div className="mt-2">
-                                <p className="border-b border-gray-800 inline-block font-semibold">{namaLengkap}</p>
-                                <p>NIM {nim}</p>
+                              <div className="mt-1">
+                                <p className="font-bold underline mb-1">{namaLengkap}</p>
+                                <p className="text-xs">NIM {nim || '-'}</p>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+
                   </CardContent>
                 </Card>
 

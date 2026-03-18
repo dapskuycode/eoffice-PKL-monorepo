@@ -54,8 +54,9 @@ function LampiranContent() {
     // Guard: Cek apakah langkah sebelumnya sudah diisi
     const detailData = localStorage.getItem("skl_detail_pengajuan");
     const isEditMode = localStorage.getItem('skl_edit_mode') === 'true';
-    if (!detailData && !isEditMode) {
-      console.warn('Lampiran page accessed without detail data. Redirecting to dashboard.');
+    const draftIdCheck = localStorage.getItem('skl_draft_id') || new URLSearchParams(window.location.search).get('draftId');
+    if (!detailData && !isEditMode && !draftIdCheck) {
+      console.warn('Lampiran page accessed without detail data or draft ID. Redirecting to dashboard.');
       router.replace('/mahasiswa/dashboard');
       return;
     }
@@ -77,12 +78,12 @@ function LampiranContent() {
           const detail = await sklService.getPengajuanDetail(currentDraftId);
           if (detail) {
             setDraftStatus(detail.status);
-            
+
             // Load lampiran from database
             if (detail.lampiran && detail.lampiran.length > 0) {
               console.log('Loading lampiran from database:', detail.lampiran);
               const lampiranFromDb: LampiranData = {};
-              
+
               detail.lampiran.forEach((item: any) => {
                 const fileUpload: FileUpload = {
                   uid: item.id,
@@ -93,7 +94,7 @@ function LampiranContent() {
                   filePath: item.pathFile,
                   isExisting: true,
                 };
-                
+
                 // Map jenisDokumen to field name
                 switch (item.jenisDokumen) {
                   case 'KTM':
@@ -119,7 +120,7 @@ function LampiranContent() {
                     break;
                 }
               });
-              
+
               setLampiran(lampiranFromDb);
               // Save lampiran from database (contains MinIO URLs, not base64)
               try {
@@ -252,10 +253,10 @@ function LampiranContent() {
 
   const handleSaveDraft = async () => {
     setLoading(true);
-    
+
     try {
       const profile = await mahasiswaService.getProfile();
-      
+
       if (!profile) {
         message.error("Data profil tidak ditemukan. Silakan login kembali.");
         setLoading(false);
@@ -264,7 +265,7 @@ function LampiranContent() {
 
       // Get or create draft ID
       let draftId = localStorage.getItem('skl_draft_id');
-      
+
       if (!draftId) {
         // Create new draft first with data from previous steps
         const dataDiriStr = localStorage.getItem("skl_data_diri");
@@ -301,7 +302,7 @@ function LampiranContent() {
         console.log('Created new draft ID:', draftId);
       }
 
-      // Save only metadata to localStorage
+      // Save metadata to localStorage (termasuk filePath agar bisa preview langsung saat edit draft)
       const lampiranMetadata: Record<string, any> = {};
       Object.entries(lampiran).forEach(([key, file]) => {
         if (file) {
@@ -310,6 +311,8 @@ function LampiranContent() {
             name: file.name,
             size: file.size,
             type: file.type,
+            filePath: (file as any).filePath || (file as any).dataUrl,
+            isExisting: (file as any).isExisting,
             hasFile: true
           };
         }
@@ -363,25 +366,25 @@ function LampiranContent() {
         if (file && file.originFileObj) {
           try {
             console.log(`Uploading ${jenis} to MinIO for draft...`);
-            
+
             // Delete existing lampiran of this type first to avoid duplicates
             if (alreadyExists) {
               console.log(`Deleting existing ${jenis} before uploading new one`);
               await sklService.deleteLampiranByCategory(draftId, jenis);
             }
-            
+
             // Upload file to MinIO
             const uploadResult = await uploadService.uploadFile(file.originFileObj, 'lampiran');
 
             if (uploadResult) {
               console.log(`Upload successful for ${jenis}:`, uploadResult);
-              
+
               // Save lampiran reference to database
               await sklService.addLampiran(draftId, {
                 jenisDokumen: jenis as any,
                 pathFile: uploadResult.url,
               });
-              
+
               console.log(`Saved ${jenis} to database:`, uploadResult.fileName);
               uploadedCount++;
             }
@@ -414,7 +417,7 @@ function LampiranContent() {
       }
 
       const totalFiles = Object.values(lampiran).filter(f => !!f).length;
-      
+
       if (uploadedCount > 0) {
         message.success(`Draft berhasil disimpan dengan ${uploadedCount} lampiran baru! (Total: ${totalFiles} lampiran)`);
       } else if (skippedCount > 0 && uploadedCount === 0) {
@@ -424,7 +427,7 @@ function LampiranContent() {
       } else {
         message.success("Draft berhasil disimpan!");
       }
-      
+
       // Redirect to riwayat page
       setTimeout(() => {
         router.push('/mahasiswa/riwayat');
@@ -615,17 +618,17 @@ function LampiranContent() {
                   />
                 )
               ) :
-                /* If it has dataUrl or filePath (loaded from draft / existing) */
-                ((previewFile as any).dataUrl || (previewFile as any).filePath) ? (
+                /* If it has dataUrl or filePath (loaded from draft / existing DB) */
+                (previewFile.dataUrl || previewFile.filePath) ? (
                   previewFile.type?.includes("pdf") ||
-                    (previewFile as any).filePath?.includes(".pdf") ? (
+                    previewFile.filePath?.includes(".pdf") ? (
                     <iframe
-                      src={(previewFile as any).dataUrl || (previewFile as any).filePath}
+                      src={previewFile.dataUrl || previewFile.filePath}
                       style={{ width: "100%", height: "70vh", border: "none" }}
                     />
                   ) : (
                     <img
-                      src={(previewFile as any).dataUrl || (previewFile as any).filePath}
+                      src={previewFile.dataUrl || previewFile.filePath}
                       alt={previewFile.name}
                       style={{ width: "100%", maxHeight: "70vh", objectFit: "contain" }}
                     />

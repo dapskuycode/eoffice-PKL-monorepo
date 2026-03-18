@@ -1,5 +1,11 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
+function getAuthHeaders(): HeadersInit {
+  return {
+    'Content-Type': 'application/json',
+  };
+}
+
 export interface CreateSklPengajuanData {
   mahasiswaId: string;
   tglLulus: string;

@@ -12,7 +12,9 @@ export interface FileUpload {
   size: number;
   type: string;
   originFileObj?: File;
-  dataUrl?: string; // Base64 encoded file for storage/preview
+  dataUrl?: string;    // Base64 encoded file atau URL MinIO untuk preview
+  filePath?: string;   // URL MinIO presigned untuk file yang sudah di-upload ke DB
+  isExisting?: boolean; // True jika file sudah ada di database (tidak perlu re-upload)
 }
 
 interface UploadFieldProps {
